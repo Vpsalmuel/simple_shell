@@ -1,11 +1,11 @@
 // Sample content. Replace with API calls (SharePoint, HRIS, claims system) when wiring a backend.
 
-export const departments = ['Claims', 'Underwriting', 'Actuarial', 'Customer Care', 'IT', 'HR', 'Finance', 'Legal & Compliance']
+export const departments = ['Executive Office', 'Claims', 'Underwriting', 'Actuarial', 'Customer Care', 'IT', 'HR', 'Finance', 'Legal & Compliance']
 
 export const people = [
   { id: 1, name: 'Ada Okafor', role: 'Senior Claims Analyst', dept: 'Claims', location: 'Lagos', email: 'ada.okafor@rexinsurance.com', phone: '+234 801 000 1001', status: 'online', manager: 'Tunde Bello', skills: ['Motor claims', 'Fraud triage'] },
   { id: 2, name: 'Tunde Bello', role: 'Head of Claims', dept: 'Claims', location: 'Lagos', email: 'tunde.bello@rexinsurance.com', phone: '+234 801 000 1002', status: 'meeting', manager: 'Grace Eze', skills: ['Ops leadership', 'Reinsurance'] },
-  { id: 3, name: 'Grace Eze', role: 'Chief Operating Officer', dept: 'Finance', location: 'Abuja', email: 'grace.eze@rexinsurance.com', phone: '+234 801 000 1003', status: 'away', manager: '—', skills: ['Strategy', 'Risk'] },
+  { id: 3, name: 'Grace Eze', role: 'Managing Director / CEO', dept: 'Executive Office', location: 'Abuja', email: 'grace.eze@rexinsurance.com', phone: '+234 801 000 1003', status: 'away', manager: '—', skills: ['Strategy', 'Risk'] },
   { id: 4, name: 'Chinedu Obi', role: 'Underwriter II', dept: 'Underwriting', location: 'Lagos', email: 'chinedu.obi@rexinsurance.com', phone: '+234 801 000 1004', status: 'online', manager: 'Funmi Adeyemi', skills: ['Property', 'Marine'] },
   { id: 5, name: 'Funmi Adeyemi', role: 'Underwriting Manager', dept: 'Underwriting', location: 'Port Harcourt', email: 'funmi.adeyemi@rexinsurance.com', phone: '+234 801 000 1005', status: 'online', manager: 'Grace Eze', skills: ['Energy', 'Portfolio pricing'] },
   { id: 6, name: 'Ibrahim Musa', role: 'Actuarial Analyst', dept: 'Actuarial', location: 'Abuja', email: 'ibrahim.musa@rexinsurance.com', phone: '+234 801 000 1006', status: 'offline', manager: 'Grace Eze', skills: ['Reserving', 'Python'] },
@@ -14,6 +14,8 @@ export const people = [
   { id: 9, name: 'Sarah Johnson', role: 'HR Business Partner', dept: 'HR', location: 'Abuja', email: 'sarah.johnson@rexinsurance.com', phone: '+234 801 000 1009', status: 'online', manager: 'Grace Eze', skills: ['Talent', 'Wellbeing'] },
   { id: 10, name: 'David Okon', role: 'Compliance Officer', dept: 'Legal & Compliance', location: 'Lagos', email: 'david.okon@rexinsurance.com', phone: '+234 801 000 1010', status: 'away', manager: 'Grace Eze', skills: ['AML/KYC', 'Regulatory reporting'] },
   { id: 11, name: 'Amaka Udeh', role: 'Claims Adjuster', dept: 'Claims', location: 'Enugu', email: 'amaka.udeh@rexinsurance.com', phone: '+234 801 000 1011', status: 'online', manager: 'Tunde Bello', skills: ['Site surveys', 'Health claims'] },
+  { id: 13, name: 'Bola Martins', role: 'Financial Controller', dept: 'Finance', location: 'Lagos', email: 'bola.martins@rexinsurance.com', phone: '+234 801 000 1013', status: 'online', manager: 'Grace Eze', skills: ['IFRS 17', 'Treasury'] },
+  { id: 14, name: 'Kemi Adebayo', role: 'Graduate Trainee', dept: 'Underwriting', location: 'Lagos', email: 'kemi.adebayo@rexinsurance.com', phone: '+234 801 000 1014', status: 'online', manager: 'Funmi Adeyemi', skills: ['Learning the ropes'] },
   { id: 12, name: 'Kelvin Ade', role: 'Frontend Engineer', dept: 'IT', location: 'Remote', email: 'kelvin.ade@rexinsurance.com', phone: '+234 801 000 1012', status: 'offline', manager: 'Emeka Nwosu', skills: ['React', 'Design systems'] },
 ]
 
@@ -23,11 +25,12 @@ export const announcements = [
   { id: 3, tag: 'Wellbeing', title: 'Open enrolment for 2027 health plan is live', body: 'Review your HMO options and add dependants before 30 Nov.', tone: 'accent', cta: 'Review benefits' },
 ]
 
+// `image`: a path in /public (e.g. '/images/telematics.jpg') or a URL. null shows the branded placeholder.
 export const news = [
-  { id: 1, category: 'Product', title: 'Telematics motor cover launches in pilot states', excerpt: 'Usage-based pricing goes live for 2,000 customers. Underwriting shares what we learned.', author: 'Funmi Adeyemi', date: '2026-10-24', readMins: 4, likes: 42, comments: 9 },
-  { id: 2, category: 'Claims', title: 'Average claim settlement down to 6.2 days', excerpt: 'The new triage workflow cut handling time by 31%. Here is how the team did it.', author: 'Tunde Bello', date: '2026-10-22', readMins: 3, likes: 67, comments: 14 },
-  { id: 3, category: 'People', title: 'Meet the Customer Care team behind our 4.7★ rating', excerpt: 'A day on the frontline with the team that handles 3,000 calls a week.', author: 'Sarah Johnson', date: '2026-10-20', readMins: 5, likes: 38, comments: 6 },
-  { id: 4, category: 'IT', title: 'Single sign-on rolls out to all core systems', excerpt: 'One login for the policy admin, claims portal and HR. Migration dates inside.', author: 'Emeka Nwosu', date: '2026-10-18', readMins: 2, likes: 25, comments: 3 },
+  { id: 1, category: 'Product', title: 'Telematics motor cover launches in pilot states', excerpt: 'Usage-based pricing goes live for 2,000 customers. Underwriting shares what we learned.', author: 'Funmi Adeyemi', date: '2026-10-24', readMins: 4, likes: 42, comments: 9, image: null },
+  { id: 2, category: 'Claims', title: 'Average claim settlement down to 6.2 days', excerpt: 'The new triage workflow cut handling time by 31%. Here is how the team did it.', author: 'Tunde Bello', date: '2026-10-22', readMins: 3, likes: 67, comments: 14, image: null },
+  { id: 3, category: 'People', title: 'Meet the Customer Care team behind our 4.7★ rating', excerpt: 'A day on the frontline with the team that handles 3,000 calls a week.', author: 'Sarah Johnson', date: '2026-10-20', readMins: 5, likes: 38, comments: 6, image: null },
+  { id: 4, category: 'IT', title: 'Single sign-on rolls out to all core systems', excerpt: 'One login for the policy admin, claims portal and HR. Migration dates inside.', author: 'Emeka Nwosu', date: '2026-10-18', readMins: 2, likes: 25, comments: 3, image: null },
 ]
 
 export const events = [
@@ -50,13 +53,6 @@ export const quickLinks = [
   { label: 'IT helpdesk', icon: 'LifeBuoy', href: '#' },
   { label: 'Learning', icon: 'GraduationCap', href: '#' },
   { label: 'Expenses', icon: 'Receipt', href: '#' },
-]
-
-export const kpis = [
-  { label: 'Open claims', value: '1,284', delta: -4.2, hint: 'vs last week', good: 'down' },
-  { label: 'Avg. settlement', value: '6.2 days', delta: -12.5, hint: 'vs last quarter', good: 'down' },
-  { label: 'New policies (MTD)', value: '3,912', delta: 9.8, hint: 'vs last month', good: 'up' },
-  { label: 'Customer NPS', value: '62', delta: 3.1, hint: 'vs last quarter', good: 'up' },
 ]
 
 export const claimsWeekly = [
@@ -82,6 +78,9 @@ export const claims = [
   { id: 'CLM-24-08731', insured: 'Unity Schools', line: 'Property', amount: 7300000, stage: 'Registered', sla: 7, owner: 'Ada Okafor' },
   { id: 'CLM-24-08702', insured: 'Musa Danjuma', line: 'Motor', amount: 960000, stage: 'Payment', sla: 0, owner: 'Amaka Udeh' },
 ]
+
+// Average days to settle, last 12 weeks (oldest → newest).
+export const settlementTrend = [8.1, 7.9, 7.6, 7.7, 7.3, 7.1, 6.9, 7.0, 6.7, 6.5, 6.4, 6.2]
 
 export const claimStages = ['Registered', 'Assessment', 'Investigation', 'Approval', 'Payment']
 

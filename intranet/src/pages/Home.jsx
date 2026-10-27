@@ -1,21 +1,27 @@
 import { useEffect, useState } from 'react'
 import { Link } from 'react-router-dom'
-import { ArrowDownRight, ArrowRight, ArrowUpRight, CalendarDays, ChevronLeft, ChevronRight, Clock, Heart, MapPin, MessageCircle, Sparkles, Trophy } from 'lucide-react'
-import { announcements, events, kpis, kudos as initialKudos, news, people, poll, quickLinks } from '../data'
-import { currentUser } from '../config/brand'
+import { ArrowDownRight, ArrowRight, ArrowUpRight, CalendarDays, Check, ChevronLeft, ChevronRight, Clock, Heart, MapPin, MessageCircle, Sparkles, Trophy, X } from 'lucide-react'
+import { announcements, claims, events, kudos as initialKudos, news, people, poll } from '../data'
+import { dashboardFor } from '../config/departments'
+import { useUser } from '../context/UserContext'
 import { useLocalStorage } from '../hooks/useLocalStorage'
+import { useCountUp } from '../hooks/useCountUp'
 import { useToast } from '../components/Toast'
 import Avatar from '../components/Avatar'
 import Icon from '../components/Icon'
 import Modal from '../components/Modal'
+import Photo from '../components/Photo'
 import SectionHeader from '../components/SectionHeader'
+import Sparkline from '../components/Sparkline'
+import StatusBadge from '../components/StatusBadge'
+import { EmptyIllustration } from '../components/Illustrations'
 
 function greeting() {
   const h = new Date().getHours()
   return h < 12 ? 'Good morning' : h < 17 ? 'Good afternoon' : 'Good evening'
 }
 
-function Hero() {
+function Hero({ user }) {
   const [i, setI] = useState(0)
   const [paused, setPaused] = useState(false)
   const a = announcements[i]
@@ -37,8 +43,11 @@ function Hero() {
       <div className="pointer-events-none absolute -top-24 -right-24 hidden h-72 w-72 sm:block rounded-full border-[28px] border-accent-600/80" />
       <div className="pointer-events-none absolute -right-10 -bottom-32 h-64 w-64 rounded-full bg-brand-500/40 blur-2xl" />
 
-      <p className="text-sm text-brand-200">{new Date().toLocaleDateString(undefined, { weekday: 'long', day: 'numeric', month: 'long' })}</p>
-      <h1 className="mt-1 text-2xl font-bold sm:text-3xl">{greeting()}, {currentUser.firstName} 👋</h1>
+      <div className="relative flex flex-wrap items-center gap-2 text-sm text-brand-200">
+        <span>{new Date().toLocaleDateString(undefined, { weekday: 'long', day: 'numeric', month: 'long' })}</span>
+        <span className="chip bg-white/10 text-white">{user.dept} dashboard</span>
+      </div>
+      <h1 className="relative mt-1 text-2xl font-extrabold sm:text-3xl">{greeting()}, {user.firstName}</h1>
 
       <div key={a.id} className="animate-fade-up relative mt-6 max-w-xl">
         <span className={`chip ${toneChip[a.tone]}`}>{a.tag}</span>
@@ -60,40 +69,123 @@ function Hero() {
   )
 }
 
-function Kpis() {
+function formatKpi(k, v) {
+  const n = v.toLocaleString(undefined, { minimumFractionDigits: k.decimals ?? 0, maximumFractionDigits: k.decimals ?? 0 })
+  return `${k.prefix ?? ''}${n}${k.unit ?? ''}`
+}
+
+function KpiCard({ k }) {
+  const value = useCountUp(k.value)
+  const good = (k.delta < 0 && k.good === 'down') || (k.delta > 0 && k.good === 'up')
+  const Arrow = k.delta < 0 ? ArrowDownRight : ArrowUpRight
   return (
-    <section className="grid grid-cols-2 gap-4 lg:grid-cols-4">
-      {kpis.map((k) => {
-        const good = (k.delta < 0 && k.good === 'down') || (k.delta > 0 && k.good === 'up')
-        const Arrow = k.delta < 0 ? ArrowDownRight : ArrowUpRight
-        return (
-          <div key={k.label} className="card card-hover p-4 sm:p-5">
-            <p className="text-xs font-medium text-slate-500 sm:text-sm">{k.label}</p>
-            <p className="mt-2 text-xl font-bold text-slate-900 sm:text-2xl dark:text-white">{k.value}</p>
-            <p className={`mt-2 inline-flex items-center gap-1 text-xs font-medium ${good ? 'text-emerald-600' : 'text-rose-600'}`}>
-              <Arrow size={14} /> {Math.abs(k.delta)}% <span className="font-normal text-slate-400">{k.hint}</span>
-            </p>
-          </div>
-        )
-      })}
+    <div className="card card-hover flex flex-col p-4 sm:p-5">
+      <p className="text-xs font-medium text-slate-500 sm:text-sm">{k.label}</p>
+      <p className="mt-1.5 font-display text-xl font-extrabold text-slate-900 tabular-nums sm:text-[1.65rem] dark:text-white">{formatKpi(k, value)}</p>
+      <p className={`mt-1 inline-flex flex-wrap items-center gap-1 text-xs font-medium ${good ? 'text-emerald-600 dark:text-emerald-400' : 'text-rose-600 dark:text-rose-400'}`}>
+        <Arrow size={14} /> {Math.abs(k.delta)}% <span className="font-normal text-slate-400">{k.hint}</span>
+      </p>
+      <div className="mt-auto pt-3"><Sparkline series={k.series} label={k.label} format={(v) => formatKpi(k, v)} /></div>
+    </div>
+  )
+}
+
+function Kpis({ kpis }) {
+  return (
+    <section className="stagger grid grid-cols-2 gap-4 lg:grid-cols-4" aria-label="Key metrics">
+      {kpis.map((k) => <KpiCard key={k.label} k={k} />)}
     </section>
   )
 }
 
-function QuickLinks() {
+function QuickLinks({ links }) {
+  const cls = 'group flex flex-col items-center gap-2 rounded-xl p-3 text-center text-xs font-medium transition hover:bg-brand-50 dark:hover:bg-slate-800'
+  const inner = (q) => (
+    <>
+      <span className="flex h-11 w-11 items-center justify-center rounded-xl bg-brand-50 text-brand-700 transition group-hover:-translate-y-0.5 group-hover:bg-brand-700 group-hover:text-white group-hover:shadow-lg group-hover:shadow-brand-700/20 dark:bg-slate-800 dark:text-brand-200">
+        <Icon name={q.icon} size={20} />
+      </span>
+      {q.label}
+    </>
+  )
   return (
     <section className="card p-5">
       <SectionHeader title="Quick links" />
-      <div className="grid grid-cols-3 gap-3">
-        {quickLinks.map((q) => (
-          <a key={q.label} href={q.href} className="group flex flex-col items-center gap-2 rounded-xl p-3 text-center text-xs font-medium transition hover:bg-brand-50 dark:hover:bg-slate-800">
-            <span className="flex h-11 w-11 items-center justify-center rounded-xl bg-brand-50 text-brand-700 transition group-hover:bg-brand-700 group-hover:text-white dark:bg-slate-800 dark:text-brand-200">
-              <Icon name={q.icon} size={20} />
-            </span>
-            {q.label}
-          </a>
-        ))}
+      <div className="grid grid-cols-3 gap-2">
+        {links.map((q) => q.href.startsWith('/')
+          ? <Link key={q.label} to={q.href} className={cls}>{inner(q)}</Link>
+          : <a key={q.label} href={q.href} className={cls}>{inner(q)}</a>)}
       </div>
+    </section>
+  )
+}
+
+const slaTone = (d) => (d === 0 ? 'critical' : d <= 2 ? 'warning' : 'neutral')
+const slaText = (d) => (d === 0 ? 'Due today' : d === 1 ? '1 day' : `${d} days`)
+
+// Department-specific widget: a queue, a status list, or approvals with actions.
+function FocusWidget({ focus }) {
+  const toast = useToast()
+  const [pending, setPending] = useState(focus.items ?? [])
+  useEffect(() => setPending(focus.items ?? []), [focus])
+
+  const decide = (item, approved) => {
+    setPending((p) => p.filter((x) => x.id !== item.id))
+    toast(`${approved ? 'Approved' : 'Declined'}: ${item.primary}`)
+  }
+
+  const rows = focus.type === 'queue'
+    ? [...claims].sort((a, b) => a.sla - b.sla).slice(0, 4).map((c) => ({ primary: `${c.id} · ${c.insured}`, secondary: `${c.line} · ${c.stage}`, badge: slaText(c.sla), tone: slaTone(c.sla) }))
+    : pending
+
+  return (
+    <section className="card flex flex-col p-5">
+      <SectionHeader
+        title={focus.title}
+        subtitle={focus.subtitle}
+        action={focus.cta && (focus.cta.to.startsWith('/')
+          ? <Link to={focus.cta.to} className="inline-flex shrink-0 items-center gap-1 text-sm font-medium text-brand-600 hover:underline dark:text-brand-300">{focus.cta.label} <ArrowRight size={14} /></Link>
+          : <a href={focus.cta.to} className="inline-flex shrink-0 items-center gap-1 text-sm font-medium text-brand-600 hover:underline dark:text-brand-300">{focus.cta.label} <ArrowRight size={14} /></a>)}
+      />
+      {rows.length === 0 ? (
+        <div className="flex flex-1 flex-col items-center justify-center py-6 text-center">
+          <EmptyIllustration />
+          <p className="mt-3 font-semibold">All caught up</p>
+          <p className="text-sm text-slate-500">Nothing is waiting on you right now.</p>
+        </div>
+      ) : (
+        <ul className="stagger divide-y divide-slate-100 dark:divide-slate-800">
+          {rows.map((r) => (
+            <li key={r.id ?? r.primary} className="flex items-center gap-3 py-3 first:pt-0 last:pb-0">
+              <div className="min-w-0 flex-1">
+                <p className="truncate text-sm font-medium">{r.primary}</p>
+                <p className="truncate text-xs text-slate-500">{r.secondary}</p>
+              </div>
+              {focus.type === 'approvals' ? (
+                <div className="flex shrink-0 gap-1.5">
+                  <button onClick={() => decide(r, false)} className="btn-ghost border border-slate-200 p-2 dark:border-slate-700" aria-label={`Decline ${r.primary}`}><X size={16} /></button>
+                  <button onClick={() => decide(r, true)} className="btn bg-emerald-600 px-3 py-2 text-white hover:bg-emerald-700"><Check size={16} /> <span className="hidden sm:inline">Approve</span></button>
+                </div>
+              ) : (
+                <StatusBadge tone={r.tone}>{r.badge}</StatusBadge>
+              )}
+            </li>
+          ))}
+        </ul>
+      )}
+    </section>
+  )
+}
+
+function FirstNinetyDays({ user }) {
+  return (
+    <section className="card flex flex-col gap-4 overflow-hidden border-accent-200 bg-gradient-to-r from-accent-50 to-white p-5 sm:flex-row sm:items-center dark:border-accent-700/40 dark:from-accent-700/10 dark:to-slate-900">
+      <span className="flex h-12 w-12 shrink-0 items-center justify-center rounded-2xl bg-accent-600 text-white"><Sparkles size={22} /></span>
+      <div className="flex-1">
+        <p className="font-display font-bold">Your first 90 days, {user.firstName}</p>
+        <p className="text-sm text-slate-600 dark:text-slate-300">Meet your buddy Funmi Adeyemi on Thursday, and finish your role training by 30 Nov.</p>
+      </div>
+      <Link to="/welcome" className="btn-ghost shrink-0 border border-slate-200 bg-white dark:border-slate-700 dark:bg-slate-900">Revisit walkthrough</Link>
     </section>
   )
 }
@@ -118,9 +210,7 @@ function NewsFeed() {
           const isLiked = liked.includes(n.id)
           return (
             <li key={n.id} className="animate-fade-up flex gap-4 py-4 first:pt-0 last:pb-0">
-              <div className="hidden h-20 w-28 shrink-0 items-end rounded-xl bg-gradient-to-br from-brand-600 to-brand-800 p-2 sm:flex">
-                <span className="chip bg-white/15 text-white">{n.category}</span>
-              </div>
+              <Photo src={n.image} alt="" label={n.category} className="hidden h-24 w-36 shrink-0 sm:block" />
               <div className="min-w-0 flex-1">
                 <span className="chip mb-1 bg-brand-50 text-brand-700 sm:hidden dark:bg-slate-800 dark:text-brand-200">{n.category}</span>
                 <a href="#" className="block font-semibold text-slate-900 hover:text-brand-600 dark:text-white">{n.title}</a>
@@ -183,11 +273,12 @@ function Kudos() {
   const [open, setOpen] = useState(false)
   const [form, setForm] = useState({ to: people[1].name, value: 'Customer first', message: '' })
   const toast = useToast()
+  const { user } = useUser()
 
   const submit = (e) => {
     e.preventDefault()
     if (!form.message.trim()) return
-    setItems([{ id: Date.now(), from: `${currentUser.firstName} ${currentUser.lastName}`, ...form }, ...items])
+    setItems([{ id: Date.now(), from: user.name, ...form }, ...items])
     setForm({ ...form, message: '' })
     setOpen(false)
     toast(`Kudos sent to ${form.to}`)
@@ -218,7 +309,7 @@ function Kudos() {
         <form onSubmit={submit} className="space-y-4">
           <label className="block text-sm font-medium">Colleague
             <select className="input mt-1" value={form.to} onChange={(e) => setForm({ ...form, to: e.target.value })}>
-              {people.filter((p) => p.id !== 1).map((p) => <option key={p.id}>{p.name}</option>)}
+              {people.filter((p) => p.name !== user.name).map((p) => <option key={p.id}>{p.name}</option>)}
             </select>
           </label>
           <fieldset>
@@ -282,21 +373,25 @@ function NewJoiners() {
 }
 
 export default function Home() {
+  const { user } = useUser()
+  const dash = dashboardFor(user.dept)
   return (
     <div className="space-y-6">
-      <div className="grid gap-6 xl:grid-cols-3">
-        <div className="xl:col-span-2"><Hero /></div>
-        <QuickLinks />
+      <div className="grid gap-6 xl:grid-cols-3 [&>*]:min-w-0">
+        <div className="xl:col-span-2"><Hero user={user} /></div>
+        <QuickLinks links={dash.quickLinks} />
       </div>
-      <Kpis />
-      <div className="grid gap-6 xl:grid-cols-3">
+      {user.newStaff && <FirstNinetyDays user={user} />}
+      <Kpis kpis={dash.kpis} />
+      <div className="grid gap-6 xl:grid-cols-3 [&>*]:min-w-0">
+        <div className="xl:col-span-2"><FocusWidget key={user.dept} focus={dash.focus} /></div>
+        <Events />
+      </div>
+      <div className="grid gap-6 xl:grid-cols-3 [&>*]:min-w-0">
         <div className="xl:col-span-2"><NewsFeed /></div>
-        <div className="space-y-6"><Events /><Poll /></div>
+        <div className="space-y-6"><Poll /><NewJoiners /></div>
       </div>
-      <div className="grid gap-6 xl:grid-cols-3">
-        <div className="xl:col-span-2"><Kudos /></div>
-        <NewJoiners />
-      </div>
+      <Kudos />
     </div>
   )
 }

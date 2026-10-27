@@ -6,6 +6,7 @@ import { useLocalStorage } from '../hooks/useLocalStorage'
 import { useToast } from '../components/Toast'
 import Modal from '../components/Modal'
 import SectionHeader from '../components/SectionHeader'
+import { EmptyIllustration } from '../components/Illustrations'
 
 const typeTone = { PDF: 'bg-rose-100 text-rose-700', XLSX: 'bg-emerald-100 text-emerald-700', DOCX: 'bg-sky-100 text-sky-700', PPTX: 'bg-accent-100 text-accent-700', ZIP: 'bg-slate-200 text-slate-700' }
 
@@ -73,12 +74,12 @@ export default function Docs() {
   return (
     <div className="space-y-6">
       <div>
-        <h1 className="text-2xl font-bold text-slate-900 dark:text-white">Docs & HR</h1>
+        <h1 className="text-2xl font-extrabold text-slate-900 sm:text-3xl dark:text-white">Docs & HR</h1>
         <p className="mt-1 text-sm text-slate-500">Policies, templates and self-service in one place.</p>
       </div>
 
       <div className="grid gap-6 lg:grid-cols-3">
-        <section className="grid gap-4 sm:grid-cols-3 lg:col-span-2">
+        <section className="stagger grid gap-4 sm:grid-cols-3 lg:col-span-2">
           {actions.map((a) => (
             <button key={a.key} onClick={() => (a.key === 'payslip' ? toast('October payslip downloaded') : setModal(a.key))} className="card card-hover group p-5 text-left">
               <span className="flex h-11 w-11 items-center justify-center rounded-xl bg-accent-50 text-accent-600 transition group-hover:bg-accent-600 group-hover:text-white dark:bg-accent-700/20"><a.icon size={20} /></span>
@@ -111,7 +112,13 @@ export default function Docs() {
             {cats.map((c) => <button key={c} onClick={() => setCat(c)} className={`chip shrink-0 px-3 py-1.5 text-sm ${cat === c ? 'bg-brand-700 text-white' : 'bg-slate-100 text-slate-600 dark:bg-slate-800 dark:text-slate-300'}`}>{c}</button>)}
           </div>
         </div>
-        {filtered.length === 0 && <p className="py-10 text-center text-sm text-slate-500">No documents match.</p>}
+        {filtered.length === 0 && (
+          <div className="flex flex-col items-center py-10 text-center">
+            <EmptyIllustration />
+            <p className="mt-3 font-semibold">No documents match</p>
+            <p className="text-sm text-slate-500">Try another keyword or category.</p>
+          </div>
+        )}
         <ul className="divide-y divide-slate-100 dark:divide-slate-800">
           {filtered.map((d) => {
             const pinned = pins.includes(d.id)

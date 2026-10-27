@@ -3,6 +3,7 @@ import { useSearchParams } from 'react-router-dom'
 import { LayoutGrid, List, Mail, MapPin, MessageSquare, Phone, Search, X } from 'lucide-react'
 import { departments, people } from '../data'
 import Avatar from '../components/Avatar'
+import { EmptyIllustration } from '../components/Illustrations'
 
 const statusLabel = { online: 'Available', meeting: 'In a meeting', away: 'Away', offline: 'Offline' }
 
@@ -68,7 +69,7 @@ export default function People() {
   return (
     <div className="space-y-6">
       <div>
-        <h1 className="text-2xl font-bold text-slate-900 dark:text-white">People directory</h1>
+        <h1 className="text-2xl font-extrabold text-slate-900 sm:text-3xl dark:text-white">People directory</h1>
         <p className="mt-1 text-sm text-slate-500">{people.length} colleagues across {departments.length} departments</p>
       </div>
 
@@ -87,12 +88,19 @@ export default function People() {
         </div>
       </div>
 
-      {filtered.length === 0 && <div className="card p-12 text-center text-sm text-slate-500">Nobody matches “{q}”. Try a different name or skill.</div>}
+      {filtered.length === 0 && (
+        <div className="card flex flex-col items-center p-12 text-center">
+          <EmptyIllustration />
+          <p className="mt-4 font-semibold">No one matches “{q}”</p>
+          <p className="text-sm text-slate-500">Try a different name, skill or department.</p>
+          <button onClick={() => { setQ(''); setDept('All') }} className="btn-ghost mt-3 border border-slate-200 dark:border-slate-700">Clear filters</button>
+        </div>
+      )}
 
       {view === 'grid' ? (
-        <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
+        <div className="stagger grid gap-4 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
           {filtered.map((p) => (
-            <button key={p.id} onClick={() => open(p)} className="card card-hover animate-fade-up p-5 text-center">
+            <button key={p.id} onClick={() => open(p)} className="card card-hover p-5 text-center hover:border-brand-200 dark:hover:border-brand-700">
               <Avatar name={p.name} size="lg" status={p.status} />
               <p className="mt-3 font-semibold">{p.name}</p>
               <p className="text-sm text-slate-500">{p.role}</p>

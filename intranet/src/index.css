@@ -8,6 +8,11 @@
  */
 @theme {
   --font-sans: "Inter", ui-sans-serif, system-ui, sans-serif;
+  --font-display: "Plus Jakarta Sans", "Inter", ui-sans-serif, sans-serif;
+
+  /* Chart series — validated for colorblind separation (dataviz validator, light on #fff). */
+  --color-chart-1: #3a5092;
+  --color-chart-2: #ea580c;
 
   --color-brand-50: #eef1f9;
   --color-brand-100: #d9dff0;
@@ -29,7 +34,18 @@
   --color-accent-700: #c2410c;
 }
 
+/* Dark-mode chart steps, validated against the dark card surface (#0f172a). */
+.dark {
+  --color-chart-1: #566dad;
+}
+
 @layer base {
+  h1, h2, h3 {
+    @apply font-display;
+  }
+  h1 {
+    @apply tracking-tight;
+  }
   body {
     @apply bg-slate-50 text-slate-800 antialiased dark:bg-slate-950 dark:text-slate-200;
   }
@@ -69,6 +85,36 @@
 }
 .animate-fade-up { animation: fade-up 0.35s ease-out both; }
 
+/* Staggered entrance for direct children of a grid/list. */
+.stagger > * { animation: fade-up 0.5s cubic-bezier(0.2, 0.7, 0.2, 1) both; }
+.stagger > *:nth-child(2) { animation-delay: 60ms; }
+.stagger > *:nth-child(3) { animation-delay: 120ms; }
+.stagger > *:nth-child(4) { animation-delay: 180ms; }
+.stagger > *:nth-child(5) { animation-delay: 240ms; }
+.stagger > *:nth-child(6) { animation-delay: 300ms; }
+.stagger > *:nth-child(n+7) { animation-delay: 340ms; }
+
+@keyframes shimmer {
+  from { background-position: -400px 0; }
+  to { background-position: 400px 0; }
+}
+.skeleton {
+  background: linear-gradient(90deg, rgb(241 245 249) 0%, rgb(226 232 240) 50%, rgb(241 245 249) 100%);
+  background-size: 800px 100%;
+  animation: shimmer 1.4s linear infinite;
+}
+.dark .skeleton {
+  background: linear-gradient(90deg, rgb(30 41 59) 0%, rgb(51 65 85) 50%, rgb(30 41 59) 100%);
+  background-size: 800px 100%;
+}
+
+@keyframes pop {
+  0% { transform: scale(0.6); opacity: 0; }
+  60% { transform: scale(1.08); opacity: 1; }
+  100% { transform: scale(1); }
+}
+.animate-pop { animation: pop 0.45s cubic-bezier(0.2, 0.7, 0.2, 1) both; }
+
 @media (prefers-reduced-motion: reduce) {
-  .animate-fade-up, .card-hover { animation: none; transition: none; }
+  .animate-fade-up, .animate-pop, .stagger > *, .card-hover, .skeleton { animation: none; transition: none; }
 }

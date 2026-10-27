@@ -1,10 +1,12 @@
 import { useEffect, useState } from 'react'
-import { NavLink, Outlet, useLocation } from 'react-router-dom'
+import { Navigate, NavLink, Outlet, useLocation } from 'react-router-dom'
 import { Bell, FileText, LayoutDashboard, Menu, Moon, Search, ShieldCheck, Sun, Users, X, LogOut, Settings } from 'lucide-react'
 import Logo from './Logo'
 import Avatar from './Avatar'
 import CommandPalette from './CommandPalette'
-import { brand, currentUser } from '../config/brand'
+import PersonaSwitcher from './PersonaSwitcher'
+import { brand } from '../config/brand'
+import { useUser } from '../context/UserContext'
 import { notifications as initialNotifications } from '../data'
 import { useLocalStorage } from '../hooks/useLocalStorage'
 
@@ -19,7 +21,7 @@ function Sidebar({ onNavigate }) {
   return (
     <div className="flex h-full flex-col bg-brand-700 text-brand-100">
       <div className="px-6 pt-6 pb-8">
-        <span className="inline-flex rounded-xl bg-white px-3 py-2"><Logo onLight /></span>
+        <Logo onDark className="h-10 w-auto" />
       </div>
       <nav className="flex-1 space-y-1 px-3" aria-label="Main">
         {nav.map(({ to, label, icon: Ico, end }) => (
@@ -60,6 +62,7 @@ export default function Layout() {
   const [notes, setNotes] = useState(initialNotifications)
   const [dark, setDark] = useLocalStorage('rex-dark', false)
   const location = useLocation()
+  const { user, blocked } = useUser()
   const unread = notes.filter((n) => n.unread).length
 
   useEffect(() => {
@@ -83,6 +86,9 @@ export default function Layout() {
     window.scrollTo(0, 0)
   }, [location.pathname])
 
+  // New staff stay in the walkthrough until it is complete.
+  if (blocked) return <Navigate to="/welcome" replace />
+
   return (
     <div className="min-h-screen">
       <aside className="fixed inset-y-0 left-0 z-30 hidden w-64 lg:block"><Sidebar /></aside>
@@ -100,7 +106,7 @@ export default function Layout() {
       <div className="lg:pl-64">
         <header className="sticky top-0 z-20 flex h-16 items-center gap-3 border-b border-slate-200/70 bg-white/80 px-4 backdrop-blur-md sm:px-6 dark:border-slate-800 dark:bg-slate-950/80">
           <button onClick={() => setMobileOpen(true)} className="btn-ghost p-2 lg:hidden" aria-label="Open menu"><Menu size={20} /></button>
-          <span className="lg:hidden"><Logo compact /></span>
+          <span className="lg:hidden"><Logo className="h-7 w-auto" /></span>
 
           <button
             onClick={() => setSearchOpen(true)}
@@ -137,14 +143,19 @@ export default function Layout() {
 
             <div className="relative">
               <button onClick={() => { setMenuOpen(!menuOpen); setBellOpen(false) }} className="ml-1 flex items-center gap-3 rounded-xl p-1 pr-2 hover:bg-slate-100 dark:hover:bg-slate-800" aria-label="Account menu">
-                <Avatar name={`${currentUser.firstName} ${currentUser.lastName}`} size="sm" status="online" />
+                <Avatar name={user.name} size="sm" status="online" />
                 <span className="hidden text-left leading-tight md:block">
-                  <span className="block text-sm font-medium">{currentUser.firstName} {currentUser.lastName}</span>
-                  <span className="block text-xs text-slate-500">{currentUser.role}</span>
+                  <span className="block text-sm font-medium">{user.name}</span>
+                  <span className="block text-xs text-slate-500">{user.role}</span>
                 </span>
               </button>
               {menuOpen && (
-                <div className="card animate-fade-up absolute right-0 mt-2 w-52 p-1.5 shadow-xl">
+                <div className="card animate-fade-up absolute right-0 mt-2 w-64 p-1.5 shadow-xl">
+                  <div className="border-b border-slate-100 px-3 pt-2 pb-3 dark:border-slate-800">
+                    <p className="text-sm font-semibold">{user.name}</p>
+                    <p className="text-xs text-slate-500">{user.role} · {user.dept}</p>
+                    <PersonaSwitcher className="mt-3" />
+                  </div>
                   <button className="btn-ghost w-full justify-start"><Settings size={16} /> Settings</button>
                   <button className="btn-ghost w-full justify-start"><LogOut size={16} /> Sign out</button>
                 </div>
@@ -154,7 +165,9 @@ export default function Layout() {
         </header>
 
         <main className="mx-auto max-w-7xl px-4 py-6 sm:px-6 lg:py-8">
-          <Outlet />
+          <div key={location.pathname} className="animate-fade-up">
+            <Outlet />
+          </div>
         </main>
       </div>
 

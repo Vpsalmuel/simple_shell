@@ -1,16 +1,9 @@
-// Company identity. To use the official logo file, drop it in /public and set `logo`.
+// Company identity. Logo files live in /public.
 export const brand = {
   name: 'Rex Insurance',
   shortName: 'Rex',
   product: 'Rex Hub',
   tagline: 'Protecting what matters, together.',
-  logo: null, // e.g. '/rex-logo.png' — falls back to the SVG <RexLogo /> when null
+  logo: { navy: '/rex-logo-navy.svg', white: '/rex-logo-white.svg' },
 }
 
-export const currentUser = {
-  firstName: 'Ada',
-  lastName: 'Okafor',
-  role: 'Senior Claims Analyst',
-  department: 'Claims',
-  initials: 'AO',
-}
