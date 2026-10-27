@@ -42,7 +42,7 @@ export const deptDashboards = {
       { label: 'CSAT', value: 4.7, unit: '/5', decimals: 1, delta: 2.2, hint: 'vs last month', good: 'up', series: [4.4, 4.5, 4.5, 4.6, 4.6, 4.6, 4.6, 4.7] },
       { label: 'Open complaints', value: 19, delta: -9.5, hint: 'vs last week', good: 'down', series: [28, 26, 25, 24, 22, 23, 21, 19] },
     ],
-    quickLinks: [{ label: 'Contact centre', icon: 'Headphones', href: '#' }, { label: 'Complaints log', icon: 'MessageSquareWarning', href: '#' }, { label: 'Claims portal', icon: 'ShieldCheck', href: '/claims' }],
+    quickLinks: [{ label: 'Contact centre', icon: 'Headphones', href: '#' }, { label: 'Complaints log', icon: 'MessageSquareWarning', href: '#' }, { label: 'Policy lookup', icon: 'FileStack', href: '#' }],
     focus: { type: 'list', title: 'Escalations', subtitle: 'Complaints needing a lead', items: [
       { primary: 'Bisi Akande — motor claim delay', secondary: 'Day 9 · promised callback 2pm', badge: 'Overdue', tone: 'critical' },
       { primary: 'Ngozi Peters — HMO pre-auth', secondary: 'Day 3 · awaiting hospital report', badge: 'Today', tone: 'warning' },

@@ -47,15 +47,16 @@ export const values = [
   { id: 'innovation', name: 'Innovation', icon: 'Lightbulb', short: 'We keep finding better ways.', detail: 'We experiment, learn fast, and use technology to remove friction for customers and colleagues.', example: 'Customer Care built a chat widget that halved average wait time.' },
 ]
 
+// Also powers the Departments pages. `dept` matches the people directory's department name.
 export const departmentTour = [
-  { id: 'claims', name: 'Claims', head: 'Tunde Bello', what: 'Registers, assesses and settles claims, and the moment customers judge us by.', video: { src: null, duration: '3:10' } },
-  { id: 'underwriting', name: 'Underwriting', head: 'Funmi Adeyemi', what: 'Prices and accepts risk so we can keep our promises sustainably.', video: { src: null, duration: '2:55' } },
-  { id: 'care', name: 'Customer Care', head: 'Zainab Lawal', what: 'The voice of Rex: calls, chat, complaints and customer feedback.', video: { src: null, duration: '2:20' } },
-  { id: 'actuarial', name: 'Actuarial', head: 'Ibrahim Musa', what: 'Models reserves, pricing and capital using data.', video: { src: null, duration: '2:45' } },
-  { id: 'finance', name: 'Finance', head: 'Bola Martins', what: 'Keeps the business solvent, paid and compliant.', video: { src: null, duration: '2:30' } },
-  { id: 'hr', name: 'People & Culture', head: 'Sarah Johnson', what: 'Hiring, growth, wellbeing and everything that makes Rex a great place to work.', video: { src: null, duration: '2:15' } },
-  { id: 'it', name: 'Technology', head: 'Emeka Nwosu', what: 'Runs the systems, security and tools everyone depends on.', video: { src: null, duration: '2:40' } },
-  { id: 'compliance', name: 'Legal & Compliance', head: 'David Okon', what: 'Keeps us on the right side of the regulator and the law.', video: { src: null, duration: '2:05' } },
+  { id: 'claims', dept: 'Claims', name: 'Claims', head: 'Tunde Bello', headcount: 120, location: 'Lagos HQ, floor 3', services: ['Register a claim', 'Claim status updates', 'Fraud referrals'], contact: 'claims@rexinsurance.com', what: 'Registers, assesses and settles claims, and the moment customers judge us by.', video: { src: null, duration: '3:10' } },
+  { id: 'underwriting', dept: 'Underwriting', name: 'Underwriting', head: 'Funmi Adeyemi', headcount: 85, location: 'Lagos HQ, floor 4', services: ['Quotes and referrals', 'Authority limits', 'Renewal pricing'], contact: 'underwriting@rexinsurance.com', what: 'Prices and accepts risk so we can keep our promises sustainably.', video: { src: null, duration: '2:55' } },
+  { id: 'care', dept: 'Customer Care', name: 'Customer Care', head: 'Zainab Lawal', headcount: 140, location: 'Lagos HQ, floor 1', services: ['Customer callbacks', 'Complaints', 'Customer feedback'], contact: 'care@rexinsurance.com', what: 'The voice of Rex: calls, chat, complaints and customer feedback.', video: { src: null, duration: '2:20' } },
+  { id: 'actuarial', dept: 'Actuarial', name: 'Actuarial', head: 'Ibrahim Musa', headcount: 18, location: 'Abuja office', services: ['Pricing models', 'Reserving', 'Data requests'], contact: 'actuarial@rexinsurance.com', what: 'Models reserves, pricing and capital using data.', video: { src: null, duration: '2:45' } },
+  { id: 'finance', dept: 'Finance', name: 'Finance', head: 'Bola Martins', headcount: 46, location: 'Lagos HQ, floor 5', services: ['Payments and approvals', 'Expenses', 'Management reports'], contact: 'finance@rexinsurance.com', what: 'Keeps the business solvent, paid and compliant.', video: { src: null, duration: '2:30' } },
+  { id: 'hr', dept: 'HR', name: 'People & Culture', head: 'Sarah Johnson', headcount: 22, location: 'Abuja office', services: ['Leave and benefits', 'Recruitment', 'Learning'], contact: 'people@rexinsurance.com', what: 'Hiring, growth, wellbeing and everything that makes Rex a great place to work.', video: { src: null, duration: '2:15' } },
+  { id: 'it', dept: 'IT', name: 'Technology', head: 'Emeka Nwosu', headcount: 64, location: 'Lagos HQ, floor 2', services: ['Service desk', 'Access requests', 'Security incidents'], contact: 'servicedesk@rexinsurance.com', what: 'Runs the systems, security and tools everyone depends on.', video: { src: null, duration: '2:40' } },
+  { id: 'compliance', dept: 'Legal & Compliance', name: 'Legal & Compliance', head: 'David Okon', headcount: 15, location: 'Lagos HQ, floor 5', services: ['Contract reviews', 'Regulatory questions', 'Gifts register'], contact: 'compliance@rexinsurance.com', what: 'Keeps us on the right side of the regulator and the law.', video: { src: null, duration: '2:05' } },
 ]
 
 // Sample policy text — replace with the approved policy documents.

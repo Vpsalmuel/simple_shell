@@ -5,6 +5,11 @@ import People from './pages/People'
 import Claims from './pages/Claims'
 import Docs from './pages/Docs'
 import Walkthrough from './pages/Walkthrough'
+import News from './pages/News'
+import Events from './pages/Events'
+import Learning from './pages/Learning'
+import Departments from './pages/Departments'
+import RequireAccess from './components/RequireAccess'
 
 export default function App() {
   return (
@@ -13,8 +18,14 @@ export default function App() {
       <Route element={<Layout />}>
         <Route index element={<Home />} />
         <Route path="people" element={<People />} />
-        <Route path="claims" element={<Claims />} />
+        <Route path="claims" element={<RequireAccess to="/claims"><Claims /></RequireAccess>} />
         <Route path="docs" element={<Docs />} />
+        <Route path="news" element={<News />} />
+        <Route path="news/:id" element={<News />} />
+        <Route path="events" element={<Events />} />
+        <Route path="learning" element={<Learning />} />
+        <Route path="departments" element={<Departments />} />
+        <Route path="departments/:id" element={<Departments />} />
         <Route path="*" element={<Home />} />
       </Route>
     </Routes>

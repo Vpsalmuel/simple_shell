@@ -1,47 +1,49 @@
 import { useEffect, useState } from 'react'
 import { Navigate, NavLink, Outlet, useLocation } from 'react-router-dom'
-import { Bell, FileText, LayoutDashboard, Menu, Moon, Search, ShieldCheck, Sun, Users, X, LogOut, Settings } from 'lucide-react'
+import { Bell, Menu, Moon, Search, Sun, X, LogOut, Settings } from 'lucide-react'
 import Logo from './Logo'
 import Avatar from './Avatar'
 import CommandPalette from './CommandPalette'
 import PersonaSwitcher from './PersonaSwitcher'
 import { brand } from '../config/brand'
 import { useUser } from '../context/UserContext'
+import { navFor } from '../config/nav'
 import { notifications as initialNotifications } from '../data'
 import { useLocalStorage } from '../hooks/useLocalStorage'
 
-const nav = [
-  { to: '/', label: 'Home', icon: LayoutDashboard, end: true },
-  { to: '/people', label: 'People', icon: Users },
-  { to: '/claims', label: 'Claims & Policy', icon: ShieldCheck },
-  { to: '/docs', label: 'Docs & HR', icon: FileText },
-]
-
 function Sidebar({ onNavigate }) {
+  const { user } = useUser()
   return (
     <div className="flex h-full flex-col bg-brand-700 text-brand-100">
-      <div className="px-6 pt-6 pb-8">
+      <div className="px-6 pt-6 pb-6">
         <Logo onDark className="h-10 w-auto" />
       </div>
-      <nav className="flex-1 space-y-1 px-3" aria-label="Main">
-        {nav.map(({ to, label, icon: Ico, end }) => (
-          <NavLink
-            key={to}
-            to={to}
-            end={end}
-            onClick={onNavigate}
-            className={({ isActive }) =>
-              `group relative flex items-center gap-3 rounded-xl px-3 py-2.5 text-sm font-medium transition ${isActive ? 'bg-white/10 text-white' : 'hover:bg-white/5 hover:text-white'}`
-            }
-          >
-            {({ isActive }) => (
-              <>
-                {isActive && <span className="absolute top-2 bottom-2 left-0 w-1 rounded-r bg-accent-500" />}
-                <Ico size={18} className={isActive ? 'text-accent-400' : ''} />
-                {label}
-              </>
-            )}
-          </NavLink>
+      <nav className="flex-1 space-y-5 overflow-y-auto px-3" aria-label="Main">
+        {navFor(user).map((group) => (
+          <div key={group.label}>
+            <p className="px-3 pb-1.5 text-[11px] font-semibold tracking-wider text-brand-300 uppercase">{group.label}</p>
+            <div className="space-y-0.5">
+              {group.items.map(({ to, label, icon: Ico, end }) => (
+                <NavLink
+                  key={to}
+                  to={to}
+                  end={end}
+                  onClick={onNavigate}
+                  className={({ isActive }) =>
+                    `group relative flex items-center gap-3 rounded-xl px-3 py-2 text-sm font-medium transition ${isActive ? 'bg-white/10 text-white' : 'hover:bg-white/5 hover:text-white'}`
+                  }
+                >
+                  {({ isActive }) => (
+                    <>
+                      {isActive && <span className="absolute top-2 bottom-2 left-0 w-1 rounded-r bg-accent-500" />}
+                      <Ico size={18} className={isActive ? 'text-accent-400' : ''} />
+                      {label}
+                    </>
+                  )}
+                </NavLink>
+              ))}
+            </div>
+          </div>
         ))}
       </nav>
       <div className="m-3 rounded-2xl bg-gradient-to-br from-accent-600 to-accent-500 p-4 text-white">

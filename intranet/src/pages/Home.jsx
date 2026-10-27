@@ -194,12 +194,12 @@ function NewsFeed() {
   const [liked, setLiked] = useLocalStorage('rex-liked', [])
   const [filter, setFilter] = useState('All')
   const cats = ['All', ...new Set(news.map((n) => n.category))]
-  const shown = filter === 'All' ? news : news.filter((n) => n.category === filter)
+  const shown = (filter === 'All' ? news : news.filter((n) => n.category === filter)).slice(0, 4)
   const toggle = (id) => setLiked(liked.includes(id) ? liked.filter((x) => x !== id) : [...liked, id])
 
   return (
     <section className="card p-5">
-      <SectionHeader title="Company news" action={<a href="#" className="text-sm font-medium text-brand-600 hover:underline dark:text-brand-300">View all</a>} />
+      <SectionHeader title="Company news" action={<Link to="/news" className="text-sm font-medium text-brand-600 hover:underline dark:text-brand-300">View all</Link>} />
       <div className="-mx-1 mb-4 flex gap-2 overflow-x-auto px-1 pb-1">
         {cats.map((c) => (
           <button key={c} onClick={() => setFilter(c)} className={`chip shrink-0 px-3 py-1 text-sm transition ${filter === c ? 'bg-brand-700 text-white' : 'bg-slate-100 text-slate-600 hover:bg-slate-200 dark:bg-slate-800 dark:text-slate-300'}`}>{c}</button>
@@ -213,7 +213,7 @@ function NewsFeed() {
               <Photo src={n.image} alt="" label={n.category} className="hidden h-24 w-36 shrink-0 sm:block" />
               <div className="min-w-0 flex-1">
                 <span className="chip mb-1 bg-brand-50 text-brand-700 sm:hidden dark:bg-slate-800 dark:text-brand-200">{n.category}</span>
-                <a href="#" className="block font-semibold text-slate-900 hover:text-brand-600 dark:text-white">{n.title}</a>
+                <Link to={`/news/${n.id}`} className="block font-semibold text-slate-900 hover:text-brand-600 dark:text-white">{n.title}</Link>
                 <p className="mt-1 line-clamp-2 text-sm text-slate-500">{n.excerpt}</p>
                 <div className="mt-2 flex flex-wrap items-center gap-x-4 gap-y-1 text-xs text-slate-400">
                   <span>{n.author}</span>
@@ -242,9 +242,9 @@ function Events() {
   }
   return (
     <section className="card p-5">
-      <SectionHeader title="Upcoming events" action={<CalendarDays size={18} className="text-slate-400" />} />
+      <SectionHeader title="Upcoming events" action={<Link to="/events" className="inline-flex items-center gap-1 text-sm font-medium text-brand-600 hover:underline dark:text-brand-300"><CalendarDays size={16} /> Calendar</Link>} />
       <ul className="space-y-3">
-        {events.map((e) => {
+        {events.filter((e) => e.date >= new Date().toISOString().slice(0, 10)).slice(0, 4).map((e) => {
           const d = new Date(e.date)
           const going = rsvp.includes(e.id)
           return (

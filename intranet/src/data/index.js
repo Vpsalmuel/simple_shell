@@ -26,18 +26,48 @@ export const announcements = [
 ]
 
 // `image`: a path in /public (e.g. '/images/telematics.jpg') or a URL. null shows the branded placeholder.
+// `body`: paragraphs shown on the article page.
 export const news = [
-  { id: 1, category: 'Product', title: 'Telematics motor cover launches in pilot states', excerpt: 'Usage-based pricing goes live for 2,000 customers. Underwriting shares what we learned.', author: 'Funmi Adeyemi', date: '2026-10-24', readMins: 4, likes: 42, comments: 9, image: null },
-  { id: 2, category: 'Claims', title: 'Average claim settlement down to 6.2 days', excerpt: 'The new triage workflow cut handling time by 31%. Here is how the team did it.', author: 'Tunde Bello', date: '2026-10-22', readMins: 3, likes: 67, comments: 14, image: null },
-  { id: 3, category: 'People', title: 'Meet the Customer Care team behind our 4.7★ rating', excerpt: 'A day on the frontline with the team that handles 3,000 calls a week.', author: 'Sarah Johnson', date: '2026-10-20', readMins: 5, likes: 38, comments: 6, image: null },
-  { id: 4, category: 'IT', title: 'Single sign-on rolls out to all core systems', excerpt: 'One login for the policy admin, claims portal and HR. Migration dates inside.', author: 'Emeka Nwosu', date: '2026-10-18', readMins: 2, likes: 25, comments: 3, image: null },
+  { id: 1, category: 'Product', title: 'Telematics motor cover launches in pilot states', excerpt: 'Usage-based pricing goes live for 2,000 customers. Underwriting shares what we learned.', author: 'Funmi Adeyemi', date: '2026-10-24', readMins: 4, likes: 42, comments: 9, image: null, featured: true,
+    body: ['Our first usage-based motor product is live for 2,000 customers across three pilot states. Drivers who share trip data through the Rex app can save up to 20% on renewal.', 'Underwriting spent six months modelling driving behaviour with the Actuarial team. Early results show safer drivers opting in, which improves the risk pool for everyone.', 'Customer Care has a new script for telematics questions, and Claims can now see trip data for any motor claim from an enrolled customer.'] },
+  { id: 2, category: 'Claims', title: 'Average claim settlement down to 6.2 days', excerpt: 'The new triage workflow cut handling time by 31%. Here is how the team did it.', author: 'Tunde Bello', date: '2026-10-22', readMins: 3, likes: 67, comments: 14, image: null,
+    body: ['Twelve weeks ago the average claim took 8.1 days to settle. This week it was 6.2.', 'The biggest change was triage: simple claims under ₦500,000 now go straight to a fast-track queue with pre-approved settlement limits.', 'Next up: same-day settlement for windscreen and minor motor damage.'] },
+  { id: 3, category: 'People', title: 'Meet the Customer Care team behind our 4.7★ rating', excerpt: 'A day on the frontline with the team that handles 3,000 calls a week.', author: 'Sarah Johnson', date: '2026-10-20', readMins: 5, likes: 38, comments: 6, image: null,
+    body: ['From 7am the phones start ringing. Zainab Lawal’s team of 40 handles policy questions, claims updates and the occasional very upset customer.', 'Their secret? Call back before the customer has to chase, and never end a call without a clear next step.'] },
+  { id: 4, category: 'IT', title: 'Single sign-on rolls out to all core systems', excerpt: 'One login for the policy admin, claims portal and HR. Migration dates inside.', author: 'Emeka Nwosu', date: '2026-10-18', readMins: 2, likes: 25, comments: 3, image: null,
+    body: ['From 3 November you will sign in once to reach policy admin, the claims workbench, HR and email.', 'Multi-factor authentication stays on for every system. Keep your authenticator app handy during the switch.'] },
+  { id: 5, category: 'Company', title: 'Q3 results: gross written premium up 18%', excerpt: 'Strong growth in motor and health, with a combined ratio of 94%.', author: 'Grace Eze', date: '2026-10-15', readMins: 4, likes: 88, comments: 21, image: null,
+    body: ['Gross written premium grew 18% year on year, led by motor and health.', 'Our combined ratio improved to 94%, and customer NPS rose to 62. Thank you to every team. The town hall recording is in the Docs hub.'] },
+  { id: 6, category: 'Wellbeing', title: 'Open enrolment for the 2027 health plan', excerpt: 'Review your HMO options and add dependants before 30 November.', author: 'Sarah Johnson', date: '2026-10-12', readMins: 2, likes: 19, comments: 4, image: null,
+    body: ['Three plan tiers are available for 2027, and you can now add up to four dependants.', 'Drop-in sessions with our HMO partner run every Wednesday in November.'] },
 ]
 
+// Dates in 2026. `type` drives the colour chip and filter.
 export const events = [
-  { id: 1, date: '2026-10-29', time: '10:00', title: 'Monthly town hall', place: 'Auditorium + Teams', type: 'Company' },
-  { id: 2, date: '2026-10-31', time: '14:00', title: 'Fraud detection masterclass', place: 'Room 4B', type: 'Learning' },
-  { id: 3, date: '2026-11-04', time: '08:30', title: 'Wellness walk', place: 'HQ car park', type: 'Social' },
-  { id: 4, date: '2026-11-07', time: '12:00', title: 'Reinsurance renewals briefing', place: 'Teams', type: 'Business' },
+  { id: 1, date: '2026-10-29', time: '10:00', end: '11:30', title: 'Monthly town hall', place: 'Auditorium + Teams', type: 'Company', host: 'Executive Office', desc: 'Q3 results, the 2027 plan, and open Q&A with the leadership team.' },
+  { id: 2, date: '2026-10-31', time: '14:00', end: '16:00', title: 'Fraud detection masterclass', place: 'Room 4B', type: 'Learning', host: 'Claims', desc: 'Spotting staged accidents and inflated invoices, with real case studies.' },
+  { id: 3, date: '2026-11-04', time: '08:30', end: '09:30', title: 'Wellness walk', place: 'HQ car park', type: 'Social', host: 'HR', desc: 'A 5km walk around the business district. Trainers and water provided.' },
+  { id: 4, date: '2026-11-07', time: '12:00', end: '13:00', title: 'Reinsurance renewals briefing', place: 'Teams', type: 'Business', host: 'Finance', desc: 'What changes in the 2027 treaty programme and what it means for underwriting limits.' },
+  { id: 5, date: '2026-11-12', time: '15:00', end: '16:00', title: 'New starters welcome session', place: 'Training room 1', type: 'Company', host: 'HR', desc: 'Meet the leadership team and your fellow new joiners.' },
+  { id: 6, date: '2026-11-18', time: '10:00', end: '12:00', title: 'IFRS 17 refresher', place: 'Teams', type: 'Learning', host: 'Finance', desc: 'A practical refresher for finance, actuarial and underwriting staff.' },
+  { id: 7, date: '2026-11-20', time: '17:30', end: '20:00', title: 'Inter-department football', place: 'Rex sports ground', type: 'Social', host: 'People & Culture', desc: 'Claims vs Underwriting in the semi-final. Bring your loudest voice.' },
+  { id: 8, date: '2026-11-26', time: '09:00', end: '17:00', title: 'Customer Care awards day', place: 'Auditorium', type: 'Company', host: 'Customer Care', desc: 'Celebrating the colleagues who went the extra mile this year.' },
+  { id: 9, date: '2026-12-03', time: '11:00', end: '12:00', title: 'Cyber security awareness', place: 'Teams', type: 'Learning', host: 'IT', desc: 'Phishing, passwords and how to report an incident.' },
+  { id: 10, date: '2026-12-18', time: '18:00', end: '22:00', title: 'End-of-year party', place: 'To be decided by poll', type: 'Social', host: 'People & Culture', desc: 'Our biggest night of the year. Vote for the venue on the Home page.' },
+]
+
+// `mandatory` courses are assigned to everyone with a due date. `progress` is the demo user's completion %.
+export const courses = [
+  { id: 'aml', title: 'Anti-money laundering essentials', category: 'Compliance', mins: 40, level: 'All staff', mandatory: true, due: '2026-11-15', progress: 60 },
+  { id: 'ndpa', title: 'Data protection (NDPA) in practice', category: 'Compliance', mins: 30, level: 'All staff', mandatory: true, due: '2026-11-15', progress: 0 },
+  { id: 'cyber', title: 'Cyber security awareness', category: 'Compliance', mins: 25, level: 'All staff', mandatory: true, due: '2026-12-31', progress: 100 },
+  { id: 'claims101', title: 'Claims handling fundamentals', category: 'Insurance', mins: 90, level: 'Beginner', progress: 0 },
+  { id: 'uw', title: 'Introduction to underwriting', category: 'Insurance', mins: 75, level: 'Beginner', progress: 35 },
+  { id: 'ifrs17', title: 'IFRS 17 for non-accountants', category: 'Insurance', mins: 60, level: 'Intermediate', progress: 0 },
+  { id: 'cx', title: 'Handling difficult conversations', category: 'Customer', mins: 45, level: 'All staff', progress: 0 },
+  { id: 'excel', title: 'Excel for analysis', category: 'Tools & data', mins: 120, level: 'Intermediate', progress: 0 },
+  { id: 'lead', title: 'First-time manager programme', category: 'Leadership', mins: 240, level: 'Managers', progress: 0 },
+  { id: 'feedback', title: 'Giving and receiving feedback', category: 'Leadership', mins: 35, level: 'All staff', progress: 0 },
 ]
 
 export const kudos = [

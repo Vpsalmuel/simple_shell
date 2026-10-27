@@ -1,19 +1,15 @@
 import { useEffect, useMemo, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
-import { FileText, Search, User, ShieldCheck, LayoutDashboard, CornerDownLeft } from 'lucide-react'
-import { people, documents, claims } from '../data'
-
-const pages = [
-  { label: 'Home', to: '/', icon: LayoutDashboard },
-  { label: 'People directory', to: '/people', icon: User },
-  { label: 'Claims & policy hub', to: '/claims', icon: ShieldCheck },
-  { label: 'Docs & HR', to: '/docs', icon: FileText },
-]
+import { CornerDownLeft, FileText, Newspaper, Search, ShieldCheck, User } from 'lucide-react'
+import { claims, documents, news, people } from '../data'
+import { canAccess, navFor, navItem } from '../config/nav'
+import { useUser } from '../context/UserContext'
 
 export default function CommandPalette({ open, onClose }) {
   const [q, setQ] = useState('')
   const [active, setActive] = useState(0)
   const navigate = useNavigate()
+  const { user } = useUser()
 
   useEffect(() => {
     if (open) {
@@ -25,19 +21,20 @@ export default function CommandPalette({ open, onClose }) {
   const results = useMemo(() => {
     const term = q.trim().toLowerCase()
     const match = (s) => s.toLowerCase().includes(term)
-    const items = [
-      ...pages.filter((p) => !term || match(p.label)).map((p) => ({ group: 'Pages', label: p.label, icon: p.icon, to: p.to })),
-    ]
+    const pages = navFor(user).flatMap((g) => g.items)
+    const items = pages.filter((p) => !term || match(p.label)).map((p) => ({ group: 'Pages', label: p.label, icon: p.icon, to: p.to }))
     if (term) {
       people.filter((p) => match(p.name) || match(p.role) || match(p.dept)).slice(0, 5)
         .forEach((p) => items.push({ group: 'People', label: p.name, meta: p.role, icon: User, to: `/people?id=${p.id}` }))
       documents.filter((d) => match(d.title) || match(d.category)).slice(0, 5)
         .forEach((d) => items.push({ group: 'Documents', label: d.title, meta: d.category, icon: FileText, to: `/docs?q=${encodeURIComponent(d.title)}` }))
-      claims.filter((c) => match(c.id) || match(c.insured)).slice(0, 5)
+      news.filter((n) => match(n.title) || match(n.category)).slice(0, 4)
+        .forEach((n) => items.push({ group: 'News', label: n.title, meta: n.category, icon: Newspaper, to: `/news/${n.id}` }))
+      if (canAccess(navItem('/claims'), user)) claims.filter((c) => match(c.id) || match(c.insured)).slice(0, 5)
         .forEach((c) => items.push({ group: 'Claims', label: c.id, meta: c.insured, icon: ShieldCheck, to: `/claims?claim=${c.id}` }))
     }
     return items
-  }, [q])
+  }, [q, user])
 
   const go = (item) => {
     navigate(item.to)
@@ -64,7 +61,7 @@ export default function CommandPalette({ open, onClose }) {
             value={q}
             onChange={(e) => { setQ(e.target.value); setActive(0) }}
             onKeyDown={onKeyDown}
-            placeholder="Search people, documents, claims…"
+            placeholder="Search pages, people, news, documents…"
             className="h-14 w-full bg-transparent text-sm outline-none"
           />
           <kbd className="rounded border border-slate-200 px-1.5 text-[10px] text-slate-400 dark:border-slate-700">ESC</kbd>
