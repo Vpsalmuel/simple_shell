@@ -14,7 +14,7 @@ export function ToastProvider({ children }) {
   return (
     <ToastContext.Provider value={toast}>
       {children}
-      <div className="pointer-events-none fixed right-4 bottom-4 z-[60] flex flex-col gap-2" aria-live="polite">
+      <div className="pointer-events-none fixed right-4 bottom-20 z-[60] flex flex-col gap-2" aria-live="polite">
         {toasts.map((t) => (
           <div key={t.id} className="animate-fade-up flex items-center gap-2 rounded-xl bg-brand-900 px-4 py-3 text-sm text-white shadow-xl">
             <CheckCircle2 size={16} className="text-accent-400" /> {t.message}

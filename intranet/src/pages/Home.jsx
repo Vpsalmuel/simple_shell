@@ -1,8 +1,10 @@
 import { useEffect, useState } from 'react'
 import { Link } from 'react-router-dom'
 import { ArrowDownRight, ArrowRight, ArrowUpRight, CalendarDays, Check, ChevronLeft, ChevronRight, Clock, Heart, MapPin, MessageCircle, Sparkles, Trophy, X } from 'lucide-react'
-import { announcements, claims, events, kudos as initialKudos, news, people, poll } from '../data'
+import { announcements, claims, events, kudos as initialKudos, people, poll } from '../data'
+import { useNews } from '../hooks/useNews'
 import { dashboardFor } from '../config/departments'
+import { values } from '../data/onboarding'
 import { useUser } from '../context/UserContext'
 import { useLocalStorage } from '../hooks/useLocalStorage'
 import { useCountUp } from '../hooks/useCountUp'
@@ -183,7 +185,7 @@ function FirstNinetyDays({ user }) {
       <span className="flex h-12 w-12 shrink-0 items-center justify-center rounded-2xl bg-accent-600 text-white"><Sparkles size={22} /></span>
       <div className="flex-1">
         <p className="font-display font-bold">Your first 90 days, {user.firstName}</p>
-        <p className="text-sm text-slate-600 dark:text-slate-300">Meet your buddy Funmi Adeyemi on Thursday, and finish your role training by 30 Nov.</p>
+        <p className="text-sm text-slate-600 dark:text-slate-300">Your buddy is {user.buddy} and your manager is {user.manager}. Finish your role training by 30 Nov.</p>
       </div>
       <Link to="/welcome" className="btn-ghost shrink-0 border border-slate-200 bg-white dark:border-slate-700 dark:bg-slate-900">Revisit walkthrough</Link>
     </section>
@@ -191,6 +193,7 @@ function FirstNinetyDays({ user }) {
 }
 
 function NewsFeed() {
+  const { news } = useNews()
   const [liked, setLiked] = useLocalStorage('rex-liked', [])
   const [filter, setFilter] = useState('All')
   const cats = ['All', ...new Set(news.map((n) => n.category))]
@@ -271,7 +274,7 @@ function Events() {
 function Kudos() {
   const [items, setItems] = useState(initialKudos)
   const [open, setOpen] = useState(false)
-  const [form, setForm] = useState({ to: people[1].name, value: 'Customer first', message: '' })
+  const [form, setForm] = useState({ to: people[1].name, value: values[0].name, message: '' })
   const toast = useToast()
   const { user } = useUser()
 
@@ -315,7 +318,7 @@ function Kudos() {
           <fieldset>
             <legend className="text-sm font-medium">Value</legend>
             <div className="mt-2 flex flex-wrap gap-2">
-              {['Customer first', 'Ownership', 'Innovation', 'Integrity'].map((v) => (
+              {values.map(({ name: v }) => (
                 <button type="button" key={v} onClick={() => setForm({ ...form, value: v })} className={`chip px-3 py-1 text-sm ${form.value === v ? 'bg-accent-600 text-white' : 'bg-slate-100 text-slate-600 dark:bg-slate-800 dark:text-slate-300'}`}>{v}</button>
               ))}
             </div>

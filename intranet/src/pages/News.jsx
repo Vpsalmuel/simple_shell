@@ -1,7 +1,7 @@
 import { useMemo, useState } from 'react'
 import { Link, useParams } from 'react-router-dom'
 import { ArrowLeft, Clock, Heart, MessageCircle, Search, Send } from 'lucide-react'
-import { news } from '../data'
+import { useNews } from '../hooks/useNews'
 import { useLocalStorage } from '../hooks/useLocalStorage'
 import { useUser } from '../context/UserContext'
 import Avatar from '../components/Avatar'
@@ -37,7 +37,7 @@ function Meta({ n, liked, toggle }) {
   )
 }
 
-function Article({ id }) {
+function Article({ id, news }) {
   const n = news.find((x) => String(x.id) === id)
   const [liked, toggle] = useLikes()
   const { user } = useUser()
@@ -96,6 +96,7 @@ function Article({ id }) {
 
 export default function News() {
   const { id } = useParams()
+  const { news } = useNews()
   const [liked, toggle] = useLikes()
   const [q, setQ] = useState('')
   const [cat, setCat] = useState('All')
@@ -104,9 +105,9 @@ export default function News() {
   const filtered = useMemo(() => {
     const t = q.toLowerCase()
     return news.filter((n) => (cat === 'All' || n.category === cat) && (n.title.toLowerCase().includes(t) || n.excerpt.toLowerCase().includes(t)))
-  }, [q, cat])
+  }, [q, cat, news])
 
-  if (id) return <Article id={id} />
+  if (id) return <Article id={id} news={news} />
 
   const showFeatured = cat === 'All' && !q
   const featured = news.find((n) => n.featured)

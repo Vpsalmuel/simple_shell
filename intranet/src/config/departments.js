@@ -92,6 +92,34 @@ export const deptDashboards = {
       { primary: 'VPN', secondary: 'Port Harcourt office', badge: 'Outage', tone: 'critical' },
     ], cta: { label: 'Open service desk', to: '#' } },
   },
+  'Brand & Communications': {
+    kpis: [
+      { label: 'Intranet visitors (week)', value: 712, delta: 6.3, hint: 'of 850 staff', good: 'up', series: [590, 610, 640, 655, 660, 680, 670, 712] },
+      { label: 'Announcement read rate', value: 78, unit: '%', delta: 4.0, hint: 'vs last month', good: 'up', series: [66, 68, 70, 71, 73, 74, 75, 78] },
+      { label: 'Kudos given (month)', value: 146, delta: 12.3, hint: 'vs last month', good: 'up', series: [98, 104, 110, 118, 121, 130, 130, 146] },
+      { label: 'Requests in queue', value: 6, delta: -25, hint: 'vs last week', good: 'down', series: [10, 9, 9, 8, 8, 8, 8, 6] },
+    ],
+    quickLinks: [{ label: 'Publish news', icon: 'Megaphone', href: '/admin' }, { label: 'Brand assets', icon: 'Palette', href: '/knowledge' }, { label: 'Request Centre', icon: 'Inbox', href: '/requests' }],
+    focus: { type: 'list', title: 'Content calendar', subtitle: 'Scheduled for the next two weeks', items: [
+      { primary: 'Town hall recap and recording', secondary: 'News · Thu 29 Oct', badge: 'Drafting', tone: 'warning' },
+      { primary: 'Health plan open enrolment reminder', secondary: 'Announcement · Mon 2 Nov', badge: 'Scheduled', tone: 'good' },
+      { primary: 'Single sign-on go-live notice', secondary: 'Announcement · Tue 3 Nov', badge: 'Needs IT review', tone: 'critical' },
+    ], cta: { label: 'Open Admin Workspace', to: '/admin' } },
+  },
+  'Executive Office': {
+    kpis: [
+      { label: 'Gross written premium (YTD)', value: 38.6, unit: 'bn', prefix: '₦', decimals: 1, delta: 18, hint: 'vs last year', good: 'up', series: [24.1, 26.8, 29.0, 31.2, 33.0, 34.9, 36.7, 38.6] },
+      { label: 'Combined ratio', value: 94, unit: '%', delta: -2.1, hint: 'vs last quarter', good: 'down', series: [99, 98, 97, 97, 96, 95, 96, 94] },
+      { label: 'Customer NPS', value: 62, delta: 3.1, hint: 'vs last quarter', good: 'up', series: [54, 55, 57, 58, 59, 60, 60, 62] },
+      { label: 'Staff engagement', value: 81, unit: '%', delta: 2.5, hint: 'pulse survey', good: 'up', series: [74, 75, 76, 77, 78, 79, 79, 81] },
+    ],
+    quickLinks: [{ label: 'Board pack', icon: 'BarChart3', href: '#' }, { label: 'Admin Workspace', icon: 'LayoutGrid', href: '/admin' }, { label: 'Request Centre', icon: 'Inbox', href: '/requests' }],
+    focus: { type: 'approvals', title: 'Awaiting your sign-off', subtitle: 'Escalated to the Managing Director', items: [
+      { id: 'x1', primary: 'Reinsurance treaty renewal 2027', secondary: '₦61.2M · Finance' },
+      { id: 'x2', primary: 'Telematics pilot: expand to 3 more states', secondary: 'Underwriting · business case' },
+      { id: 'x3', primary: 'Q4 hiring plan: 14 roles', secondary: 'People & Culture' },
+    ] },
+  },
 }
 
 export function dashboardFor(dept) {

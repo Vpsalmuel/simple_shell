@@ -10,6 +10,10 @@ import Events from './pages/Events'
 import Learning from './pages/Learning'
 import Departments from './pages/Departments'
 import RequireAccess from './components/RequireAccess'
+import Requests from './pages/Requests'
+import Knowledge from './pages/Knowledge'
+import Help from './pages/Help'
+import Admin from './pages/Admin'
 
 export default function App() {
   return (
@@ -20,6 +24,11 @@ export default function App() {
         <Route path="people" element={<People />} />
         <Route path="claims" element={<RequireAccess to="/claims"><Claims /></RequireAccess>} />
         <Route path="docs" element={<Docs />} />
+        <Route path="requests" element={<Requests />} />
+        <Route path="knowledge" element={<Knowledge />} />
+        <Route path="knowledge/:id" element={<Knowledge />} />
+        <Route path="help" element={<Help />} />
+        <Route path="admin" element={<RequireAccess to="/admin"><Admin /></RequireAccess>} />
         <Route path="news" element={<News />} />
         <Route path="news/:id" element={<News />} />
         <Route path="events" element={<Events />} />

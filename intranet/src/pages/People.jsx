@@ -3,6 +3,7 @@ import { useSearchParams } from 'react-router-dom'
 import { LayoutGrid, List, Mail, MapPin, MessageSquare, Phone, Search, X } from 'lucide-react'
 import { departments, people } from '../data'
 import Avatar from '../components/Avatar'
+import Portal from '../components/Portal'
 import { EmptyIllustration } from '../components/Illustrations'
 
 const statusLabel = { online: 'Available', meeting: 'In a meeting', away: 'Away', offline: 'Offline' }
@@ -11,6 +12,7 @@ function ProfilePanel({ person, onClose }) {
   if (!person) return null
   const reports = people.filter((p) => p.manager === person.name)
   return (
+    <Portal>
     <div className="fixed inset-0 z-50" role="dialog" aria-modal="true" aria-label={person.name}>
       <div className="absolute inset-0 bg-slate-900/40 backdrop-blur-sm" onClick={onClose} />
       <aside className="animate-fade-up absolute inset-y-0 right-0 w-full max-w-md overflow-y-auto bg-white shadow-2xl dark:bg-slate-900">
@@ -49,6 +51,7 @@ function ProfilePanel({ person, onClose }) {
         </div>
       </aside>
     </div>
+    </Portal>
   )
 }
 

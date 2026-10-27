@@ -5,6 +5,7 @@ import Logo from './Logo'
 import Avatar from './Avatar'
 import CommandPalette from './CommandPalette'
 import PersonaSwitcher from './PersonaSwitcher'
+import RexAI from './RexAI'
 import { brand } from '../config/brand'
 import { useUser } from '../context/UserContext'
 import { navFor } from '../config/nav'
@@ -49,7 +50,7 @@ function Sidebar({ onNavigate }) {
       <div className="m-3 rounded-2xl bg-gradient-to-br from-accent-600 to-accent-500 p-4 text-white">
         <p className="text-sm font-semibold">Need help?</p>
         <p className="mt-1 text-xs text-white/85">IT helpdesk is open 7am – 7pm.</p>
-        <button className="mt-3 w-full rounded-lg bg-white/20 py-1.5 text-xs font-medium hover:bg-white/30">Raise a ticket</button>
+        <NavLink to="/help" onClick={onNavigate} className="mt-3 block w-full rounded-lg bg-white/20 py-1.5 text-center text-xs font-medium hover:bg-white/30">Raise a ticket</NavLink>
       </div>
       <div className="border-t border-white/10 p-4 text-[11px] text-brand-200">© {new Date().getFullYear()} {brand.name}</div>
     </div>
@@ -174,6 +175,7 @@ export default function Layout() {
       </div>
 
       <CommandPalette open={searchOpen} onClose={() => setSearchOpen(false)} />
+      <RexAI key={user.id} />
     </div>
   )
 }

@@ -1,5 +1,6 @@
 import { useEffect } from 'react'
 import { X } from 'lucide-react'
+import Portal from './Portal'
 
 export default function Modal({ open, onClose, title, children, wide = false }) {
   useEffect(() => {
@@ -11,6 +12,7 @@ export default function Modal({ open, onClose, title, children, wide = false }) 
 
   if (!open) return null
   return (
+    <Portal>
     <div className="fixed inset-0 z-50 flex items-end justify-center p-0 sm:items-center sm:p-4" role="dialog" aria-modal="true" aria-label={title}>
       <div className="absolute inset-0 bg-slate-900/40 backdrop-blur-sm" onClick={onClose} />
       <div className={`animate-fade-up relative w-full ${wide ? 'sm:max-w-2xl' : 'sm:max-w-lg'} max-h-[90vh] overflow-y-auto rounded-t-2xl bg-white p-6 shadow-2xl sm:rounded-2xl dark:bg-slate-900`}>
@@ -21,5 +23,6 @@ export default function Modal({ open, onClose, title, children, wide = false }) 
         {children}
       </div>
     </div>
+    </Portal>
   )
 }

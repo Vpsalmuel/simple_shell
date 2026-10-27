@@ -1,6 +1,6 @@
 // Sample content. Replace with API calls (SharePoint, HRIS, claims system) when wiring a backend.
 
-export const departments = ['Executive Office', 'Claims', 'Underwriting', 'Actuarial', 'Customer Care', 'IT', 'HR', 'Finance', 'Legal & Compliance']
+export const departments = ['Executive Office', 'Brand & Communications', 'Claims', 'Underwriting', 'Actuarial', 'Customer Care', 'IT', 'HR', 'Finance', 'Legal & Compliance']
 
 export const people = [
   { id: 1, name: 'Ada Okafor', role: 'Senior Claims Analyst', dept: 'Claims', location: 'Lagos', email: 'ada.okafor@rexinsurance.com', phone: '+234 801 000 1001', status: 'online', manager: 'Tunde Bello', skills: ['Motor claims', 'Fraud triage'] },
@@ -16,6 +16,7 @@ export const people = [
   { id: 11, name: 'Amaka Udeh', role: 'Claims Adjuster', dept: 'Claims', location: 'Enugu', email: 'amaka.udeh@rexinsurance.com', phone: '+234 801 000 1011', status: 'online', manager: 'Tunde Bello', skills: ['Site surveys', 'Health claims'] },
   { id: 13, name: 'Bola Martins', role: 'Financial Controller', dept: 'Finance', location: 'Lagos', email: 'bola.martins@rexinsurance.com', phone: '+234 801 000 1013', status: 'online', manager: 'Grace Eze', skills: ['IFRS 17', 'Treasury'] },
   { id: 14, name: 'Kemi Adebayo', role: 'Graduate Trainee', dept: 'Underwriting', location: 'Lagos', email: 'kemi.adebayo@rexinsurance.com', phone: '+234 801 000 1014', status: 'online', manager: 'Funmi Adeyemi', skills: ['Learning the ropes'] },
+  { id: 15, name: 'Ngozi Eke', role: 'Communications Manager', dept: 'Brand & Communications', location: 'HQ', email: 'ngozi.eke@rexinsurance.com', phone: '+234 801 000 1015', status: 'online', manager: 'Grace Eze', skills: ['Internal comms', 'Brand'] },
   { id: 12, name: 'Kelvin Ade', role: 'Frontend Engineer', dept: 'IT', location: 'Remote', email: 'kelvin.ade@rexinsurance.com', phone: '+234 801 000 1012', status: 'offline', manager: 'Emeka Nwosu', skills: ['React', 'Design systems'] },
 ]
 
@@ -71,9 +72,9 @@ export const courses = [
 ]
 
 export const kudos = [
-  { id: 1, from: 'Tunde Bello', to: 'Amaka Udeh', message: 'Closed a complex flood claim in 3 days and the customer sent a thank-you letter.', value: 'Customer first' },
-  { id: 2, from: 'Zainab Lawal', to: 'Kelvin Ade', message: 'The new chat widget halved our wait times. Brilliant work.', value: 'Innovation' },
-  { id: 3, from: 'Funmi Adeyemi', to: 'Chinedu Obi', message: 'Stepped up on the marine renewals while the team was stretched.', value: 'Ownership' },
+  { id: 1, from: 'Tunde Bello', to: 'Amaka Udeh', message: 'Closed a complex flood claim in 3 days and the customer sent a thank-you letter.', value: 'Client Empathy' },
+  { id: 2, from: 'Zainab Lawal', to: 'Kelvin Ade', message: 'The new chat widget halved our wait times. Brilliant work.', value: 'Digital Precision' },
+  { id: 3, from: 'Funmi Adeyemi', to: 'Chinedu Obi', message: 'Stepped up on the marine renewals while the team was stretched.', value: 'Continuous Growth' },
 ]
 
 export const quickLinks = [

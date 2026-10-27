@@ -4,13 +4,15 @@ import { walkthroughSteps } from '../data/onboarding'
 
 // Demo personas. In production the signed-in user (and `newStaff`) comes from SSO / the HR system.
 export const personas = [
-  { id: 'new', firstName: 'Kemi', lastName: 'Adebayo', role: 'Graduate Trainee', dept: 'Underwriting', newStaff: true },
+  { id: 'new', firstName: 'Kemi', lastName: 'Adebayo', role: 'Graduate Trainee', dept: 'Underwriting', newStaff: true, manager: 'Funmi Adeyemi', buddy: 'Chinedu Obi' },
   { id: 'claims', firstName: 'Ada', lastName: 'Okafor', role: 'Senior Claims Analyst', dept: 'Claims' },
   { id: 'underwriting', firstName: 'Chinedu', lastName: 'Obi', role: 'Underwriter II', dept: 'Underwriting' },
   { id: 'care', firstName: 'Zainab', lastName: 'Lawal', role: 'Customer Care Lead', dept: 'Customer Care' },
   { id: 'hr', firstName: 'Sarah', lastName: 'Johnson', role: 'HR Business Partner', dept: 'HR' },
   { id: 'finance', firstName: 'Bola', lastName: 'Martins', role: 'Financial Controller', dept: 'Finance' },
   { id: 'it', firstName: 'Emeka', lastName: 'Nwosu', role: 'IT Service Manager', dept: 'IT' },
+  { id: 'comms', firstName: 'Ngozi', lastName: 'Eke', role: 'Communications Manager', dept: 'Brand & Communications' },
+  { id: 'md', firstName: 'Grace', lastName: 'Eze', role: 'Managing Director / CEO', dept: 'Executive Office' },
 ]
 
 const UserContext = createContext(null)
