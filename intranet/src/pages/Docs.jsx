@@ -1,10 +1,11 @@
 import { useMemo, useState } from 'react'
 import { useSearchParams } from 'react-router-dom'
-import { CalendarPlus, Download, FileText, Laptop, Pin, Search, Wallet } from 'lucide-react'
+import { CalendarPlus, DoorOpen, Download, FileText, Laptop, Pin, Search, Wallet } from 'lucide-react'
 import { documents, leaveBalance } from '../data'
 import { useLocalStorage } from '../hooks/useLocalStorage'
 import { useToast } from '../components/Toast'
 import Modal from '../components/Modal'
+import MeetingRoomModal from '../components/MeetingRoomModal'
 import SectionHeader from '../components/SectionHeader'
 import { EmptyIllustration } from '../components/Illustrations'
 
@@ -22,7 +23,7 @@ function LeaveForm({ onDone }) {
         <label className="block text-sm font-medium">From<input type="date" required className="input mt-1" value={form.from} onChange={(e) => setForm({ ...form, from: e.target.value })} /></label>
         <label className="block text-sm font-medium">To<input type="date" required min={form.from} className="input mt-1" value={form.to} onChange={(e) => setForm({ ...form, to: e.target.value })} /></label>
       </div>
-      {days > 0 && <p className="rounded-xl bg-brand-50 px-3 py-2 text-sm text-brand-700 dark:bg-slate-800 dark:text-brand-200">{days} calendar day{days === 1 ? '' : 's'} · goes to Tunde Bello for approval</p>}
+      {days > 0 && <p className="rounded-xl bg-brand-50 px-3 py-2 text-sm text-brand-700 dark:bg-slate-800 dark:text-brand-200">{days} calendar day{days === 1 ? '' : 's'} · goes to Arthur Pendelton for approval</p>}
       <label className="block text-sm font-medium">Note (optional)<textarea rows={2} className="input mt-1" value={form.note} onChange={(e) => setForm({ ...form, note: e.target.value })} /></label>
       <div className="flex justify-end"><button className="btn-primary">Submit request</button></div>
     </form>
@@ -69,6 +70,7 @@ export default function Docs() {
     { key: 'leave', label: 'Request leave', desc: 'Annual, sick or study', icon: CalendarPlus },
     { key: 'ticket', label: 'IT ticket', desc: 'Access, hardware, VPN', icon: Laptop },
     { key: 'payslip', label: 'Payslips', desc: 'Download latest', icon: Wallet },
+    { key: 'room', label: 'Book meeting room', desc: 'Opens SeamlessHR', icon: DoorOpen },
   ]
 
   return (
@@ -79,7 +81,7 @@ export default function Docs() {
       </div>
 
       <div className="grid gap-6 lg:grid-cols-3">
-        <section className="stagger grid gap-4 sm:grid-cols-3 lg:col-span-2">
+        <section className="stagger grid gap-4 sm:grid-cols-2 lg:col-span-2">
           {actions.map((a) => (
             <button key={a.key} onClick={() => (a.key === 'payslip' ? toast('October payslip downloaded') : setModal(a.key))} className="card card-hover group p-5 text-left">
               <span className="flex h-11 w-11 items-center justify-center rounded-xl bg-accent-50 text-accent-600 transition group-hover:bg-accent-600 group-hover:text-white dark:bg-accent-700/20"><a.icon size={20} /></span>
@@ -138,6 +140,7 @@ export default function Docs() {
       </section>
 
       <Modal open={modal === 'leave'} onClose={() => setModal(null)} title="Request leave"><LeaveForm onDone={done} /></Modal>
+      <MeetingRoomModal open={modal === 'room'} onClose={() => setModal(null)} />
       <Modal open={modal === 'ticket'} onClose={() => setModal(null)} title="Raise an IT ticket"><TicketForm onDone={done} /></Modal>
     </div>
   )

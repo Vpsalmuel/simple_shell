@@ -25,6 +25,7 @@ function ProfilePanel({ person, onClose }) {
           <h2 className="mt-3 text-xl font-bold">{person.name}</h2>
           <p className="text-sm text-slate-500">{person.role} · {person.dept}</p>
           <p className="mt-1 text-xs text-slate-400">{statusLabel[person.status]}</p>
+          {person.bio && <p className="mt-4 text-sm leading-relaxed text-slate-600 dark:text-slate-300">{person.bio}</p>}
 
           <div className="mt-5 grid grid-cols-3 gap-2">
             <a href={`mailto:${person.email}`} className="btn border border-slate-200 dark:border-slate-700"><Mail size={16} /> Email</a>

@@ -5,8 +5,8 @@
 const shared = {
   quickLinks: [
     { label: 'Payslips', icon: 'Wallet', href: '#' },
-    { label: 'IT helpdesk', icon: 'LifeBuoy', href: '#' },
-    { label: 'Learning', icon: 'GraduationCap', href: '#' },
+    { label: 'Book meeting room', icon: 'DoorOpen', action: 'meetingRoom' },
+    { label: 'Help Desk', icon: 'LifeBuoy', href: '/help' },
   ],
 }
 
@@ -30,7 +30,7 @@ export const deptDashboards = {
     ],
     quickLinks: [{ label: 'UW workbench', icon: 'Scale', href: '#' }, { label: 'Rating engine', icon: 'Calculator', href: '#' }, { label: 'Policy admin', icon: 'FileStack', href: '#' }],
     focus: { type: 'list', title: 'Referrals awaiting decision', subtitle: 'Above your authority limit', items: [
-      { primary: 'Coastline Logistics — Marine cargo', secondary: 'Sum insured ₦850M · referred by Chinedu Obi', badge: 'Due today', tone: 'critical' },
+      { primary: 'Coastline Logistics — Marine cargo', secondary: 'Sum insured ₦850M · broker referral', badge: 'Due today', tone: 'critical' },
       { primary: 'Unity Schools — Property', secondary: 'Sum insured ₦420M · flood zone B', badge: '2 days', tone: 'warning' },
       { primary: 'Apex Haulage — Fleet motor', secondary: '42 vehicles · telematics opt-in', badge: '4 days', tone: 'neutral' },
     ], cta: { label: 'Open workbench', to: '#' } },
@@ -58,8 +58,8 @@ export const deptDashboards = {
     ],
     quickLinks: [{ label: 'HR system', icon: 'Users', href: '#' }, { label: 'Recruitment', icon: 'UserPlus', href: '#' }, { label: 'Learning admin', icon: 'GraduationCap', href: '#' }],
     focus: { type: 'approvals', title: 'Pending approvals', subtitle: 'Leave and training requests', items: [
-      { id: 'a1', primary: 'Amaka Udeh — Annual leave', secondary: '11–15 Nov · 5 days' },
-      { id: 'a2', primary: 'Kelvin Ade — React certification', secondary: '₦180,000 · online course' },
+      { id: 'a1', primary: 'Chloe Chen — Annual leave', secondary: '11–15 Nov · 5 days' },
+      { id: 'a2', primary: 'Michael Okoro — mediation certification', secondary: '₦180,000 · online course' },
       { id: 'a3', primary: 'Ibrahim Musa — Study leave', secondary: '2–4 Dec · exam' },
     ] },
   },

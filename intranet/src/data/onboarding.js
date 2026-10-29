@@ -2,7 +2,7 @@
 // A video with `src: null` renders as a placeholder player so the flow can still be tested.
 
 export const walkthroughSteps = [
-  { id: 'md', label: "MD's welcome", blurb: 'A welcome from our Managing Director' },
+  { id: 'md', label: "MD's welcome", blurb: 'Please watch the welcome message from our Managing Director/CEO.' },
   { id: 'company', label: 'Company overview', blurb: 'Our history, mission and where we are going' },
   { id: 'values', label: 'Our values', blurb: 'What we stand for, every day' },
   { id: 'culture', label: 'Culture & workplace norms', blurb: 'How we work together, in the office and remote' },
@@ -10,7 +10,7 @@ export const walkthroughSteps = [
   { id: 'locations', label: 'Office locations', blurb: 'Find your way around headquarters' },
   { id: 'team', label: 'Meet your team', blurb: 'Your manager, your buddy and your colleagues' },
   { id: 'departments', label: 'Meet the departments', blurb: 'Culture videos from every team' },
-  { id: 'policies', label: 'HR & IT policies', blurb: 'Read and sign the policies that apply to everyone' },
+  { id: 'policies', label: 'HR & IT Policies', blurb: 'Read and sign the policies that apply to everyone' },
   { id: 'tools', label: 'Your tools & IT setup', blurb: 'Get signed in to the systems you need' },
   { id: 'performance', label: 'Performance management', blurb: 'How we set goals and review progress' },
   { id: 'feedback', label: 'Schedule buddy feedback', blurb: 'Book your first-week check-in' },
@@ -36,8 +36,8 @@ export const company = {
 }
 
 export const mdMessage = {
-  name: 'Grace Eze',
-  title: 'Managing Director / CEO',
+  name: 'Victoria Hawthorne',
+  title: 'Managing Director & CEO',
   video: { src: null, poster: null, duration: '2:40' },
   letter: [
     'Welcome to Rex Insurance. You have joined a team that exists for one reason: to be there for our customers on their worst days.',
@@ -66,6 +66,8 @@ export const products = [
   { id: 'energy', title: 'Energy Insurance', icon: 'Zap', variants: ['Oil & Gas', 'Renewable', 'Power Generation'], description: 'Risk solutions for the energy sector, including offshore and onshore operations, renewables and power generation.' },
   { id: 'engineering', title: 'Engineering Insurance', icon: 'HardHat', variants: ['Contractors All Risk', 'Erection All Risk', 'Plant & Machinery'], description: 'Cover for construction projects, machinery installation and operational equipment against physical loss or damage.' },
   { id: 'travel', title: 'Travel Insurance', icon: 'Luggage', variants: ['Local', 'International', 'Student', 'Pilgrimage'], description: 'Covers medical emergencies, trip cancellations, lost baggage and travel delays.' },
+  { id: 'marine', title: 'Marine Insurance', icon: 'Ship', variants: ['Marine Cargo', 'Marine Hull', 'Goods-in-Transit'], description: 'Covers goods moving by sea, air and road, and the vessels that carry them, against loss or damage in transit.' },
+  { id: 'bond', title: 'Bond Insurance', icon: 'ScrollText', variants: ['Bid Bond', 'Performance Bond', 'Advance Payment Bond', 'Customs Bond'], description: 'Guarantees that protect project owners and government agencies if a contractor or importer fails to meet their obligations.' },
   { id: 'aviation', title: 'Aviation Insurance', icon: 'Plane', variants: ['Hull All Risks', 'Passenger Liability', 'Airport Operators Liability'], description: 'Aircraft hull, passenger and third-party liability cover for airlines, private jets and aviation operations.' },
 ]
 
@@ -94,14 +96,14 @@ export const feedbackSlots = ['10:00', '11:30', '14:00', '15:30']
 
 // Also powers the Departments pages. `dept` matches the people directory's department name.
 export const departmentTour = [
-  { id: 'claims', dept: 'Claims', name: 'Claims', head: 'Tunde Bello', headcount: 120, location: 'HQ, floor 3', services: ['Register a claim', 'Claim status updates', 'Fraud referrals'], contact: 'claims@rexinsurance.com', what: 'Registers, assesses and settles claims, and the moment customers judge us by.', video: { src: null, duration: '3:10' } },
-  { id: 'underwriting', dept: 'Underwriting', name: 'Underwriting', head: 'Funmi Adeyemi', headcount: 85, location: 'HQ, floor 2', services: ['Quotes and referrals', 'Authority limits', 'Renewal pricing'], contact: 'underwriting@rexinsurance.com', what: 'Prices and accepts risk so we can keep our promises sustainably.', video: { src: null, duration: '2:55' } },
-  { id: 'care', dept: 'Customer Care', name: 'Customer Care', head: 'Zainab Lawal', headcount: 140, location: 'HQ, floor 1', services: ['Customer callbacks', 'Complaints', 'Customer feedback'], contact: 'care@rexinsurance.com', what: 'The voice of Rex: calls, chat, complaints and customer feedback.', video: { src: null, duration: '2:20' } },
+  { id: 'claims', dept: 'Claims', name: 'Claims', head: 'Arthur Pendelton', headcount: 120, location: 'HQ, floor 3', services: ['Register a claim', 'Claim status updates', 'Fraud referrals'], contact: 'claims@rexinsurance.com', what: 'Registers, assesses and settles claims, and the moment customers judge us by.', video: { src: null, duration: '3:10' } },
+  { id: 'underwriting', dept: 'Underwriting', name: 'Underwriting', head: 'Rebecca Sterling', headcount: 85, location: 'HQ, floor 2', services: ['Quotes and referrals', 'Authority limits', 'Renewal pricing'], contact: 'underwriting@rexinsurance.com', what: 'Prices and accepts risk so we can keep our promises sustainably.', video: { src: null, duration: '2:55' } },
+  { id: 'care', dept: 'Customer Care', name: 'Customer Care', head: 'Marcus Vance', headcount: 140, location: 'HQ, floor 1', services: ['Customer callbacks', 'Complaints', 'Customer feedback'], contact: 'care@rexinsurance.com', what: 'The voice of Rex: calls, chat, complaints and customer feedback.', video: { src: null, duration: '2:20' } },
   { id: 'actuarial', dept: 'Actuarial', name: 'Actuarial', head: 'Ibrahim Musa', headcount: 18, location: 'HQ, floor 3', services: ['Pricing models', 'Reserving', 'Data requests'], contact: 'actuarial@rexinsurance.com', what: 'Models reserves, pricing and capital using data.', video: { src: null, duration: '2:45' } },
-  { id: 'finance', dept: 'Finance', name: 'Finance', head: 'Bola Martins', headcount: 46, location: 'HQ, floor 4', services: ['Payments and approvals', 'Expenses', 'Management reports'], contact: 'finance@rexinsurance.com', what: 'Keeps the business solvent, paid and compliant.', video: { src: null, duration: '2:30' } },
-  { id: 'hr', dept: 'HR', name: 'People & Culture', head: 'Sarah Johnson', headcount: 22, location: 'HQ, floor 4', services: ['Leave and benefits', 'Recruitment', 'Learning'], contact: 'people@rexinsurance.com', what: 'Hiring, growth, wellbeing and everything that makes Rex a great place to work.', video: { src: null, duration: '2:15' } },
-  { id: 'it', dept: 'IT', name: 'Technology', head: 'Emeka Nwosu', headcount: 64, location: 'HQ, floor 1', services: ['Service desk', 'Access requests', 'Security incidents'], contact: 'servicedesk@rexinsurance.com', what: 'Runs the systems, security and tools everyone depends on.', video: { src: null, duration: '2:40' } },
-  { id: 'comms', dept: 'Brand & Communications', name: 'Brand & Communications', head: 'Ngozi Eke', headcount: 12, location: 'HQ, floor 2', services: ['Announcements', 'Brand assets', 'Event support'], contact: 'comms@rexinsurance.com', what: 'Tells the Rex story inside and out, and looks after our brand.', video: { src: null, duration: '2:10' } },
+  { id: 'finance', dept: 'Finance', name: 'Finance', head: 'Amanda Lin', headcount: 46, location: 'HQ, floor 4', services: ['Payments and approvals', 'Expenses', 'Management reports'], contact: 'finance@rexinsurance.com', what: 'Keeps the business solvent, paid and compliant.', video: { src: null, duration: '2:30' } },
+  { id: 'hr', dept: 'HR', name: 'People & Culture', head: 'Thomas Mueller', headcount: 22, location: 'HQ, floor 4', services: ['Leave and benefits', 'Recruitment', 'Learning'], contact: 'people@rexinsurance.com', what: 'Hiring, growth, wellbeing and everything that makes Rex a great place to work.', video: { src: null, duration: '2:15' } },
+  { id: 'it', dept: 'IT', name: 'Technology', head: 'David Kojo', headcount: 64, location: 'HQ, floor 1', services: ['Service desk', 'Access requests', 'Security incidents'], contact: 'servicedesk@rexinsurance.com', what: 'Runs the systems, security and tools everyone depends on.', video: { src: null, duration: '2:40' } },
+  { id: 'comms', dept: 'Brand & Communications', name: 'Brand & Communications', head: 'Elena Rostova', headcount: 12, location: 'HQ, floor 2', services: ['Announcements', 'Brand assets', 'Event support'], contact: 'comms@rexinsurance.com', what: 'Tells the Rex story inside and out, and looks after our brand.', video: { src: null, duration: '2:10' } },
   { id: 'compliance', dept: 'Legal & Compliance', name: 'Legal & Compliance', head: 'David Okon', headcount: 15, location: 'HQ, floor 4', services: ['Contract reviews', 'Regulatory questions', 'Gifts register'], contact: 'compliance@rexinsurance.com', what: 'Keeps us on the right side of the regulator and the law.', video: { src: null, duration: '2:05' } },
 ]
 

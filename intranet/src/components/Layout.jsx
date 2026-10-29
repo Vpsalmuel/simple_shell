@@ -1,11 +1,12 @@
-import { useEffect, useState } from 'react'
+import { useCallback, useEffect, useState } from 'react'
 import { Navigate, NavLink, Outlet, useLocation } from 'react-router-dom'
-import { Bell, Menu, Moon, Search, Sun, X, LogOut, Settings } from 'lucide-react'
+import { Bell, Compass, Menu, Moon, Search, Sun, X, LogOut, Settings } from 'lucide-react'
 import Logo from './Logo'
 import Avatar from './Avatar'
 import CommandPalette from './CommandPalette'
 import PersonaSwitcher from './PersonaSwitcher'
 import RexAI from './RexAI'
+import GuidedTour from './GuidedTour'
 import { brand } from '../config/brand'
 import { useUser } from '../context/UserContext'
 import { navFor } from '../config/nav'
@@ -16,13 +17,13 @@ function Sidebar({ onNavigate }) {
   const { user } = useUser()
   return (
     <div className="flex h-full flex-col bg-brand-700 text-brand-100">
-      <div className="px-6 pt-6 pb-6">
-        <Logo onDark className="h-10 w-auto" />
+      <div className="px-6 pt-5 pb-4">
+        <Logo onDark className="h-9 w-auto" />
       </div>
-      <nav className="flex-1 space-y-5 overflow-y-auto px-3" aria-label="Main">
+      <nav className="flex-1 space-y-4 overflow-y-auto px-3 pb-4" aria-label="Main">
         {navFor(user).map((group) => (
           <div key={group.label}>
-            <p className="px-3 pb-1.5 text-[11px] font-semibold tracking-wider text-brand-300 uppercase">{group.label}</p>
+            <p className="px-3 pb-1 text-[11px] font-semibold tracking-wider text-brand-300 uppercase">{group.label}</p>
             <div className="space-y-0.5">
               {group.items.map(({ to, label, icon: Ico, end }) => (
                 <NavLink
@@ -31,7 +32,7 @@ function Sidebar({ onNavigate }) {
                   end={end}
                   onClick={onNavigate}
                   className={({ isActive }) =>
-                    `group relative flex items-center gap-3 rounded-xl px-3 py-2 text-sm font-medium transition ${isActive ? 'bg-white/10 text-white' : 'hover:bg-white/5 hover:text-white'}`
+                    `group relative flex items-center gap-3 rounded-xl px-3 py-1.5 text-sm font-medium transition ${isActive ? 'bg-white/10 text-white' : 'hover:bg-white/5 hover:text-white'}`
                   }
                 >
                   {({ isActive }) => (
@@ -47,12 +48,10 @@ function Sidebar({ onNavigate }) {
           </div>
         ))}
       </nav>
-      <div className="m-3 rounded-2xl bg-gradient-to-br from-accent-600 to-accent-500 p-4 text-white">
-        <p className="text-sm font-semibold">Need help?</p>
-        <p className="mt-1 text-xs text-white/85">IT helpdesk is open 7am – 7pm.</p>
-        <NavLink to="/help" onClick={onNavigate} className="mt-3 block w-full rounded-lg bg-white/20 py-1.5 text-center text-xs font-medium hover:bg-white/30">Raise a ticket</NavLink>
+      <div className="flex items-center justify-between gap-2 border-t border-white/10 px-6 py-3 text-[11px] text-brand-200">
+        <span>IT help: Ext. 999 · 7am–7pm</span>
+        <span>© {new Date().getFullYear()} {brand.name.split(' ')[0]}</span>
       </div>
-      <div className="border-t border-white/10 p-4 text-[11px] text-brand-200">© {new Date().getFullYear()} {brand.name}</div>
     </div>
   )
 }
@@ -66,6 +65,16 @@ export default function Layout() {
   const [dark, setDark] = useLocalStorage('rex-dark', false)
   const location = useLocation()
   const { user, blocked } = useUser()
+  // First visit per person: show the guided tour once.
+  const [toured, setToured] = useLocalStorage(`rex-tour-${user.id}`, false)
+  const [tourOpen, setTourOpen] = useState(false)
+  useEffect(() => {
+    if (!toured && !blocked) {
+      const t = setTimeout(() => setTourOpen(true), 600)
+      return () => clearTimeout(t)
+    }
+  }, [toured, blocked])
+  const closeTour = useCallback(() => { setTourOpen(false); setToured(true) }, [setToured])
   const unread = notes.filter((n) => n.unread).length
 
   useEffect(() => {
@@ -94,7 +103,7 @@ export default function Layout() {
 
   return (
     <div className="min-h-screen">
-      <aside className="fixed inset-y-0 left-0 z-30 hidden w-64 lg:block"><Sidebar /></aside>
+      <aside data-tour="nav" className="fixed inset-y-0 left-0 z-30 hidden w-64 lg:block"><Sidebar /></aside>
 
       {mobileOpen && (
         <div className="fixed inset-0 z-40 lg:hidden">
@@ -108,10 +117,11 @@ export default function Layout() {
 
       <div className="lg:pl-64">
         <header className="sticky top-0 z-20 flex h-16 items-center gap-3 border-b border-slate-200/70 bg-white/80 px-4 backdrop-blur-md sm:px-6 dark:border-slate-800 dark:bg-slate-950/80">
-          <button onClick={() => setMobileOpen(true)} className="btn-ghost p-2 lg:hidden" aria-label="Open menu"><Menu size={20} /></button>
+          <button data-tour="menu" onClick={() => setMobileOpen(true)} className="btn-ghost p-2 lg:hidden" aria-label="Open menu"><Menu size={20} /></button>
           <span className="lg:hidden"><Logo className="h-7 w-auto" /></span>
 
           <button
+            data-tour="search"
             onClick={() => setSearchOpen(true)}
             className="ml-auto flex h-10 items-center gap-2 rounded-xl border border-slate-200 bg-slate-50 px-3 text-sm text-slate-400 transition hover:border-brand-300 sm:w-80 lg:ml-0 dark:border-slate-800 dark:bg-slate-900"
           >
@@ -145,7 +155,7 @@ export default function Layout() {
             </div>
 
             <div className="relative">
-              <button onClick={() => { setMenuOpen(!menuOpen); setBellOpen(false) }} className="ml-1 flex items-center gap-3 rounded-xl p-1 pr-2 hover:bg-slate-100 dark:hover:bg-slate-800" aria-label="Account menu">
+              <button data-tour="profile" onClick={() => { setMenuOpen(!menuOpen); setBellOpen(false) }} className="ml-1 flex items-center gap-3 rounded-xl p-1 pr-2 hover:bg-slate-100 dark:hover:bg-slate-800" aria-label="Account menu">
                 <Avatar name={user.name} size="sm" status="online" />
                 <span className="hidden text-left leading-tight md:block">
                   <span className="block text-sm font-medium">{user.name}</span>
@@ -159,6 +169,7 @@ export default function Layout() {
                     <p className="text-xs text-slate-500">{user.role} · {user.dept}</p>
                     <PersonaSwitcher className="mt-3" />
                   </div>
+                  <button onClick={() => { setMenuOpen(false); setTourOpen(true) }} className="btn-ghost w-full justify-start"><Compass size={16} /> Take the tour</button>
                   <button className="btn-ghost w-full justify-start"><Settings size={16} /> Settings</button>
                   <button className="btn-ghost w-full justify-start"><LogOut size={16} /> Sign out</button>
                 </div>
@@ -176,6 +187,7 @@ export default function Layout() {
 
       <CommandPalette open={searchOpen} onClose={() => setSearchOpen(false)} />
       <RexAI key={user.id} />
+      <GuidedTour open={tourOpen} onClose={closeTour} />
     </div>
   )
 }

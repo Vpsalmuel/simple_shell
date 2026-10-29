@@ -17,6 +17,7 @@ import SectionHeader from '../components/SectionHeader'
 import Sparkline from '../components/Sparkline'
 import StatusBadge from '../components/StatusBadge'
 import { EmptyIllustration } from '../components/Illustrations'
+import MeetingRoomModal from '../components/MeetingRoomModal'
 
 function greeting() {
   const h = new Date().getHours()
@@ -101,6 +102,7 @@ function Kpis({ kpis }) {
 }
 
 function QuickLinks({ links }) {
+  const [room, setRoom] = useState(false)
   const cls = 'group flex flex-col items-center gap-2 rounded-xl p-3 text-center text-xs font-medium transition hover:bg-brand-50 dark:hover:bg-slate-800'
   const inner = (q) => (
     <>
@@ -114,10 +116,13 @@ function QuickLinks({ links }) {
     <section className="card p-5">
       <SectionHeader title="Quick links" />
       <div className="grid grid-cols-3 gap-2">
-        {links.map((q) => q.href.startsWith('/')
-          ? <Link key={q.label} to={q.href} className={cls}>{inner(q)}</Link>
-          : <a key={q.label} href={q.href} className={cls}>{inner(q)}</a>)}
+        {links.map((q) => q.action === 'meetingRoom'
+          ? <button key={q.label} onClick={() => setRoom(true)} className={cls}>{inner(q)}</button>
+          : q.href.startsWith('/')
+            ? <Link key={q.label} to={q.href} className={cls}>{inner(q)}</Link>
+            : <a key={q.label} href={q.href} className={cls}>{inner(q)}</a>)}
       </div>
+      <MeetingRoomModal open={room} onClose={() => setRoom(false)} />
     </section>
   )
 }
@@ -366,11 +371,11 @@ function NewJoiners() {
     <section className="card p-5">
       <SectionHeader title="Celebrations" />
       <ul className="space-y-3 text-sm">
-        <li className="flex items-center gap-3"><Avatar name="Kelvin Ade" size="sm" /><span className="flex-1"><b>Kelvin Ade</b> joined IT</span><span className="chip bg-sky-100 text-sky-700">New</span></li>
-        <li className="flex items-center gap-3"><Avatar name="Zainab Lawal" size="sm" /><span className="flex-1"><b>Zainab Lawal</b> · birthday today</span><span>🎂</span></li>
-        <li className="flex items-center gap-3"><Avatar name="Funmi Adeyemi" size="sm" /><span className="flex-1"><b>Funmi Adeyemi</b> · 10 years</span><span>🎉</span></li>
+        <li className="flex items-center gap-3"><Avatar name="Samuel Adebayo" size="sm" /><span className="flex-1"><b>Samuel Adebayo</b> joined Claims</span><span className="chip bg-sky-100 text-sky-700">New</span></li>
+        <li className="flex items-center gap-3"><Avatar name="Marcus Vance" size="sm" /><span className="flex-1"><b>Marcus Vance</b> · birthday today</span><span>🎂</span></li>
+        <li className="flex items-center gap-3"><Avatar name="Rebecca Sterling" size="sm" /><span className="flex-1"><b>Rebecca Sterling</b> · 10 years</span><span>🎉</span></li>
       </ul>
-      <Link to="/people" className="mt-4 inline-flex items-center gap-1 text-sm font-medium text-brand-600 hover:underline dark:text-brand-300">Open directory <ArrowRight size={14} /></Link>
+      <Link to="/celebrations" className="mt-4 inline-flex items-center gap-1 text-sm font-medium text-brand-600 hover:underline dark:text-brand-300">All celebrations <ArrowRight size={14} /></Link>
     </section>
   )
 }

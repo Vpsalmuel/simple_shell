@@ -14,6 +14,10 @@ import Requests from './pages/Requests'
 import Knowledge from './pages/Knowledge'
 import Help from './pages/Help'
 import Admin from './pages/Admin'
+import Milestones from './pages/Milestones'
+import Celebrations from './pages/Celebrations'
+import Wellbeing from './pages/Wellbeing'
+import Rewards from './pages/Rewards'
 
 export default function App() {
   return (
@@ -29,6 +33,10 @@ export default function App() {
         <Route path="knowledge/:id" element={<Knowledge />} />
         <Route path="help" element={<Help />} />
         <Route path="admin" element={<RequireAccess to="/admin"><Admin /></RequireAccess>} />
+        <Route path="milestones" element={<Milestones />} />
+        <Route path="celebrations" element={<Celebrations />} />
+        <Route path="wellbeing" element={<Wellbeing />} />
+        <Route path="rewards" element={<Rewards />} />
         <Route path="news" element={<News />} />
         <Route path="news/:id" element={<News />} />
         <Route path="events" element={<Events />} />

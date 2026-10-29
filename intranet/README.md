@@ -17,6 +17,14 @@ npm run dev            # site on http://localhost:5173 (proxies /api to :3001)
 npm run build && npm start   # site + Rex AI on http://localhost:3001
 ```
 
+## Guided tour
+
+On a person’s first visit (and for new staff right after onboarding) a 5-step tour highlights the menu, search, Rex AI and the profile menu. It shows once per person and can be replayed from **account menu → Take the tour**.
+
+## Third-party apps
+
+**Book meeting room** (Home quick links, Docs & HR) opens an info pop-up that hands off to SeamlessHR. Set the address in `src/config/brand.js` → `externalApps.seamlessHr.url`; until then the pop-up points people to Facilities.
+
 ## Rex AI
 
 A chat assistant (bottom-right button) powered by Google Gemini, as in the AI Studio prototype. The browser calls `/api/chat` on our own server (`server/index.js`), which holds the API key; the key is never sent to the browser.
@@ -59,7 +67,7 @@ After finishing, new staff land on their department's dashboard with a "first 90
 
 ## Pages
 
-Sidebar groups (from `src/config/nav.js`): **Workspace** (Home, News, Events) · **Work** (Request Centre, Claims & Policy, Docs & HR) · **Knowledge** (Knowledge Center, Learning, Help Desk) · **Company** (Departments, People) · **Management** (Admin Workspace).
+Sidebar groups (from `src/config/nav.js`): **Workspace** (Home, News, Events, Milestones) · **Work** (Request Centre, Claims & Policy, Docs & HR) · **Knowledge** (Knowledge Center, Learning, Help Desk) · **Company** (Departments, People, Celebrations) · **You** (Health & Wellbeing, Rewards & Benefits) · **Management** (Admin Workspace).
 
 Restricted items are hidden from the menu and search, and their address shows a "no access" page:
 - Claims & Policy: Claims and Underwriting
@@ -75,6 +83,10 @@ Restricted items are hidden from the menu and search, and their address shows a 
 | Request Centre | `/requests` | Requests between departments: tabs (mine, my team's queue, open, resolved), search, detail panel with comments and history; the receiving team can assign, progress, complete or reject |
 | Knowledge Center | `/knowledge`, `/knowledge/:id` | Searchable wiki of policies, SOPs, guides and FAQs, with "was this helpful?" |
 | Help Desk | `/help` | IT, HR, Finance and Facilities tickets (they land in the Request Centre), FAQs, my tickets |
+| Milestones | `/milestones` | Work anniversaries only, with reactions and congratulations; admins can share an anniversary |
+| Celebrations | `/celebrations` | Today, upcoming birthdays and work anniversaries with “Send wishes”, new joiners |
+| Health & Wellbeing | `/wellbeing` | HMO, confidential mental health and fitness info, a daily checklist that resets each morning, monthly hike sign-up |
+| Rewards & Benefits | `/rewards` | Benefits, pay & performance review cycle, career tracks with “You are here” and promotion criteria |
 | Admin Workspace | `/admin` | Publish news to News and the Home feed, open requests by team, overview figures |
 | People | `/people` | Search, department filter, grid/list, profile slide-over |
 | Claims & Policy | `/claims` | Claim tracker, weekly chart (hover tooltips + table view), settlement trend vs target, SLA work queue, core systems |
@@ -101,6 +113,8 @@ Global: ⌘K / Ctrl+K search, notifications, dark mode, responsive layout, reduc
 | Requests | `src/data/requests.js` |
 | Knowledge articles, Help Desk FAQs | `src/data/knowledge.js` |
 | Onboarding content (products, floors, IT setup…) | `src/data/onboarding.js` |
+| Milestones, birthdays, wellbeing, benefits, career tracks | `src/data/culture.js` |
+| SeamlessHR link | `src/config/brand.js` |
 
 Chart colors were checked for colorblind separation: `#3A5092` / `#EA580C` on light surfaces, `#566DAD` / `#EA580C` on dark.
 
@@ -108,4 +122,4 @@ Walkthrough progress, requests, published news and other demo state are stored i
 
 ## Origin
 
-The Request Centre, Knowledge Center, Help Desk, buddy, Admin Workspace, Rex AI and the extra onboarding steps were merged in from the AI Studio prototype (`Vpsalmuel/intranet-alpha-web`), rebuilt in this project's design system.
+The Request Centre, Knowledge Center, Help Desk, buddy, Admin Workspace, Rex AI and the extra onboarding steps were merged in from the AI Studio prototype (`Vpsalmuel/intranet-alpha-web`), rebuilt in this project's design system. People's names, roles, bios and joining dates come from the prototype's roster; Ibrahim Musa (Actuarial) and David Okon (Legal & Compliance) are placeholders because the prototype had no one in those teams.

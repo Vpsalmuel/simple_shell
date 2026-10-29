@@ -2,22 +2,25 @@
 
 export const departments = ['Executive Office', 'Brand & Communications', 'Claims', 'Underwriting', 'Actuarial', 'Customer Care', 'IT', 'HR', 'Finance', 'Legal & Compliance']
 
+// People from the AI Studio prototype's roster. Ibrahim Musa (Actuarial) and David Okon (Legal & Compliance)
+// are placeholders: the prototype has no one in those departments.
 export const people = [
-  { id: 1, name: 'Ada Okafor', role: 'Senior Claims Analyst', dept: 'Claims', location: 'Lagos', email: 'ada.okafor@rexinsurance.com', phone: '+234 801 000 1001', status: 'online', manager: 'Tunde Bello', skills: ['Motor claims', 'Fraud triage'] },
-  { id: 2, name: 'Tunde Bello', role: 'Head of Claims', dept: 'Claims', location: 'Lagos', email: 'tunde.bello@rexinsurance.com', phone: '+234 801 000 1002', status: 'meeting', manager: 'Grace Eze', skills: ['Ops leadership', 'Reinsurance'] },
-  { id: 3, name: 'Grace Eze', role: 'Managing Director / CEO', dept: 'Executive Office', location: 'Abuja', email: 'grace.eze@rexinsurance.com', phone: '+234 801 000 1003', status: 'away', manager: '—', skills: ['Strategy', 'Risk'] },
-  { id: 4, name: 'Chinedu Obi', role: 'Underwriter II', dept: 'Underwriting', location: 'Lagos', email: 'chinedu.obi@rexinsurance.com', phone: '+234 801 000 1004', status: 'online', manager: 'Funmi Adeyemi', skills: ['Property', 'Marine'] },
-  { id: 5, name: 'Funmi Adeyemi', role: 'Underwriting Manager', dept: 'Underwriting', location: 'Port Harcourt', email: 'funmi.adeyemi@rexinsurance.com', phone: '+234 801 000 1005', status: 'online', manager: 'Grace Eze', skills: ['Energy', 'Portfolio pricing'] },
-  { id: 6, name: 'Ibrahim Musa', role: 'Actuarial Analyst', dept: 'Actuarial', location: 'Abuja', email: 'ibrahim.musa@rexinsurance.com', phone: '+234 801 000 1006', status: 'offline', manager: 'Grace Eze', skills: ['Reserving', 'Python'] },
-  { id: 7, name: 'Zainab Lawal', role: 'Customer Care Lead', dept: 'Customer Care', location: 'Lagos', email: 'zainab.lawal@rexinsurance.com', phone: '+234 801 000 1007', status: 'online', manager: 'Tunde Bello', skills: ['CX', 'Escalations'] },
-  { id: 8, name: 'Emeka Nwosu', role: 'IT Service Manager', dept: 'IT', location: 'Lagos', email: 'emeka.nwosu@rexinsurance.com', phone: '+234 801 000 1008', status: 'meeting', manager: 'Grace Eze', skills: ['ITSM', 'Security'] },
-  { id: 9, name: 'Sarah Johnson', role: 'HR Business Partner', dept: 'HR', location: 'Abuja', email: 'sarah.johnson@rexinsurance.com', phone: '+234 801 000 1009', status: 'online', manager: 'Grace Eze', skills: ['Talent', 'Wellbeing'] },
-  { id: 10, name: 'David Okon', role: 'Compliance Officer', dept: 'Legal & Compliance', location: 'Lagos', email: 'david.okon@rexinsurance.com', phone: '+234 801 000 1010', status: 'away', manager: 'Grace Eze', skills: ['AML/KYC', 'Regulatory reporting'] },
-  { id: 11, name: 'Amaka Udeh', role: 'Claims Adjuster', dept: 'Claims', location: 'Enugu', email: 'amaka.udeh@rexinsurance.com', phone: '+234 801 000 1011', status: 'online', manager: 'Tunde Bello', skills: ['Site surveys', 'Health claims'] },
-  { id: 13, name: 'Bola Martins', role: 'Financial Controller', dept: 'Finance', location: 'Lagos', email: 'bola.martins@rexinsurance.com', phone: '+234 801 000 1013', status: 'online', manager: 'Grace Eze', skills: ['IFRS 17', 'Treasury'] },
-  { id: 14, name: 'Kemi Adebayo', role: 'Graduate Trainee', dept: 'Underwriting', location: 'Lagos', email: 'kemi.adebayo@rexinsurance.com', phone: '+234 801 000 1014', status: 'online', manager: 'Funmi Adeyemi', skills: ['Learning the ropes'] },
-  { id: 15, name: 'Ngozi Eke', role: 'Communications Manager', dept: 'Brand & Communications', location: 'HQ', email: 'ngozi.eke@rexinsurance.com', phone: '+234 801 000 1015', status: 'online', manager: 'Grace Eze', skills: ['Internal comms', 'Brand'] },
-  { id: 12, name: 'Kelvin Ade', role: 'Frontend Engineer', dept: 'IT', location: 'Remote', email: 'kelvin.ade@rexinsurance.com', phone: '+234 801 000 1012', status: 'offline', manager: 'Emeka Nwosu', skills: ['React', 'Design systems'] },
+  { id: 1, name: 'Sarah Jenkins', joined: '2020-03-15', role: 'Senior Claims Specialist / Onboarding Buddy', dept: 'Claims', location: 'Lagos Main Campus, Block C', email: 'sarah.jenkins@rexinsurance.com', phone: 'Ext. 309', status: 'online', manager: 'Arthur Pendelton', skills: ['Communication', 'Analysis', 'Insurance Logic'], bio: 'Dedicated claims investigator with over 5 years of tenure. Onboarding buddy supporting Samuel Adebayo’s learning track.' },
+  { id: 2, name: 'Arthur Pendelton', role: 'VP of Claims', dept: 'Claims', location: 'Lagos Main Campus, Block C Executive', email: 'arthur.pendelton@rexinsurance.com', phone: 'Ext. 300', status: 'meeting', manager: 'Victoria Hawthorne', skills: ['Leadership', 'Strategic Planning', 'Risk Mitigation'], bio: 'Oversees all claims operations across motor, property and general liability portfolios.' },
+  { id: 3, name: 'Victoria Hawthorne', joined: '2015-01-10', role: 'Managing Director & CEO', dept: 'Executive Office', location: 'Executive Leadership Office', email: 'victoria.hawthorne@rexinsurance.com', phone: 'Via the executive office', status: 'away', manager: '—', skills: ['Strategy', 'Leadership'], bio: 'Leads Rex Insurance and its executive board.' },
+  { id: 4, name: 'Rebecca Sterling', joined: '2019-11-01', role: 'Lead Commercial Underwriter', dept: 'Underwriting', location: 'Lagos Main Campus, Block B', email: 'rebecca.sterling@rexinsurance.com', phone: 'Ext. 320', status: 'online', manager: 'Victoria Hawthorne', skills: ['Communication', 'Analysis', 'Insurance Logic'], bio: 'Manages underwriting checklists for commercial assets. Fan of risk mitigation structures and deep compliance audits.' },
+  { id: 5, name: 'Samuel Adebayo', joined: '2026-05-24', role: 'Junior Claims Analyst', dept: 'Claims', location: 'Lagos Main Campus, Block C', email: 'samuel.adebayo@rexinsurance.com', phone: 'Ext. 312', status: 'online', manager: 'Arthur Pendelton', skills: ['Communication', 'Analysis', 'Insurance Logic'], bio: 'Joined the company this year. Driven to improve claimant fast-tracking while learning core underwriting assessment.' },
+  { id: 6, name: 'Ibrahim Musa', role: 'Actuarial Analyst', dept: 'Actuarial', location: 'Lagos Main Campus', email: 'ibrahim.musa@rexinsurance.com', phone: 'Ext. 330', status: 'offline', manager: 'Victoria Hawthorne', skills: ['Reserving', 'Python'] },
+  { id: 7, name: 'Marcus Vance', joined: '2022-09-12', role: 'Senior CX Manager', dept: 'Customer Care', location: 'Lagos Main Campus, Block A', email: 'marcus.vance@rexinsurance.com', phone: 'Ext. 404', status: 'online', manager: 'Victoria Hawthorne', skills: ['Communication', 'Analysis', 'Insurance Logic'], bio: 'Passionate about turning customer complaint metrics into process improvements.' },
+  { id: 8, name: 'David Kojo', joined: '2018-05-10', role: 'IT Support Supervisor & System Admin', dept: 'IT', location: 'IT Command Suite, Basement 1', email: 'david.kojo@rexinsurance.com', phone: 'Ext. 999', status: 'meeting', manager: 'Victoria Hawthorne', skills: ['Communication', 'Analysis', 'Insurance Logic'], bio: 'Solves hardware bottlenecks and secures network systems. Raise a ticket with me for any access or sign-in problem.' },
+  { id: 9, name: 'Thomas Mueller', joined: '2017-08-20', role: 'Head of Recruitment & Onboarding', dept: 'HR', location: 'Lagos Main Campus, Block A', email: 'thomas.mueller@rexinsurance.com', phone: 'Ext. 201', status: 'online', manager: 'Victoria Hawthorne', skills: ['Communication', 'Analysis', 'Insurance Logic'], bio: 'Welcomes new talent, shapes people policies and guides onboarding journeys across the company.' },
+  { id: 10, name: 'David Okon', role: 'Compliance Officer', dept: 'Legal & Compliance', location: 'Lagos Main Campus', email: 'david.okon@rexinsurance.com', phone: 'Ext. 340', status: 'away', manager: 'Victoria Hawthorne', skills: ['AML/KYC', 'Regulatory reporting'] },
+  { id: 11, name: 'Chloe Chen', role: 'Fire & Property Loss Adjuster', dept: 'Claims', location: 'Lagos Main Campus, Block C', email: 'chloe.chen@rexinsurance.com', phone: 'Ext. 315', status: 'online', manager: 'Arthur Pendelton', skills: ['Property Valuation', 'Investigation', 'Reporting'], bio: 'Handles large commercial property claims and fire damage assessments.' },
+  { id: 12, name: 'John Davis', role: 'Motor Claims Assessor', dept: 'Claims', location: 'Lagos Main Campus, Block C', email: 'john.davis@rexinsurance.com', phone: 'Ext. 314', status: 'offline', manager: 'Arthur Pendelton', skills: ['Automotive Appraisal', 'Negotiation', 'Conflict Resolution'], bio: 'Specialist in motor accident assessments and third-party property damage negotiations.' },
+  { id: 13, name: 'Amanda Lin', joined: '2021-04-18', role: 'Senior Financial Controlling Analyst', dept: 'Finance', location: 'Business Advisory Wing, Block A', email: 'amanda.lin@rexinsurance.com', phone: 'Ext. 104', status: 'online', manager: 'Victoria Hawthorne', skills: ['Communication', 'Analysis', 'Insurance Logic'], bio: 'Budget tracker, reimbursement auditor and Excel formula champion.' },
+  { id: 14, name: 'Fatima Bello', role: 'Claims Auditor', dept: 'Claims', location: 'Lagos Main Campus, Block C', email: 'fatima.bello@rexinsurance.com', phone: 'Ext. 316', status: 'online', manager: 'Arthur Pendelton', skills: ['Auditing', 'Compliance', 'Data Analysis'], bio: 'Makes sure claims processing meets internal SLAs and regulatory standards.' },
+  { id: 15, name: 'Elena Rostova', joined: '2021-02-14', role: 'Communications Lead', dept: 'Brand & Communications', location: 'Creative Hub, Penthouse Flat', email: 'elena.rostova@rexinsurance.com', phone: 'Ext. 112', status: 'online', manager: 'Victoria Hawthorne', skills: ['Communication', 'Analysis', 'Insurance Logic'], bio: 'Oversees brand and public relations. Contact me for brand asset folders or custom flyer support.' },
+  { id: 16, name: 'Michael Okoro', role: 'Dispute Resolution Specialist', dept: 'Claims', location: 'Lagos Main Campus, Block C', email: 'michael.okoro@rexinsurance.com', phone: 'Ext. 317', status: 'meeting', manager: 'Arthur Pendelton', skills: ['Mediation', 'Legal Analysis', 'Customer Service'], bio: 'Manages escalated claims disputes that need alternative resolution or legal review.' },
 ]
 
 export const announcements = [
@@ -29,17 +32,17 @@ export const announcements = [
 // `image`: a path in /public (e.g. '/images/telematics.jpg') or a URL. null shows the branded placeholder.
 // `body`: paragraphs shown on the article page.
 export const news = [
-  { id: 1, category: 'Product', title: 'Telematics motor cover launches in pilot states', excerpt: 'Usage-based pricing goes live for 2,000 customers. Underwriting shares what we learned.', author: 'Funmi Adeyemi', date: '2026-10-24', readMins: 4, likes: 42, comments: 9, image: null, featured: true,
+  { id: 1, category: 'Product', title: 'Telematics motor cover launches in pilot states', excerpt: 'Usage-based pricing goes live for 2,000 customers. Underwriting shares what we learned.', author: 'Rebecca Sterling', date: '2026-10-24', readMins: 4, likes: 42, comments: 9, image: null, featured: true,
     body: ['Our first usage-based motor product is live for 2,000 customers across three pilot states. Drivers who share trip data through the Rex app can save up to 20% on renewal.', 'Underwriting spent six months modelling driving behaviour with the Actuarial team. Early results show safer drivers opting in, which improves the risk pool for everyone.', 'Customer Care has a new script for telematics questions, and Claims can now see trip data for any motor claim from an enrolled customer.'] },
-  { id: 2, category: 'Claims', title: 'Average claim settlement down to 6.2 days', excerpt: 'The new triage workflow cut handling time by 31%. Here is how the team did it.', author: 'Tunde Bello', date: '2026-10-22', readMins: 3, likes: 67, comments: 14, image: null,
+  { id: 2, category: 'Claims', title: 'Average claim settlement down to 6.2 days', excerpt: 'The new triage workflow cut handling time by 31%. Here is how the team did it.', author: 'Arthur Pendelton', date: '2026-10-22', readMins: 3, likes: 67, comments: 14, image: null,
     body: ['Twelve weeks ago the average claim took 8.1 days to settle. This week it was 6.2.', 'The biggest change was triage: simple claims under ₦500,000 now go straight to a fast-track queue with pre-approved settlement limits.', 'Next up: same-day settlement for windscreen and minor motor damage.'] },
-  { id: 3, category: 'People', title: 'Meet the Customer Care team behind our 4.7★ rating', excerpt: 'A day on the frontline with the team that handles 3,000 calls a week.', author: 'Sarah Johnson', date: '2026-10-20', readMins: 5, likes: 38, comments: 6, image: null,
-    body: ['From 7am the phones start ringing. Zainab Lawal’s team of 40 handles policy questions, claims updates and the occasional very upset customer.', 'Their secret? Call back before the customer has to chase, and never end a call without a clear next step.'] },
-  { id: 4, category: 'IT', title: 'Single sign-on rolls out to all core systems', excerpt: 'One login for the policy admin, claims portal and HR. Migration dates inside.', author: 'Emeka Nwosu', date: '2026-10-18', readMins: 2, likes: 25, comments: 3, image: null,
+  { id: 3, category: 'People', title: 'Meet the Customer Care team behind our 4.7★ rating', excerpt: 'A day on the frontline with the team that handles 3,000 calls a week.', author: 'Thomas Mueller', date: '2026-10-20', readMins: 5, likes: 38, comments: 6, image: null,
+    body: ['From 7am the phones start ringing. Marcus Vance’s team of 40 handles policy questions, claims updates and the occasional very upset customer.', 'Their secret? Call back before the customer has to chase, and never end a call without a clear next step.'] },
+  { id: 4, category: 'IT', title: 'Single sign-on rolls out to all core systems', excerpt: 'One login for the policy admin, claims portal and HR. Migration dates inside.', author: 'David Kojo', date: '2026-10-18', readMins: 2, likes: 25, comments: 3, image: null,
     body: ['From 3 November you will sign in once to reach policy admin, the claims workbench, HR and email.', 'Multi-factor authentication stays on for every system. Keep your authenticator app handy during the switch.'] },
-  { id: 5, category: 'Company', title: 'Q3 results: gross written premium up 18%', excerpt: 'Strong growth in motor and health, with a combined ratio of 94%.', author: 'Grace Eze', date: '2026-10-15', readMins: 4, likes: 88, comments: 21, image: null,
+  { id: 5, category: 'Company', title: 'Q3 results: gross written premium up 18%', excerpt: 'Strong growth in motor and health, with a combined ratio of 94%.', author: 'Victoria Hawthorne', date: '2026-10-15', readMins: 4, likes: 88, comments: 21, image: null,
     body: ['Gross written premium grew 18% year on year, led by motor and health.', 'Our combined ratio improved to 94%, and customer NPS rose to 62. Thank you to every team. The town hall recording is in the Docs hub.'] },
-  { id: 6, category: 'Wellbeing', title: 'Open enrolment for the 2027 health plan', excerpt: 'Review your HMO options and add dependants before 30 November.', author: 'Sarah Johnson', date: '2026-10-12', readMins: 2, likes: 19, comments: 4, image: null,
+  { id: 6, category: 'Wellbeing', title: 'Open enrolment for the 2027 health plan', excerpt: 'Review your HMO options and add dependants before 30 November.', author: 'Thomas Mueller', date: '2026-10-12', readMins: 2, likes: 19, comments: 4, image: null,
     body: ['Three plan tiers are available for 2027, and you can now add up to four dependants.', 'Drop-in sessions with our HMO partner run every Wednesday in November.'] },
 ]
 
@@ -72,9 +75,9 @@ export const courses = [
 ]
 
 export const kudos = [
-  { id: 1, from: 'Tunde Bello', to: 'Amaka Udeh', message: 'Closed a complex flood claim in 3 days and the customer sent a thank-you letter.', value: 'Client Empathy' },
-  { id: 2, from: 'Zainab Lawal', to: 'Kelvin Ade', message: 'The new chat widget halved our wait times. Brilliant work.', value: 'Digital Precision' },
-  { id: 3, from: 'Funmi Adeyemi', to: 'Chinedu Obi', message: 'Stepped up on the marine renewals while the team was stretched.', value: 'Continuous Growth' },
+  { id: 1, from: 'Arthur Pendelton', to: 'Chloe Chen', message: 'Closed a complex flood claim in 3 days and the customer sent a thank-you letter.', value: 'Client Empathy' },
+  { id: 2, from: 'Marcus Vance', to: 'David Kojo', message: 'The new chat widget halved our wait times. Brilliant work.', value: 'Digital Precision' },
+  { id: 3, from: 'Arthur Pendelton', to: 'Fatima Bello', message: 'Cleared the claims audit backlog while the team was stretched.', value: 'Continuous Growth' },
 ]
 
 export const quickLinks = [
@@ -103,11 +106,11 @@ export const claimsByLine = [
 ]
 
 export const claims = [
-  { id: 'CLM-24-08812', insured: 'Bisi Akande', line: 'Motor', amount: 1850000, stage: 'Assessment', sla: 2, owner: 'Ada Okafor' },
-  { id: 'CLM-24-08790', insured: 'Coastline Logistics Ltd', line: 'Marine', amount: 24500000, stage: 'Investigation', sla: 5, owner: 'Ada Okafor' },
-  { id: 'CLM-24-08755', insured: 'Ngozi Peters', line: 'Health', amount: 420000, stage: 'Approval', sla: 1, owner: 'Amaka Udeh' },
-  { id: 'CLM-24-08731', insured: 'Unity Schools', line: 'Property', amount: 7300000, stage: 'Registered', sla: 7, owner: 'Ada Okafor' },
-  { id: 'CLM-24-08702', insured: 'Musa Danjuma', line: 'Motor', amount: 960000, stage: 'Payment', sla: 0, owner: 'Amaka Udeh' },
+  { id: 'CLM-24-08812', insured: 'Bisi Akande', line: 'Motor', amount: 1850000, stage: 'Assessment', sla: 2, owner: 'Sarah Jenkins' },
+  { id: 'CLM-24-08790', insured: 'Coastline Logistics Ltd', line: 'Marine', amount: 24500000, stage: 'Investigation', sla: 5, owner: 'Sarah Jenkins' },
+  { id: 'CLM-24-08755', insured: 'Ngozi Peters', line: 'Health', amount: 420000, stage: 'Approval', sla: 1, owner: 'Chloe Chen' },
+  { id: 'CLM-24-08731', insured: 'Unity Schools', line: 'Property', amount: 7300000, stage: 'Registered', sla: 7, owner: 'Sarah Jenkins' },
+  { id: 'CLM-24-08702', insured: 'Musa Danjuma', line: 'Motor', amount: 960000, stage: 'Payment', sla: 0, owner: 'Chloe Chen' },
 ]
 
 // Average days to settle, last 12 weeks (oldest → newest).
@@ -143,7 +146,7 @@ export const leaveBalance = [
 ]
 
 export const notifications = [
-  { id: 1, text: 'Tunde Bello approved your leave request (11–13 Nov).', time: '12m', unread: true },
+  { id: 1, text: 'Arthur Pendelton approved your leave request (11–13 Nov).', time: '12m', unread: true },
   { id: 2, text: 'CLM-24-08755 is due for approval today.', time: '1h', unread: true },
   { id: 3, text: 'New document: Q3 town hall slides.', time: '3h', unread: false },
 ]
