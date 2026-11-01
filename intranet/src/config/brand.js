@@ -10,7 +10,7 @@ export const brand = {
   logo: { navy: logoNavy, white: logoWhite },
 }
 
-// Third-party apps opened from Rex Hub. Set `url` to your company's SeamlessHR address.
+// Third-party apps opened from Rex Hub. Optional: set `url` to add a "Continue to SeamlessHR" button.
 export const externalApps = {
   seamlessHr: { name: 'SeamlessHR', url: null },
 }

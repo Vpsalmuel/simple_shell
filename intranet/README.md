@@ -23,7 +23,9 @@ On a person’s first visit (and for new staff right after onboarding) a 5-step 
 
 ## Third-party apps
 
-**Book meeting room** (Home quick links, Docs & HR) opens an info pop-up that hands off to SeamlessHR. Set the address in `src/config/brand.js` → `externalApps.seamlessHr.url`; until then the pop-up points people to Facilities.
+**Book meeting room** (Home quick links, Docs & HR) opens a pop-up telling people it goes to SeamlessHR. Optionally set `externalApps.seamlessHr.url` in `src/config/brand.js` to add a “Continue to SeamlessHR” button.
+
+Placeholders still to replace: most birthdays, the HMO and counsellor phone numbers (`src/data/culture.js`), and the Bond product variants (`src/data/onboarding.js`).
 
 ## Rex AI
 

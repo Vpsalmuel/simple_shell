@@ -67,6 +67,7 @@ export const products = [
   { id: 'engineering', title: 'Engineering Insurance', icon: 'HardHat', variants: ['Contractors All Risk', 'Erection All Risk', 'Plant & Machinery'], description: 'Cover for construction projects, machinery installation and operational equipment against physical loss or damage.' },
   { id: 'travel', title: 'Travel Insurance', icon: 'Luggage', variants: ['Local', 'International', 'Student', 'Pilgrimage'], description: 'Covers medical emergencies, trip cancellations, lost baggage and travel delays.' },
   { id: 'marine', title: 'Marine Insurance', icon: 'Ship', variants: ['Marine Cargo', 'Marine Hull', 'Goods-in-Transit'], description: 'Covers goods moving by sea, air and road, and the vessels that carry them, against loss or damage in transit.' },
+  // Bond variants are placeholders until the product team confirms the list.
   { id: 'bond', title: 'Bond Insurance', icon: 'ScrollText', variants: ['Bid Bond', 'Performance Bond', 'Advance Payment Bond', 'Customs Bond'], description: 'Guarantees that protect project owners and government agencies if a contractor or importer fails to meet their obligations.' },
   { id: 'aviation', title: 'Aviation Insurance', icon: 'Plane', variants: ['Hull All Risks', 'Passenger Liability', 'Airport Operators Liability'], description: 'Aircraft hull, passenger and third-party liability cover for airlines, private jets and aviation operations.' },
 ]

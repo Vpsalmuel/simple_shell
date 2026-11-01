@@ -36,7 +36,8 @@ export const wellbeingTabs = [
       ['Annual full-body check-up', 'A yearly blood, screening and diagnostic profile, fully prepaid.'],
       ['Pharmacy cover', 'Prescribed chronic medication and therapeutic supplies are covered with your HMO card.'],
     ],
-    contact: { label: 'HMO provider helpline', value: '+234-REX-HEALTH', note: 'Provider: Reliance HMO Premium Core' },
+    contact: { label: 'HMO provider helpline', value: '+234-REX-HEALTH', // placeholder number
+      note: 'Provider: Reliance HMO Premium Core' },
   },
   {
     id: 'mind', label: 'Mental health', icon: 'Brain',
@@ -47,7 +48,8 @@ export const wellbeingTabs = [
       ['Counsellor hotline', 'Talk to someone the same day when work or life feels heavy.'],
       ['Self-guided support', 'Use the daily checklist on this page to build small habits that help.'],
     ],
-    contact: { label: 'Counsellor hotline', value: 'Ext. 884-PEACE', note: 'Confidential, weekdays 8:00–18:00' },
+    contact: { label: 'Counsellor hotline', value: 'Ext. 884-PEACE', // placeholder number
+      note: 'Confidential, weekdays 8:00–18:00' },
   },
   {
     id: 'fitness', label: 'Fitness & run club', icon: 'Dumbbell',
