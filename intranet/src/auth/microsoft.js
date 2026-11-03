@@ -33,7 +33,7 @@ export async function restoreSession() {
   let profile = {}
   try {
     const { accessToken } = await c.acquireTokenSilent({ scopes, account })
-    const res = await fetch('https://graph.microsoft.com/v1.0/me?$select=displayName,givenName,surname,jobTitle,department,mail', {
+    const res = await fetch('https://graph.microsoft.com/v1.0/me?$select=displayName,givenName,surname,jobTitle,department,mail,employeeHireDate', {
       headers: { Authorization: `Bearer ${accessToken}` },
     })
     if (res.ok) profile = await res.json()
@@ -47,6 +47,8 @@ export async function restoreSession() {
     email: profile.mail ?? account.username,
     jobTitle: profile.jobTitle,
     department: profile.department,
+    // Set by HR/IT on the Microsoft 365 profile. Used to decide who is new staff.
+    hireDate: profile.employeeHireDate ?? null,
   }
 }
 

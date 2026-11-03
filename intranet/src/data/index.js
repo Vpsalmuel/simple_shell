@@ -1,3 +1,5 @@
+import { coursePhotos, newsPhotos } from './photos'
+
 // Sample content. Replace with API calls (SharePoint, HRIS, claims system) when wiring a backend.
 
 export const departments = ['Executive Office', 'Brand & Communications', 'Claims', 'Underwriting', 'Actuarial', 'Customer Care', 'IT', 'HR', 'Finance', 'Legal & Compliance']
@@ -32,17 +34,17 @@ export const announcements = [
 // `image`: a path in /public (e.g. '/images/telematics.jpg') or a URL. null shows the branded placeholder.
 // `body`: paragraphs shown on the article page.
 export const news = [
-  { id: 1, category: 'Product', title: 'Telematics motor cover launches in pilot states', excerpt: 'Usage-based pricing goes live for 2,000 customers. Underwriting shares what we learned.', author: 'Rebecca Sterling', date: '2026-10-24', readMins: 4, likes: 42, comments: 9, image: null, featured: true,
+  { id: 1, category: 'Product', title: 'Telematics motor cover launches in pilot states', excerpt: 'Usage-based pricing goes live for 2,000 customers. Underwriting shares what we learned.', author: 'Rebecca Sterling', date: '2026-10-24', readMins: 4, likes: 42, comments: 9, image: newsPhotos[1], featured: true,
     body: ['Our first usage-based motor product is live for 2,000 customers across three pilot states. Drivers who share trip data through the Rex app can save up to 20% on renewal.', 'Underwriting spent six months modelling driving behaviour with the Actuarial team. Early results show safer drivers opting in, which improves the risk pool for everyone.', 'Customer Care has a new script for telematics questions, and Claims can now see trip data for any motor claim from an enrolled customer.'] },
-  { id: 2, category: 'Claims', title: 'Average claim settlement down to 6.2 days', excerpt: 'The new triage workflow cut handling time by 31%. Here is how the team did it.', author: 'Arthur Pendelton', date: '2026-10-22', readMins: 3, likes: 67, comments: 14, image: null,
+  { id: 2, category: 'Claims', title: 'Average claim settlement down to 6.2 days', excerpt: 'The new triage workflow cut handling time by 31%. Here is how the team did it.', author: 'Arthur Pendelton', date: '2026-10-22', readMins: 3, likes: 67, comments: 14, image: newsPhotos[2],
     body: ['Twelve weeks ago the average claim took 8.1 days to settle. This week it was 6.2.', 'The biggest change was triage: simple claims under ₦500,000 now go straight to a fast-track queue with pre-approved settlement limits.', 'Next up: same-day settlement for windscreen and minor motor damage.'] },
-  { id: 3, category: 'People', title: 'Meet the Customer Care team behind our 4.7-star rating', excerpt: 'A day on the frontline with the team that handles 3,000 calls a week.', author: 'Thomas Mueller', date: '2026-10-20', readMins: 5, likes: 38, comments: 6, image: null,
+  { id: 3, category: 'People', title: 'Meet the Customer Care team behind our 4.7-star rating', excerpt: 'A day on the frontline with the team that handles 3,000 calls a week.', author: 'Thomas Mueller', date: '2026-10-20', readMins: 5, likes: 38, comments: 6, image: newsPhotos[3],
     body: ['From 7am the phones start ringing. Marcus Vance’s team of 40 handles policy questions, claims updates and the occasional very upset customer.', 'Their secret? Call back before the customer has to chase, and never end a call without a clear next step.'] },
-  { id: 4, category: 'IT', title: 'Single sign-on rolls out to all core systems', excerpt: 'One login for the policy admin, claims portal and HR. Migration dates inside.', author: 'David Kojo', date: '2026-10-18', readMins: 2, likes: 25, comments: 3, image: null,
+  { id: 4, category: 'IT', title: 'Single sign-on rolls out to all core systems', excerpt: 'One login for the policy admin, claims portal and HR. Migration dates inside.', author: 'David Kojo', date: '2026-10-18', readMins: 2, likes: 25, comments: 3, image: newsPhotos[4],
     body: ['From 3 November you will sign in once to reach policy admin, the claims workbench, HR and email.', 'Multi-factor authentication stays on for every system. Keep your authenticator app handy during the switch.'] },
-  { id: 5, category: 'Company', title: 'Q3 results: gross written premium up 18%', excerpt: 'Strong growth in motor and health, with a combined ratio of 94%.', author: 'Victoria Hawthorne', date: '2026-10-15', readMins: 4, likes: 88, comments: 21, image: null,
+  { id: 5, category: 'Company', title: 'Q3 results: gross written premium up 18%', excerpt: 'Strong growth in motor and health, with a combined ratio of 94%.', author: 'Victoria Hawthorne', date: '2026-10-15', readMins: 4, likes: 88, comments: 21, image: newsPhotos[5],
     body: ['Gross written premium grew 18% year on year, led by motor and health.', 'Our combined ratio improved to 94%, and customer NPS rose to 62. Thank you to every team. The town hall recording is in the Docs hub.'] },
-  { id: 6, category: 'Wellbeing', title: 'Open enrolment for the 2027 health plan', excerpt: 'Review your HMO options and add dependants before 30 November.', author: 'Thomas Mueller', date: '2026-10-12', readMins: 2, likes: 19, comments: 4, image: null,
+  { id: 6, category: 'Wellbeing', title: 'Open enrolment for the 2027 health plan', excerpt: 'Review your HMO options and add dependants before 30 November.', author: 'Thomas Mueller', date: '2026-10-12', readMins: 2, likes: 19, comments: 4, image: newsPhotos[6],
     body: ['Three plan tiers are available for 2027, and you can now add up to four dependants.', 'Drop-in sessions with our HMO partner run every Wednesday in November.'] },
 ]
 
@@ -62,7 +64,7 @@ export const events = [
 
 // `mandatory` courses are assigned to everyone with a due date. `progress` is the demo user's completion %.
 // `rating` and `reviews` are sample values. Set `image` to a course thumbnail URL to replace the cover.
-export const courses = [
+const courseList = [
   { id: 'aml', title: 'Anti-money laundering essentials', instructor: 'David Okon', rating: 4.6, reviews: 212, category: 'Compliance', mins: 40, level: 'All staff', mandatory: true, due: '2026-11-15', progress: 60 },
   { id: 'ndpa', title: 'Data protection (NDPA) in practice', instructor: 'David Okon', rating: 4.4, reviews: 167, category: 'Compliance', mins: 30, level: 'All staff', mandatory: true, due: '2026-11-15', progress: 0 },
   { id: 'cyber', title: 'Cyber security awareness', instructor: 'David Kojo', rating: 4.7, reviews: 301, category: 'Compliance', mins: 25, level: 'All staff', mandatory: true, due: '2026-12-31', progress: 100 },
@@ -74,6 +76,8 @@ export const courses = [
   { id: 'lead', title: 'First-time manager programme', instructor: 'Thomas Mueller', rating: 4.5, reviews: 47, category: 'Leadership', mins: 240, level: 'Managers', progress: 0 },
   { id: 'feedback', title: 'Giving and receiving feedback', instructor: 'Thomas Mueller', rating: 4.6, reviews: 72, category: 'Leadership', mins: 35, level: 'All staff', progress: 0 },
 ]
+
+export const courses = courseList.map((c) => ({ ...c, image: c.image ?? coursePhotos[c.id] ?? null }))
 
 export const quickLinks = [
   { label: 'Policy admin', icon: 'FileStack', href: '#' },

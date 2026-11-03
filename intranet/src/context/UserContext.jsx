@@ -3,8 +3,8 @@ import { useLocalStorage } from '../hooks/useLocalStorage'
 import { walkthroughSteps } from '../data/onboarding'
 import { mapDepartment, restoreSession, signInWithMicrosoft, signOutOfMicrosoft, ssoConfigured } from '../auth/microsoft'
 
-// Demo personas, used when Microsoft sign-in isn't configured. With SSO the user comes from Microsoft;
-// whether someone is new staff should come from the HR system (not available from Microsoft alone).
+// Demo personas, used when Microsoft sign-in isn't configured. With SSO the user comes from Microsoft.
+// Everyone, new staff included, signs in with Microsoft; new staff are then held in onboarding.
 export const personas = [
   { id: 'new', firstName: 'Samuel', lastName: 'Adebayo', role: 'Junior Claims Analyst', dept: 'Claims', newStaff: true, manager: 'Arthur Pendelton', buddy: 'Sarah Jenkins' },
   { id: 'claims', firstName: 'Sarah', lastName: 'Jenkins', role: 'Senior Claims Specialist', dept: 'Claims' },
@@ -16,6 +16,9 @@ export const personas = [
   { id: 'comms', firstName: 'Elena', lastName: 'Rostova', role: 'Communications Lead', dept: 'Brand & Communications' },
   { id: 'md', firstName: 'Victoria', lastName: 'Hawthorne', role: 'Managing Director & CEO', dept: 'Executive Office' },
 ]
+
+// How long after their hire date someone counts as new staff (until onboarding is complete).
+const NEW_STAFF_DAYS = 90
 
 const UserContext = createContext(null)
 
@@ -43,6 +46,8 @@ export function UserProvider({ children }) {
         role: ssoUser.jobTitle ?? 'Rex Insurance',
         dept: mapDepartment(ssoUser.department),
         email: ssoUser.email,
+        // New staff = hired in the last NEW_STAFF_DAYS days (Microsoft 365 employeeHireDate).
+        newStaff: Boolean(ssoUser.hireDate) && Date.now() - new Date(ssoUser.hireDate).getTime() < NEW_STAFF_DAYS * 86400000,
       }
     } else {
       user = personas.find((p) => p.id === personaId) ?? personas[1]

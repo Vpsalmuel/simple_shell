@@ -41,7 +41,7 @@ Everyone starts at `/login` and signs in with **Sign in with Microsoft**.
 
 - **Demo mode (default):** with no Azure settings, the button opens a clearly labelled picker of demo colleagues, and **account menu → View as** switches between them.
 - **Microsoft mode:** your IT team registers Rex Hub in **Microsoft Entra ID** (App registrations → New registration → platform **Single-page application**, redirect URI = your site's address, e.g. `https://hub.rexinsurance.com`; API permission **Microsoft Graph → User.Read**, delegated). Put the **Application (client) ID** and **Directory (tenant) ID** in `.env` as `VITE_AZURE_CLIENT_ID` and `VITE_AZURE_TENANT_ID`, then rebuild. Names, job titles and departments then come from Microsoft, and "View as" disappears.
-- Microsoft does not know who is *new staff*: that flag (which locks people into onboarding) needs to come from your HR system. Until then, Microsoft-mode users are treated as existing staff.
+- **New staff sign in with Microsoft too.** Rex Hub treats anyone whose Microsoft 365 **hire date** (`employeeHireDate`) is within the last 90 days as new staff and sends them straight to onboarding until it is complete. HR/IT must fill in the hire date on each new account (change the 90 days in `NEW_STAFF_DAYS`, `src/context/UserContext.jsx`).
 - The Microsoft path is built on Microsoft's official MSAL library (`src/auth/microsoft.js`) but has not been tested against your tenant yet.
 
 ## Staff types
