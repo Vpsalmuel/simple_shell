@@ -1,5 +1,5 @@
 import { useCallback, useEffect, useLayoutEffect, useState } from 'react'
-import { ArrowLeft, ArrowRight, X } from 'lucide-react'
+import { ArrowLeftIcon as ArrowLeft, ArrowRightIcon as ArrowRight, XIcon as X } from '@phosphor-icons/react'
 import Portal from './Portal'
 
 // Tour steps from the AI Studio prototype. `target` is a data-tour value; the first visible match is used.
@@ -7,6 +7,7 @@ const steps = [
   { title: 'Welcome to Rex Hub', text: 'A quick tour of your new digital workspace. It takes about 30 seconds.' },
   { target: ['nav', 'menu'], title: 'Everything in one menu', text: 'Your tools, teams and company news live here, grouped into Workspace, Work, Knowledge, Company and You.' },
   { target: ['search'], title: 'Search everything', text: 'Find colleagues, pages, news, documents and requests. Shortcut: Ctrl+K (⌘K on Mac).' },
+  { target: ['tools'], title: 'Your quick tools', text: 'Emails, Kissflow, IES and the Help Desk, one click from Home.' },
   { target: ['rexai'], title: 'Ask Rex AI', text: 'Got a question? Rex AI can point you to the right policy, page or person.' },
   { target: ['profile'], title: 'Your profile', text: 'Your settings live here. You can replay this tour from this menu at any time.' },
 ]

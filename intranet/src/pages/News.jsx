@@ -1,6 +1,6 @@
 import { useMemo, useState } from 'react'
 import { Link, useParams } from 'react-router-dom'
-import { ArrowLeft, Clock, Heart, MessageCircle, Search, Send } from 'lucide-react'
+import { ArrowLeftIcon as ArrowLeft, ClockIcon as Clock, HeartIcon as Heart, ChatCircleIcon as MessageCircle, MagnifyingGlassIcon as Search, PaperPlaneTiltIcon as Send } from '@phosphor-icons/react'
 import { useNews } from '../hooks/useNews'
 import { useLocalStorage } from '../hooks/useLocalStorage'
 import { useUser } from '../context/UserContext'
@@ -20,7 +20,7 @@ function LikeButton({ item, liked, toggle }) {
   const on = liked.includes(item.id)
   return (
     <button onClick={() => toggle(item.id)} aria-pressed={on} className={`inline-flex items-center gap-1 transition ${on ? 'text-accent-600' : 'hover:text-accent-600'}`}>
-      <Heart size={14} className={on ? 'fill-current' : ''} /> {item.likes + (on ? 1 : 0)}
+      <Heart size={14} weight={on ? 'fill' : 'regular'} /> {item.likes + (on ? 1 : 0)}
     </button>
   )
 }
@@ -124,7 +124,7 @@ export default function News() {
         <Link to={`/news/${featured.id}`} className="card card-hover group grid overflow-hidden md:grid-cols-2">
           <Photo src={featured.image} alt="" className="aspect-[16/10] w-full md:aspect-auto md:h-full" rounded="rounded-none" />
           <div className="flex flex-col justify-center gap-3 p-6 sm:p-8">
-            <span className="chip w-fit bg-accent-600 text-white">Featured · {featured.category}</span>
+            <span className="chip w-fit bg-accent-700 text-white">Featured · {featured.category}</span>
             <h2 className="text-2xl font-bold text-balance group-hover:text-brand-600 dark:group-hover:text-brand-300">{featured.title}</h2>
             <p className="text-slate-600 dark:text-slate-300">{featured.excerpt}</p>
             <div className="text-xs text-slate-500">{featured.author} · {fmtDate(featured.date)} · {featured.readMins} min read</div>

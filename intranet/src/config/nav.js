@@ -1,4 +1,4 @@
-import { Award, BookOpen, Building2, CalendarDays, FileText, Gift, GraduationCap, HeartPulse, Inbox, LayoutDashboard, LayoutGrid, LifeBuoy, Newspaper, PartyPopper, ShieldCheck, Users } from 'lucide-react'
+import { MedalIcon as Award, BookOpenIcon as BookOpen, BuildingsIcon as Building2, CalendarDotsIcon as CalendarDays, FileTextIcon as FileText, GiftIcon as Gift, GraduationCapIcon as GraduationCap, HeartbeatIcon as HeartPulse, TrayIcon as Inbox, SquaresFourIcon as LayoutDashboard, GridFourIcon as LayoutGrid, LifebuoyIcon as LifeBuoy, NewspaperIcon as Newspaper, ConfettiIcon as PartyPopper, ShieldCheckIcon as ShieldCheck, UsersIcon as Users } from '@phosphor-icons/react'
 
 // Departments whose staff can open the Admin Workspace.
 export const adminDepts = ['HR', 'IT', 'Brand & Communications', 'Executive Office']
@@ -14,7 +14,6 @@ export const navGroups = [
   ] },
   { label: 'Work', items: [
     { to: '/requests', label: 'Request Centre', icon: Inbox },
-    { to: '/claims', label: 'Claims & Policy', icon: ShieldCheck, depts: ['Claims', 'Underwriting'] },
     { to: '/docs', label: 'Docs & HR', icon: FileText },
   ] },
   { label: 'Knowledge', items: [

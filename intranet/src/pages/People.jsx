@@ -1,6 +1,6 @@
 import { useMemo, useState } from 'react'
 import { useSearchParams } from 'react-router-dom'
-import { LayoutGrid, List, Mail, MapPin, MessageSquare, Phone, Search, X } from 'lucide-react'
+import { GridFourIcon as LayoutGrid, ListBulletsIcon as List, EnvelopeSimpleIcon as Mail, MapPinIcon as MapPin, ChatTextIcon as MessageSquare, PhoneIcon as Phone, MagnifyingGlassIcon as Search, XIcon as X } from '@phosphor-icons/react'
 import { departments, people } from '../data'
 import Avatar from '../components/Avatar'
 import Portal from '../components/Portal'

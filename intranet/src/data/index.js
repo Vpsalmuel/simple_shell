@@ -1,6 +1,6 @@
 import { coursePhotos, newsPhotos } from './photos'
 
-// Sample content. Replace with API calls (SharePoint, HRIS, claims system) when wiring a backend.
+// Sample content. Replace with API calls (SharePoint, HRIS) when wiring a backend.
 
 export const departments = ['Executive Office', 'Brand & Communications', 'Claims', 'Underwriting', 'Actuarial', 'Customer Care', 'IT', 'HR', 'Finance', 'Legal & Compliance']
 
@@ -77,45 +77,27 @@ const courseList = [
   { id: 'feedback', title: 'Giving and receiving feedback', instructor: 'Thomas Mueller', rating: 4.6, reviews: 72, category: 'Leadership', mins: 35, level: 'All staff', progress: 0 },
 ]
 
-export const courses = courseList.map((c) => ({ ...c, image: c.image ?? coursePhotos[c.id] ?? null }))
+// Lesson outlines. Add `src` to a lesson to play a real video file in the course player.
+const lessonTitles = {
+  aml: ['Why AML matters in insurance', 'Spotting red flags', 'Customer due diligence', 'Reporting suspicious activity', 'Knowledge check'],
+  ndpa: ['What the NDPA covers', 'Lawful basis for processing', 'Handling customer data day to day', 'Data breaches: what to do', 'Knowledge check'],
+  cyber: ['Phishing in the real world', 'Passwords and MFA', 'Working safely on the move', 'Reporting an incident'],
+  claims101: ['The claims journey', 'First notice of loss', 'Triage and fast-track', 'Assessment and fraud indicators', 'Settlement and authority limits', 'Talking to customers about decisions'],
+  uw: ['What underwriters do', 'Reading a proposal form', 'Risk factors by product line', 'Pricing and the rating engine', 'Referrals and authority'],
+  ifrs17: ['Why IFRS 17 exists', 'Contracts and portfolios', 'Measuring insurance revenue', 'What changes for your team'],
+  cx: ['Listening before solving', 'Staying calm under pressure', 'Saying no with empathy', 'Closing with a clear next step'],
+  excel: ['Clean data first', 'Lookups that do not break', 'PivotTables', 'Charts that tell a story', 'Power Query basics', 'Project: claims ageing report'],
+  lead: ['Your first 90 days as a manager', 'Setting clear goals', 'Running one-to-ones', 'Delegating well', 'Managing performance', 'Building a team culture'],
+  feedback: ['Why feedback matters', 'A simple feedback model', 'Receiving feedback well'],
+}
 
-export const quickLinks = [
-  { label: 'Policy admin', icon: 'FileStack', href: '#' },
-  { label: 'Claims portal', icon: 'ShieldCheck', href: '#' },
-  { label: 'Payslips', icon: 'Wallet', href: '#' },
-  { label: 'IT helpdesk', icon: 'LifeBuoy', href: '#' },
-  { label: 'Learning', icon: 'GraduationCap', href: '#' },
-  { label: 'Expenses', icon: 'Receipt', href: '#' },
-]
+const withLessons = (c) => {
+  const titles = lessonTitles[c.id] ?? ['Introduction', 'Core concepts', 'Putting it into practice', 'Summary']
+  const each = Math.max(3, Math.round(c.mins / titles.length))
+  return titles.map((title, i) => ({ id: `${c.id}-${i + 1}`, title, mins: each, src: null }))
+}
 
-export const claimsWeekly = [
-  { day: 'Mon', opened: 148, closed: 132 },
-  { day: 'Tue', opened: 162, closed: 155 },
-  { day: 'Wed', opened: 139, closed: 160 },
-  { day: 'Thu', opened: 171, closed: 149 },
-  { day: 'Fri', opened: 125, closed: 168 },
-]
-
-export const claimsByLine = [
-  { line: 'Motor', share: 41 },
-  { line: 'Health', share: 26 },
-  { line: 'Property', share: 18 },
-  { line: 'Marine', share: 9 },
-  { line: 'Life', share: 6 },
-]
-
-export const claims = [
-  { id: 'CLM-24-08812', insured: 'Bisi Akande', line: 'Motor', amount: 1850000, stage: 'Assessment', sla: 2, owner: 'Sarah Jenkins' },
-  { id: 'CLM-24-08790', insured: 'Coastline Logistics Ltd', line: 'Marine', amount: 24500000, stage: 'Investigation', sla: 5, owner: 'Sarah Jenkins' },
-  { id: 'CLM-24-08755', insured: 'Ngozi Peters', line: 'Health', amount: 420000, stage: 'Approval', sla: 1, owner: 'Chloe Chen' },
-  { id: 'CLM-24-08731', insured: 'Unity Schools', line: 'Property', amount: 7300000, stage: 'Registered', sla: 7, owner: 'Sarah Jenkins' },
-  { id: 'CLM-24-08702', insured: 'Musa Danjuma', line: 'Motor', amount: 960000, stage: 'Payment', sla: 0, owner: 'Chloe Chen' },
-]
-
-// Average days to settle, last 12 weeks (oldest → newest).
-export const settlementTrend = [8.1, 7.9, 7.6, 7.7, 7.3, 7.1, 6.9, 7.0, 6.7, 6.5, 6.4, 6.2]
-
-export const claimStages = ['Registered', 'Assessment', 'Investigation', 'Approval', 'Payment']
+export const courses = courseList.map((c) => ({ ...c, image: c.image ?? coursePhotos[c.id] ?? null, lessons: withLessons(c) }))
 
 export const tools = [
   { name: 'Policy administration', desc: 'Issue, endorse and renew policies', icon: 'FileStack' },

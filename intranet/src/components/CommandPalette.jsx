@@ -1,8 +1,8 @@
 import { useEffect, useMemo, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
-import { CornerDownLeft, FileText, Newspaper, Search, ShieldCheck, User } from 'lucide-react'
-import { claims, documents, news, people } from '../data'
-import { canAccess, navFor, navItem } from '../config/nav'
+import { ArrowElbowDownLeftIcon as CornerDownLeft, FileTextIcon as FileText, NewspaperIcon as Newspaper, MagnifyingGlassIcon as Search, UserIcon as User } from '@phosphor-icons/react'
+import { documents, news, people } from '../data'
+import { navFor } from '../config/nav'
 import { useUser } from '../context/UserContext'
 
 export default function CommandPalette({ open, onClose }) {
@@ -30,8 +30,6 @@ export default function CommandPalette({ open, onClose }) {
         .forEach((d) => items.push({ group: 'Documents', label: d.title, meta: d.category, icon: FileText, to: `/docs?q=${encodeURIComponent(d.title)}` }))
       news.filter((n) => match(n.title) || match(n.category)).slice(0, 4)
         .forEach((n) => items.push({ group: 'News', label: n.title, meta: n.category, icon: Newspaper, to: `/news/${n.id}` }))
-      if (canAccess(navItem('/claims'), user)) claims.filter((c) => match(c.id) || match(c.insured)).slice(0, 5)
-        .forEach((c) => items.push({ group: 'Claims', label: c.id, meta: c.insured, icon: ShieldCheck, to: `/claims?claim=${c.id}` }))
     }
     return items
   }, [q, user])

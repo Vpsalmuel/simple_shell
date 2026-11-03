@@ -1,6 +1,6 @@
 import { useEffect, useRef, useState } from 'react'
 import { Navigate, useNavigate } from 'react-router-dom'
-import { ArrowLeft, ArrowRight, CalendarCheck, LogOut, Check, CheckCircle2, ChevronDown, FileSignature, Lock, MapPin, Quote, RotateCcw, Star } from 'lucide-react'
+import { ArrowLeftIcon as ArrowLeft, ArrowRightIcon as ArrowRight, CalendarCheckIcon as CalendarCheck, SignOutIcon as LogOut, CheckIcon as Check, CheckCircleIcon as CheckCircle2, CaretDownIcon as ChevronDown, SignatureIcon as FileSignature, LockIcon as Lock, MapPinIcon as MapPin, QuotesIcon as Quote, ArrowCounterClockwiseIcon as RotateCcw, StarIcon as Star } from '@phosphor-icons/react'
 import { company, departmentTour, feedbackSlots, floors, itSetup, mdMessage, performance, policies, products, values, walkthroughSteps, workplaceNorms } from '../data/onboarding'
 import { people } from '../data'
 import { useUser } from '../context/UserContext'
@@ -112,7 +112,7 @@ function ValuesStep({ progress, update }) {
         return (
           <button key={v.id} onClick={() => toggle(v.id)} aria-expanded={isOpen} className={`card card-hover p-5 text-left transition ${isOpen ? 'ring-2 ring-accent-500' : ''}`}>
             <div className="flex items-start gap-4">
-              <span className={`flex h-12 w-12 shrink-0 items-center justify-center rounded-2xl transition ${isSeen ? 'bg-accent-600 text-white' : 'bg-brand-50 text-brand-700 dark:bg-slate-800 dark:text-brand-200'}`}><Icon name={v.icon} size={22} /></span>
+              <span className={`flex h-12 w-12 shrink-0 items-center justify-center rounded-2xl transition ${isSeen ? 'bg-accent-700 text-white' : 'bg-brand-50 text-brand-700 dark:bg-slate-800 dark:text-brand-200'}`}><Icon name={v.icon} size={22} /></span>
               <div className="flex-1">
                 <p className="font-display text-lg font-bold">{v.name}</p>
                 <p className="text-sm text-slate-500">{v.short}</p>
@@ -248,7 +248,7 @@ function ProductsStep({ progress, update }) {
       <div className="stagger grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
         {products.map((p) => (
           <button key={p.id} onClick={() => show(p)} className="card card-hover flex items-start gap-4 p-5 text-left">
-            <span className={`flex h-12 w-12 shrink-0 items-center justify-center rounded-2xl transition ${seen.includes(p.id) ? 'bg-accent-600 text-white' : 'bg-brand-50 text-brand-700 dark:bg-slate-800 dark:text-brand-200'}`}><Icon name={p.icon} size={22} /></span>
+            <span className={`flex h-12 w-12 shrink-0 items-center justify-center rounded-2xl transition ${seen.includes(p.id) ? 'bg-accent-700 text-white' : 'bg-brand-50 text-brand-700 dark:bg-slate-800 dark:text-brand-200'}`}><Icon name={p.icon} size={22} /></span>
             <span className="min-w-0">
               <span className="block font-display text-lg font-bold">{p.title}</span>
               <span className="block truncate text-xs text-slate-500">{p.variants.join(' · ')}</span>
@@ -280,12 +280,12 @@ function LocationsStep({ user }) {
           const mine = f.teams.includes(myTeam)
           return (
             <li key={f.floor} className={`card flex flex-col gap-3 p-4 sm:flex-row sm:items-center ${mine ? 'ring-2 ring-accent-500' : ''}`}>
-              <span className={`flex h-14 w-14 shrink-0 flex-col items-center justify-center rounded-xl font-display ${mine ? 'bg-accent-600 text-white' : 'bg-brand-700 text-white'}`}>
+              <span className={`flex h-14 w-14 shrink-0 flex-col items-center justify-center rounded-xl font-display ${mine ? 'bg-accent-700 text-white' : 'bg-brand-700 text-white'}`}>
                 <span className="text-[10px] font-semibold uppercase opacity-80">Floor</span><span className="text-xl leading-none font-bold">{f.floor}</span>
               </span>
               <div className="flex-1">
                 <p className="font-display font-bold">{f.name}{mine && <span className="chip ml-2 bg-accent-50 text-accent-700 dark:bg-accent-700/20 dark:text-accent-400">Your team</span>}</p>
-                <div className="mt-1 flex flex-wrap gap-1.5">{f.teams.map((t) => <span key={t} className={`chip ${t === myTeam ? 'bg-accent-600 text-white' : 'bg-slate-100 text-slate-600 dark:bg-slate-800 dark:text-slate-300'}`}>{t}</span>)}</div>
+                <div className="mt-1 flex flex-wrap gap-1.5">{f.teams.map((t) => <span key={t} className={`chip ${t === myTeam ? 'bg-accent-700 text-white' : 'bg-slate-100 text-slate-600 dark:bg-slate-800 dark:text-slate-300'}`}>{t}</span>)}</div>
               </div>
             </li>
           )
@@ -457,9 +457,9 @@ export default function Walkthrough() {
                   <button
                     disabled={!can}
                     onClick={() => setIndex(i)}
-                    className={`flex w-full items-center gap-3 rounded-xl px-3 py-2.5 text-left text-sm transition ${current ? 'bg-white shadow-sm ring-1 ring-slate-200 dark:bg-slate-900 dark:ring-slate-800' : can ? 'hover:bg-white/70 dark:hover:bg-slate-900' : 'cursor-not-allowed opacity-50'}`}
+                    className={`flex w-full items-center gap-3 rounded-xl px-3 py-2.5 text-left text-sm transition ${current ? 'bg-white shadow-sm ring-1 ring-slate-200 dark:bg-slate-900 dark:ring-slate-800' : can ? 'hover:bg-white/70 dark:hover:bg-slate-900' : 'cursor-not-allowed opacity-70'}`}
                   >
-                    <span className={`flex h-7 w-7 shrink-0 items-center justify-center rounded-full text-xs font-bold ${done ? 'bg-emerald-500 text-white' : current ? 'bg-accent-600 text-white' : 'bg-slate-200 text-slate-500 dark:bg-slate-800'}`}>
+                    <span className={`flex h-7 w-7 shrink-0 items-center justify-center rounded-full text-xs font-bold ${done ? 'bg-emerald-500 text-white' : current ? 'bg-accent-700 text-white' : 'bg-slate-200 text-slate-500 dark:bg-slate-800'}`}>
                       {done ? <Check size={14} /> : can ? i + 1 : <Lock size={12} />}
                     </span>
                     <span className="whitespace-nowrap lg:whitespace-normal"><span className="block font-medium">{s.label}</span><span className="hidden text-xs text-slate-500 lg:block">{s.blurb}</span></span>
@@ -491,7 +491,7 @@ export default function Walkthrough() {
                 <button onClick={() => setIndex(index - 1)} disabled={index === 0} className="btn-ghost"><ArrowLeft size={16} /> Back</button>
                 <div className="flex flex-col items-stretch gap-2 sm:flex-row sm:items-center">
                   {!req.met && <span className="text-center text-xs text-slate-500">{req.hint}</span>}
-                  <button onClick={next} disabled={!req.met} className="btn bg-accent-600 px-6 text-white hover:bg-accent-700">
+                  <button onClick={next} disabled={!req.met} className="btn bg-accent-700 px-6 text-white hover:bg-accent-800">
                     {index === walkthroughSteps.length - 1 ? 'Finish' : 'Continue'} <ArrowRight size={16} />
                   </button>
                 </div>

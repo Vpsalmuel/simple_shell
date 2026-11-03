@@ -1,5 +1,5 @@
 import { Link } from 'react-router-dom'
-import { Cake, Check, Gift, PartyPopper, Sparkles } from 'lucide-react'
+import { CakeIcon as Cake, CheckIcon as Check, GiftIcon as Gift, ConfettiIcon as PartyPopper, SparkleIcon as Sparkles } from '@phosphor-icons/react'
 import { people } from '../data'
 import { birthdays } from '../data/culture'
 import { daysUntil, nextOccurrence, shortDate, today, whenLabel } from '../lib/dates'
@@ -72,7 +72,7 @@ export default function Celebrations() {
             <ul className="divide-y divide-slate-100 dark:divide-slate-800">
               {anniversaries.map((a) => (
                 <li key={a.id} className="flex items-center gap-3 py-3">
-                  <span className="flex h-10 w-10 shrink-0 flex-col items-center justify-center rounded-xl bg-accent-600 font-display text-white"><span className="text-base leading-none font-bold">{a.years}</span><span className="text-[9px] font-semibold uppercase">{a.years === 1 ? 'year' : 'years'}</span></span>
+                  <span className="flex h-10 w-10 shrink-0 flex-col items-center justify-center rounded-xl bg-accent-700 font-display text-white"><span className="text-base leading-none font-bold">{a.years}</span><span className="text-[9px] font-semibold uppercase">{a.years === 1 ? 'year' : 'years'}</span></span>
                   <span className="min-w-0 flex-1"><span className="block truncate font-medium">{a.name}</span><span className="block truncate text-xs text-slate-500">{a.role} · {whenLabel(a.days)}</span></span>
                   <WishButton id={key('anniv', a.name, a.date)} name={a.name} wished={wishes.includes(key('anniv', a.name, a.date))} onWish={wish} />
                 </li>

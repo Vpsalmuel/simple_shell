@@ -1,6 +1,6 @@
 import { useCallback, useEffect, useState } from 'react'
 import { Navigate, NavLink, Outlet, useLocation } from 'react-router-dom'
-import { Bell, Compass, Menu, Moon, Search, Sun, X, LogOut, Settings } from 'lucide-react'
+import { BellIcon as Bell, CompassIcon as Compass, ListIcon as Menu, MoonIcon as Moon, MagnifyingGlassIcon as Search, SunIcon as Sun, XIcon as X, SignOutIcon as LogOut, GearIcon as Settings } from '@phosphor-icons/react'
 import Logo from './Logo'
 import Avatar from './Avatar'
 import CommandPalette from './CommandPalette'
@@ -81,7 +81,7 @@ export default function Layout() {
     document.documentElement.classList.toggle('dark', dark)
   }, [dark])
 
-  // Other pages (e.g. the Home search bar) open search with a 'rex:search' event.
+  // Other pages can open search with a 'rex:search' event.
   useEffect(() => {
     const open = () => setSearchOpen(true)
     window.addEventListener('rex:search', open)
@@ -132,11 +132,12 @@ export default function Layout() {
           <button
             data-tour="search"
             onClick={() => setSearchOpen(true)}
-            className={`${location.pathname === '/' ? 'invisible ' : ''}ml-auto flex h-10 items-center gap-2 rounded-xl border border-slate-200 bg-slate-50 px-3 text-sm text-slate-400 transition hover:border-brand-300 sm:w-80 lg:ml-0 dark:border-slate-800 dark:bg-slate-900`}
+            aria-label="Search Rex Hub"
+            className="ml-auto flex h-10 items-center gap-2 rounded-xl border border-slate-200 bg-slate-50 px-3 text-sm text-slate-500 transition hover:border-brand-300 sm:w-80 lg:ml-0 lg:w-[26rem] dark:border-slate-700 dark:bg-slate-900 dark:text-slate-400 dark:hover:border-brand-500"
           >
             <Search size={16} />
-            <span className="hidden flex-1 text-left sm:inline">Search Rex Hub…</span>
-            <kbd className="hidden rounded border border-slate-200 bg-white px-1.5 text-[10px] sm:inline dark:border-slate-700 dark:bg-slate-800">⌘K</kbd>
+            <span className="hidden flex-1 text-left sm:inline">Search people, policies, news…</span>
+            <kbd className="hidden rounded border border-slate-200 bg-white px-1.5 text-[10px] sm:inline dark:border-slate-600 dark:bg-slate-800 dark:text-slate-300">Ctrl K</kbd>
           </button>
 
           <div className="flex items-center gap-1 lg:ml-auto">
@@ -145,7 +146,7 @@ export default function Layout() {
             <div className="relative">
               <button onClick={() => { setBellOpen(!bellOpen); setMenuOpen(false) }} className="btn-ghost relative p-2" aria-label={`Notifications (${unread} unread)`}>
                 <Bell size={18} />
-                {unread > 0 && <span className="absolute top-1 right-1 flex h-4 min-w-4 items-center justify-center rounded-full bg-accent-600 px-1 text-[10px] font-bold text-white">{unread}</span>}
+                {unread > 0 && <span className="absolute top-1 right-1 flex h-4 min-w-4 items-center justify-center rounded-full bg-accent-700 px-1 text-[10px] font-bold text-white">{unread}</span>}
               </button>
               {bellOpen && (
                 <div className="card animate-fade-up absolute right-0 mt-2 w-80 max-w-[calc(100vw-2rem)] p-2 shadow-xl">

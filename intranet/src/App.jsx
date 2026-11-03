@@ -2,13 +2,13 @@ import { Route, Routes } from 'react-router-dom'
 import Layout from './components/Layout'
 import Home from './pages/Home'
 import People from './pages/People'
-import Claims from './pages/Claims'
 import Docs from './pages/Docs'
 import Walkthrough from './pages/Walkthrough'
 import Login from './pages/Login'
 import News from './pages/News'
 import Events from './pages/Events'
 import Learning from './pages/Learning'
+import CoursePlayer from './pages/CoursePlayer'
 import Departments from './pages/Departments'
 import RequireAccess from './components/RequireAccess'
 import Requests from './pages/Requests'
@@ -28,7 +28,6 @@ export default function App() {
       <Route element={<Layout />}>
         <Route index element={<Home />} />
         <Route path="people" element={<People />} />
-        <Route path="claims" element={<RequireAccess to="/claims"><Claims /></RequireAccess>} />
         <Route path="docs" element={<Docs />} />
         <Route path="requests" element={<Requests />} />
         <Route path="knowledge" element={<Knowledge />} />
@@ -43,6 +42,7 @@ export default function App() {
         <Route path="news/:id" element={<News />} />
         <Route path="events" element={<Events />} />
         <Route path="learning" element={<Learning />} />
+        <Route path="learning/:id" element={<CoursePlayer />} />
         <Route path="departments" element={<Departments />} />
         <Route path="departments/:id" element={<Departments />} />
         <Route path="*" element={<Home />} />

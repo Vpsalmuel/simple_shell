@@ -1,4 +1,4 @@
-import { AlertOctagon, AlertTriangle, CheckCircle2, Clock } from 'lucide-react'
+import { WarningOctagonIcon as AlertOctagon, WarningIcon as AlertTriangle, CheckCircleIcon as CheckCircle2, ClockIcon as Clock } from '@phosphor-icons/react'
 
 // Status always ships with an icon + label, never color alone.
 const tones = {

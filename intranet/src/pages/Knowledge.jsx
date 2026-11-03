@@ -1,6 +1,6 @@
 import { useMemo, useState } from 'react'
 import { Link, useParams } from 'react-router-dom'
-import { ArrowLeft, BookOpen, Eye, Search, ThumbsDown, ThumbsUp } from 'lucide-react'
+import { ArrowLeftIcon as ArrowLeft, BookOpenIcon as BookOpen, EyeIcon as Eye, MagnifyingGlassIcon as Search, ThumbsDownIcon as ThumbsDown, ThumbsUpIcon as ThumbsUp } from '@phosphor-icons/react'
 import { articleCategories, articles } from '../data/knowledge'
 import { useLocalStorage } from '../hooks/useLocalStorage'
 import { EmptyIllustration } from '../components/Illustrations'
@@ -61,7 +61,7 @@ export default function Knowledge() {
         <div className="relative mt-6 max-w-xl">
           <Search size={18} className="absolute top-1/2 left-4 -translate-y-1/2 text-slate-400" />
           <label htmlFor="kb-q" className="sr-only">Search the Knowledge Center</label>
-          <input id="kb-q" className="h-12 w-full rounded-2xl bg-white pr-4 pl-11 text-slate-900 outline-none placeholder:text-slate-400 focus:ring-4 focus:ring-accent-500/40" placeholder="Search for leave, travel, claims SOP…" value={q} onChange={(e) => setQ(e.target.value)} />
+          <input id="kb-q" className="h-12 w-full rounded-2xl bg-white pr-4 pl-11 text-slate-900 dark:text-slate-900 outline-none placeholder:text-slate-400 focus:ring-4 focus:ring-accent-500/40" placeholder="Search for leave, travel, claims SOP…" value={q} onChange={(e) => setQ(e.target.value)} />
         </div>
       </section>
 

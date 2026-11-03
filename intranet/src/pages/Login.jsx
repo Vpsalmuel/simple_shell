@@ -1,6 +1,6 @@
 import { useState } from 'react'
 import { Navigate } from 'react-router-dom'
-import { ArrowLeft, ChevronRight, Info, LifeBuoy } from 'lucide-react'
+import { ArrowLeftIcon as ArrowLeft, CaretRightIcon as ChevronRight, InfoIcon as Info, LifebuoyIcon as LifeBuoy } from '@phosphor-icons/react'
 import { personas, useUser } from '../context/UserContext'
 import Avatar from '../components/Avatar'
 import Logo from '../components/Logo'

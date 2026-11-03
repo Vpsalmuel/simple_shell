@@ -1,6 +1,6 @@
 import { useState } from 'react'
 import { Link } from 'react-router-dom'
-import { ChevronDown, Clock, Phone, Send } from 'lucide-react'
+import { CaretDownIcon as ChevronDown, ClockIcon as Clock, PhoneIcon as Phone, PaperPlaneTiltIcon as Send } from '@phosphor-icons/react'
 import { faqs, helpCategories } from '../data/knowledge'
 import { initialRequests, priorities } from '../data/requests'
 import { useLocalStorage } from '../hooks/useLocalStorage'

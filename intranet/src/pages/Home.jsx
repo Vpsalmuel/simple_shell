@@ -1,11 +1,12 @@
 import { useEffect, useState } from 'react'
 import { Link } from 'react-router-dom'
-import { ArrowRight, BookOpen, CalendarDays, Check, ChevronRight, Clock, Inbox, Info, MapPin, Search, Sparkles, X } from 'lucide-react'
-import { announcements, claims, courses, events, people, poll } from '../data'
+import { ArrowRightIcon as ArrowRight, ArrowUpRightIcon as ArrowUpRight, BookOpenIcon as BookOpen, CalendarDotsIcon as CalendarDays, CheckIcon as Check, CaretRightIcon as ChevronRight, ClockIcon as Clock, TrayIcon as Inbox, InfoIcon as Info, MapPinIcon as MapPin, SparkleIcon as Sparkles, XIcon as X } from '@phosphor-icons/react'
+import { announcements, courses, events, people, poll } from '../data'
 import { birthdays } from '../data/culture'
 import { closedStatuses, initialRequests } from '../data/requests'
 import { useNews } from '../hooks/useNews'
 import { dashboardFor } from '../config/departments'
+import { companyTools } from '../config/brand'
 import { useUser } from '../context/UserContext'
 import { useLocalStorage } from '../hooks/useLocalStorage'
 import { daysUntil, nextOccurrence, shortDate, whenLabel } from '../lib/dates'
@@ -17,31 +18,20 @@ import StatusBadge from '../components/StatusBadge'
 import MeetingRoomModal from '../components/MeetingRoomModal'
 
 // Home follows the patterns of award-winning intranets (NN/g Intranet Design Annual, Viva Connections):
-// search first, things to act on, then news, events and people. No metrics, no rotating banners.
+// things to act on and the tools people open daily, then news, events and people.
+// Search lives in the header on every page (NN/g: a persistent, exposed search field), so Home does not repeat it.
+// No metrics, no rotating banners.
 
 function greeting() {
   const h = new Date().getHours()
   return h < 12 ? 'Good morning' : h < 17 ? 'Good afternoon' : 'Good evening'
 }
 
-const openSearch = () => window.dispatchEvent(new Event('rex:search'))
-
 function Greeting({ user }) {
   return (
-    <section className="flex flex-col gap-5 lg:flex-row lg:items-end lg:justify-between">
-      <div>
-        <p className="text-sm text-slate-500">{new Date().toLocaleDateString(undefined, { weekday: 'long', day: 'numeric', month: 'long' })}</p>
-        <h1 className="mt-1 text-3xl font-bold text-brand-800 sm:text-4xl dark:text-white">{greeting()}, {user.firstName}</h1>
-      </div>
-      <button
-        data-tour="search"
-        onClick={openSearch}
-        className="group flex h-12 w-full items-center gap-3 rounded-xl border border-slate-200 bg-white px-4 text-left text-slate-500 shadow-[0_1px_2px_rgba(30,45,100,0.05)] transition hover:border-brand-300 lg:w-[26rem] dark:border-slate-800 dark:bg-slate-900"
-      >
-        <Search size={18} className="text-slate-400 group-hover:text-brand-600" />
-        <span className="flex-1">Search people, policies and news</span>
-        <kbd className="hidden rounded-md border border-slate-200 px-1.5 py-0.5 text-[11px] text-slate-400 sm:inline dark:border-slate-700">Ctrl K</kbd>
-      </button>
+    <section>
+      <p className="text-sm text-slate-500 dark:text-slate-400">{new Date().toLocaleDateString(undefined, { weekday: 'long', day: 'numeric', month: 'long' })}</p>
+      <h1 className="mt-1 text-3xl font-bold text-brand-800 sm:text-4xl dark:text-white">{greeting()}, {user.firstName}</h1>
     </section>
   )
 }
@@ -66,9 +56,6 @@ function Notice() {
     </section>
   )
 }
-
-const slaTone = (d) => (d === 0 ? 'critical' : d <= 2 ? 'warning' : 'neutral')
-const slaText = (d) => (d === 0 ? 'Due today' : d === 1 ? '1 day left' : `${d} days left`)
 
 function TaskRow({ icon: Ico, title, meta, children, to }) {
   const body = (
@@ -102,11 +89,10 @@ function Tasks({ user }) {
 
   const decide = (item, ok) => { setDecided([...decided, item.id]); toast(`${ok ? 'Approved' : 'Declined'}: ${item.primary}`) }
   const approvals = focus.type === 'approvals' ? focus.items.filter((i) => !decided.includes(i.id)) : []
-  const queue = focus.type === 'queue' ? [...claims].sort((a, b) => a.sla - b.sla).slice(0, 3) : []
   const watch = focus.type === 'list' ? focus.items.slice(0, 3) : []
   const training = courses.filter((c) => c.mandatory && (progress[c.id] ?? 0) < 100)
   const waiting = requests.filter((r) => r.to === user.dept && !closedStatuses.includes(r.status))
-  const count = approvals.length + queue.length + training.length + (waiting.length ? 1 : 0)
+  const count = approvals.length + training.length + (waiting.length ? 1 : 0)
 
   return (
     <section className="card flex h-full flex-col p-5">
@@ -130,18 +116,13 @@ function Tasks({ user }) {
               </div>
             </TaskRow>
           ))}
-          {queue.map((c) => (
-            <TaskRow key={c.id} icon={Inbox} title={`${c.id}, ${c.insured}`} meta={`${c.line} claim at ${c.stage.toLowerCase()} stage`} to={`/claims?claim=${c.id}`}>
-              <StatusBadge tone={slaTone(c.sla)}>{slaText(c.sla)}</StatusBadge>
-            </TaskRow>
-          ))}
           {watch.map((w) => (
             <TaskRow key={w.primary} icon={Inbox} title={w.primary} meta={w.secondary} to={focus.cta?.to?.startsWith('/') ? focus.cta.to : undefined}>
               <StatusBadge tone={w.tone}>{w.badge}</StatusBadge>
             </TaskRow>
           ))}
           {training.map((c) => (
-            <TaskRow key={c.id} icon={BookOpen} title={`Complete ${c.title}`} meta={`Required training, due ${shortDate(new Date(`${c.due}T00:00`))}`} to="/learning">
+            <TaskRow key={c.id} icon={BookOpen} title={`Complete ${c.title}`} meta={`Required training, due ${shortDate(new Date(`${c.due}T00:00`))}`} to={`/learning/${c.id}`}>
               <StatusBadge tone={daysUntil(new Date(`${c.due}T00:00`)) <= 14 ? 'warning' : 'neutral'}>{progress[c.id] ?? 0}% done</StatusBadge>
             </TaskRow>
           ))}
@@ -154,24 +135,42 @@ function Tasks({ user }) {
   )
 }
 
-function QuickLinks({ links }) {
+function ToolLink({ tool, className, children }) {
+  const toast = useToast()
+  if (tool.internal) return <Link to={tool.internal} className={className}>{children}</Link>
+  if (!tool.url) return <button onClick={() => toast(`${tool.label} link coming soon. IT will add it.`)} className={`${className} text-left`}>{children}</button>
+  return <a href={tool.url} target="_blank" rel="noreferrer" className={className}>{children}</a>
+}
+
+// The company tools people open every day, then department shortcuts.
+function QuickTools({ links }) {
   const [room, setRoom] = useState(false)
-  const cls = 'group flex items-center gap-3 rounded-xl px-2 py-2.5 text-sm font-medium transition hover:bg-slate-50 dark:hover:bg-slate-800/60'
-  const inner = (q) => (
-    <>
-      <span className="flex h-9 w-9 shrink-0 items-center justify-center rounded-lg bg-brand-50 text-brand-700 transition group-hover:bg-brand-700 group-hover:text-white dark:bg-slate-800 dark:text-brand-200"><Icon name={q.icon} size={16} /></span>
-      {q.label}
-    </>
-  )
+  const row = 'group flex items-center gap-3 rounded-xl px-2 py-2 text-sm font-medium text-slate-700 transition hover:bg-slate-50 dark:text-slate-200 dark:hover:bg-slate-800/60'
   return (
-    <section className="card p-5">
-      <h2 className="mb-2 text-lg font-semibold">Quick links</h2>
-      <div className="-mx-2 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-1">
-        {links.map((q) => q.action === 'meetingRoom'
-          ? <button key={q.label} onClick={() => setRoom(true)} className={`${cls} text-left`}>{inner(q)}</button>
-          : q.href.startsWith('/')
-            ? <Link key={q.label} to={q.href} className={cls}>{inner(q)}</Link>
-            : <a key={q.label} href={q.href} className={cls}>{inner(q)}</a>)}
+    <section className="card p-5" data-tour="tools">
+      <h2 className="mb-3 text-lg font-semibold">Quick tools</h2>
+      <div className="grid grid-cols-2 gap-2">
+        {companyTools.map((t) => (
+          <ToolLink key={t.id} tool={t} className="group relative flex flex-col gap-2 rounded-xl border border-slate-200/80 p-3 transition hover:border-brand-300 hover:bg-brand-50/50 dark:border-slate-800 dark:hover:border-brand-600 dark:hover:bg-slate-800/60">
+            <span className="flex h-9 w-9 items-center justify-center rounded-lg bg-brand-700 text-white dark:bg-brand-500"><Icon name={t.icon} size={18} /></span>
+            <span className="min-w-0">
+              <span className="block text-sm font-semibold text-slate-900 dark:text-white">{t.label}</span>
+              <span className="block truncate text-xs text-slate-500 dark:text-slate-400">{t.desc}</span>
+            </span>
+            {!t.internal && <ArrowUpRight size={14} className="absolute top-3 right-3 text-slate-300 transition group-hover:text-brand-600 dark:text-slate-600 dark:group-hover:text-brand-300" />}
+          </ToolLink>
+        ))}
+      </div>
+      <h3 className="mt-5 mb-1 text-xs font-semibold tracking-wide text-slate-500 uppercase dark:text-slate-400">Shortcuts</h3>
+      <div className="-mx-2">
+        {links.map((q) => {
+          const inner = <><span className="flex h-8 w-8 shrink-0 items-center justify-center rounded-lg bg-brand-50 text-brand-700 dark:bg-slate-800 dark:text-brand-200"><Icon name={q.icon} size={16} /></span>{q.label}</>
+          return q.action === 'meetingRoom'
+            ? <button key={q.label} onClick={() => setRoom(true)} className={`${row} w-full text-left`}>{inner}</button>
+            : q.href.startsWith('/')
+              ? <Link key={q.label} to={q.href} className={row}>{inner}</Link>
+              : <a key={q.label} href={q.href} className={row}>{inner}</a>
+        })}
       </div>
       <MeetingRoomModal open={room} onClose={() => setRoom(false)} />
     </section>
@@ -333,7 +332,7 @@ export default function Home() {
       <Notice />
       <div className="grid gap-6 lg:grid-cols-3 [&>*]:min-w-0">
         <div className="lg:col-span-2"><Tasks user={user} /></div>
-        <QuickLinks links={quickLinks} />
+        <QuickTools links={quickLinks} />
       </div>
       <News />
       <div className="grid gap-6 md:grid-cols-2 xl:grid-cols-3 [&>*]:min-w-0">

@@ -1,6 +1,6 @@
 import { useEffect, useRef, useState } from 'react'
 import { Link } from 'react-router-dom'
-import { Send, Sparkles, X } from 'lucide-react'
+import { PaperPlaneTiltIcon as Send, SparkleIcon as Sparkles, XIcon as X } from '@phosphor-icons/react'
 import { articles, faqs } from '../data/knowledge'
 import { useUser } from '../context/UserContext'
 
@@ -82,7 +82,7 @@ export default function RexAI() {
   return (
     <>
       {!open && (
-        <button data-tour="rexai" onClick={() => setOpen(true)} className="fixed right-4 bottom-4 z-40 flex items-center gap-2 rounded-full bg-accent-600 px-4 py-3 text-sm font-semibold text-white shadow-xl shadow-accent-600/30 transition hover:-translate-y-0.5 hover:bg-accent-700" style={{ marginBottom: 'env(safe-area-inset-bottom, 0px)' }}>
+        <button data-tour="rexai" onClick={() => setOpen(true)} className="fixed right-4 bottom-4 z-40 flex items-center gap-2 rounded-full bg-accent-700 px-4 py-3 text-sm font-semibold text-white shadow-xl shadow-accent-600/30 transition hover:-translate-y-0.5 hover:bg-accent-800" style={{ marginBottom: 'env(safe-area-inset-bottom, 0px)' }}>
           <Sparkles size={18} /> Ask Rex AI
         </button>
       )}

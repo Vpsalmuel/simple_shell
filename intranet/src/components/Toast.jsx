@@ -1,5 +1,5 @@
 import { createContext, useCallback, useContext, useState } from 'react'
-import { CheckCircle2 } from 'lucide-react'
+import { CheckCircleIcon as CheckCircle2 } from '@phosphor-icons/react'
 
 const ToastContext = createContext(() => {})
 

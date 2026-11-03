@@ -1,6 +1,6 @@
 import { useState } from 'react'
 import { Link } from 'react-router-dom'
-import { Inbox, Megaphone, Newspaper, Trash2, Users } from 'lucide-react'
+import { TrayIcon as Inbox, MegaphoneIcon as Megaphone, NewspaperIcon as Newspaper, TrashIcon as Trash2, UsersIcon as Users } from '@phosphor-icons/react'
 import { people } from '../data'
 import { closedStatuses, initialRequests, requestDepts } from '../data/requests'
 import { useLocalStorage } from '../hooks/useLocalStorage'

@@ -1,5 +1,5 @@
 import { useState } from 'react'
-import { CalendarDays, Check, Lock, MapPin, Phone, Users } from 'lucide-react'
+import { CalendarDotsIcon as CalendarDays, CheckIcon as Check, LockIcon as Lock, MapPinIcon as MapPin, PhoneIcon as Phone, UsersIcon as Users } from '@phosphor-icons/react'
 import { nextHike, wellbeingChecklist, wellbeingTabs } from '../data/culture'
 import { useLocalStorage } from '../hooks/useLocalStorage'
 import { useToast } from '../components/Toast'

@@ -1,4 +1,4 @@
-import { Eye } from 'lucide-react'
+import { EyeIcon as Eye } from '@phosphor-icons/react'
 import { personas, useUser } from '../context/UserContext'
 
 // Demo-only control to preview each staff type. Remove once real sign-in decides the user.

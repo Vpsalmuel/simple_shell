@@ -1,4 +1,4 @@
-import { CalendarClock, ExternalLink } from 'lucide-react'
+import { CalendarDotsIcon as CalendarClock, ArrowSquareOutIcon as ExternalLink } from '@phosphor-icons/react'
 import { externalApps } from '../config/brand'
 import Modal from './Modal'
 

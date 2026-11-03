@@ -1,5 +1,5 @@
 import { Link } from 'react-router-dom'
-import { Lock } from 'lucide-react'
+import { LockIcon as Lock } from '@phosphor-icons/react'
 import { canAccess, navItem } from '../config/nav'
 import { useUser } from '../context/UserContext'
 

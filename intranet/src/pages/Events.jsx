@@ -1,5 +1,5 @@
 import { useMemo, useState } from 'react'
-import { CalendarDays, Check, ChevronLeft, ChevronRight, Clock, List, MapPin, Users } from 'lucide-react'
+import { CalendarDotsIcon as CalendarDays, CheckIcon as Check, CaretLeftIcon as ChevronLeft, CaretRightIcon as ChevronRight, ClockIcon as Clock, ListBulletsIcon as List, MapPinIcon as MapPin, UsersIcon as Users } from '@phosphor-icons/react'
 import { events } from '../data'
 import { useLocalStorage } from '../hooks/useLocalStorage'
 import { useToast } from '../components/Toast'
@@ -7,7 +7,7 @@ import { useToast } from '../components/Toast'
 const types = ['Company', 'Learning', 'Social', 'Business']
 const typeTone = {
   Company: 'bg-brand-100 text-brand-800 dark:bg-brand-500/25 dark:text-brand-100',
-  Learning: 'bg-accent-100 text-accent-700 dark:bg-accent-600/25 dark:text-accent-400',
+  Learning: 'bg-accent-100 text-accent-900 dark:bg-accent-600/25 dark:text-accent-200',
   Social: 'bg-emerald-100 text-emerald-800 dark:bg-emerald-500/20 dark:text-emerald-300',
   Business: 'bg-sky-100 text-sky-800 dark:bg-sky-500/20 dark:text-sky-300',
 }
@@ -117,9 +117,9 @@ export default function Events() {
                     onClick={() => setSelected(key)}
                     aria-label={`${longDate(key)}${evs.length ? `, ${evs.length} event${evs.length > 1 ? 's' : ''}` : ''}`}
                     aria-pressed={isSel}
-                    className={`flex min-h-16 flex-col items-stretch gap-1 rounded-xl p-1.5 text-left transition sm:min-h-24 ${isSel ? 'bg-brand-50 ring-2 ring-brand-500 dark:bg-slate-800' : 'hover:bg-slate-50 dark:hover:bg-slate-800/60'} ${inMonth ? '' : 'opacity-40'}`}
+                    className={`flex min-h-16 flex-col items-stretch gap-1 rounded-xl p-1.5 text-left transition sm:min-h-24 ${isSel ? 'bg-brand-50 ring-2 ring-brand-500 dark:bg-slate-800' : 'hover:bg-slate-50 dark:hover:bg-slate-800/60'} ${inMonth ? '' : 'opacity-70'}`}
                   >
-                    <span className={`flex h-6 w-6 items-center justify-center rounded-full text-xs font-semibold ${isToday ? 'bg-accent-600 text-white' : ''}`}>{d.getDate()}</span>
+                    <span className={`flex h-6 w-6 items-center justify-center rounded-full text-xs font-semibold ${isToday ? 'bg-accent-700 text-white' : ''}`}>{d.getDate()}</span>
                     {evs.slice(0, 2).map((e) => <span key={e.id} className={`hidden truncate rounded-md px-1.5 py-0.5 text-[11px] font-medium sm:block ${typeTone[e.type]}`}>{e.title}</span>)}
                     {evs.length > 0 && <span className="flex gap-0.5 sm:hidden">{evs.map((e) => <i key={e.id} className={`h-1.5 w-1.5 rounded-full ${typeTone[e.type]}`} />)}</span>}
                     {evs.length > 2 && <span className="hidden text-[11px] text-slate-500 sm:block">+{evs.length - 2} more</span>}

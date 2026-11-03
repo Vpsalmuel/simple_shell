@@ -1,6 +1,6 @@
 import { useMemo, useState } from 'react'
 import { useSearchParams } from 'react-router-dom'
-import { Calendar, Inbox, MessageSquare, Plus, Search, Send, X } from 'lucide-react'
+import { CalendarIcon as Calendar, TrayIcon as Inbox, ChatTextIcon as MessageSquare, PlusIcon as Plus, MagnifyingGlassIcon as Search, PaperPlaneTiltIcon as Send, XIcon as X } from '@phosphor-icons/react'
 import { closedStatuses, initialRequests, priorities, requestDepts, requestTypes } from '../data/requests'
 import { useLocalStorage } from '../hooks/useLocalStorage'
 import { useUser } from '../context/UserContext'
@@ -175,7 +175,7 @@ export default function Requests() {
           <h1 className="text-2xl font-bold text-slate-900 sm:text-3xl dark:text-white">Request Centre</h1>
           <p className="mt-1 text-sm text-slate-500">Ask another department for help, and track what’s been asked of yours.</p>
         </div>
-        <button onClick={() => setCreating(true)} className="btn bg-accent-600 text-white hover:bg-accent-700"><Plus size={16} /> New request</button>
+        <button onClick={() => setCreating(true)} className="btn bg-accent-700 text-white hover:bg-accent-800"><Plus size={16} /> New request</button>
       </div>
 
       <section className="stagger grid grid-cols-2 gap-4 lg:grid-cols-4" aria-label="Request summary">
@@ -197,7 +197,7 @@ export default function Requests() {
           <div className="-mx-1 flex gap-1 overflow-x-auto px-1" role="tablist">
             {tabs.map((t) => (
               <button key={t.id} role="tab" aria-selected={tab === t.id} onClick={() => setTab(t.id)} className={`btn shrink-0 px-3 py-1.5 ${tab === t.id ? 'bg-brand-700 text-white' : 'text-slate-600 hover:bg-slate-100 dark:text-slate-300 dark:hover:bg-slate-800'}`}>
-                {t.label}{t.badge > 0 && <span className={`rounded-full px-1.5 text-[11px] font-bold ${tab === t.id ? 'bg-white/20' : 'bg-accent-600 text-white'}`}>{t.badge}</span>}
+                {t.label}{t.badge > 0 && <span className={`rounded-full px-1.5 text-[11px] font-bold ${tab === t.id ? 'bg-white/20' : 'bg-accent-700 text-white'}`}>{t.badge}</span>}
               </button>
             ))}
           </div>

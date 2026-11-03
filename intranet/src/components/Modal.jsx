@@ -1,5 +1,5 @@
 import { useEffect } from 'react'
-import { X } from 'lucide-react'
+import { XIcon as X } from '@phosphor-icons/react'
 import Portal from './Portal'
 
 export default function Modal({ open, onClose, title, children, wide = false }) {

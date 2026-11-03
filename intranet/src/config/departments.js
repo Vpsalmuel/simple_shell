@@ -1,18 +1,22 @@
 // Department-specific Home config. Everyone gets the same Home layout;
-// quick links and the department's tasks (`focus`) swap per department.
+// shortcuts and the department's tasks (`focus`) swap per department.
 
+// Shortcuts shown under Quick tools. The company tools themselves are in src/config/brand.js.
 const shared = {
   quickLinks: [
-    { label: 'Payslips', icon: 'Wallet', href: '#' },
     { label: 'Book meeting room', icon: 'DoorOpen', action: 'meetingRoom' },
-    { label: 'Help Desk', icon: 'LifeBuoy', href: '/help' },
+    { label: 'Payslips', icon: 'Wallet', href: '#' },
   ],
 }
 
 export const deptDashboards = {
   Claims: {
-    quickLinks: [{ label: 'Claims portal', icon: 'ShieldCheck', href: '/claims' }, { label: 'Fraud analytics', icon: 'ScanSearch', href: '#' }, { label: 'Policy admin', icon: 'FileStack', href: '#' }],
-    focus: { type: 'queue', title: 'My SLA queue', subtitle: 'Claims due soonest', cta: { label: 'Open claims hub', to: '/claims' } },
+    quickLinks: [{ label: 'Fraud analytics', icon: 'ScanSearch', href: '#' }, { label: 'Policy admin', icon: 'FileStack', href: '#' }],
+    // Claims work itself lives in the productivity tool, outside Rex Hub. These are reminders only.
+    focus: { type: 'list', title: 'Team reminders', subtitle: 'From your team lead', items: [
+      { primary: 'Fast-track queue review', secondary: 'Thursday 10:00 · claims under ₦500,000', badge: 'This week', tone: 'neutral' },
+      { primary: 'Updated motor claims SOP', secondary: 'Read before 15 Nov · Knowledge Center', badge: 'New', tone: 'warning' },
+    ], cta: { label: 'Open Knowledge Center', to: '/knowledge' } },
   },
   Underwriting: {
     quickLinks: [{ label: 'UW workbench', icon: 'Scale', href: '#' }, { label: 'Rating engine', icon: 'Calculator', href: '#' }, { label: 'Policy admin', icon: 'FileStack', href: '#' }],

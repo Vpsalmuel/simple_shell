@@ -1,6 +1,6 @@
 import { useState } from 'react'
 import { Link } from 'react-router-dom'
-import { ArrowRight, CalendarClock, CheckCircle2, MapPin } from 'lucide-react'
+import { ArrowRightIcon as ArrowRight, CalendarDotsIcon as CalendarClock, CheckCircleIcon as CheckCircle2, MapPinIcon as MapPin } from '@phosphor-icons/react'
 import { benefits, careerTracks, currentTier } from '../data/culture'
 import { useUser } from '../context/UserContext'
 import Icon from '../components/Icon'
@@ -50,8 +50,8 @@ export default function Rewards() {
                 <li key={tier.title} className={`relative rounded-2xl p-4 ${here ? 'bg-accent-50 ring-2 ring-accent-500 dark:bg-accent-700/15' : 'bg-slate-50 dark:bg-slate-800/50'}`}>
                   <span className={`absolute top-5 -left-[33px] flex h-4 w-4 items-center justify-center rounded-full border-2 border-white dark:border-slate-900 ${here ? 'bg-accent-600' : past ? 'bg-emerald-500' : 'bg-slate-300 dark:bg-slate-600'}`} />
                   <div className="flex flex-wrap items-center gap-2">
-                    <span className="text-xs font-semibold text-slate-400">Level {i + 1}</span>
-                    {here && <span className="chip gap-1 bg-accent-600 text-white"><MapPin size={11} /> You are here</span>}
+                    <span className="text-xs font-semibold text-slate-600 dark:text-slate-400">Level {i + 1}</span>
+                    {here && <span className="chip gap-1 bg-accent-700 text-white"><MapPin size={11} /> You are here</span>}
                     {past && <span className="chip gap-1 bg-emerald-50 text-emerald-700 dark:bg-emerald-500/10 dark:text-emerald-300"><CheckCircle2 size={11} /> Reached</span>}
                   </div>
                   <p className="mt-1 font-display font-bold">{tier.title}</p>

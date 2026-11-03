@@ -19,11 +19,11 @@ npm run build && npm start   # site + Rex AI on http://localhost:3001
 
 ## Guided tour
 
-On a person’s first visit (and for new staff right after onboarding) a 5-step tour highlights the menu, search, Rex AI and the profile menu. It shows once per person and can be replayed from **account menu → Take the tour**.
+On a person’s first visit (and for new staff right after onboarding) a 6-step tour highlights the menu, search, quick tools, Rex AI and the profile menu. It shows once per person and can be replayed from **account menu → Take the tour**.
 
 ## Third-party apps
 
-**Book meeting room** (Home quick links, Docs & HR) opens a pop-up telling people it goes to SeamlessHR. Optionally set `externalApps.seamlessHr.url` in `src/config/brand.js` to add a “Continue to SeamlessHR” button.
+**Book meeting room** (Home shortcuts, Docs & HR) opens a pop-up telling people it goes to SeamlessHR. Optionally set `externalApps.seamlessHr.url` in `src/config/brand.js` to add a “Continue to SeamlessHR” button.
 
 Placeholders still to replace: most birthdays, the HMO and counsellor phone numbers (`src/data/culture.js`), and the Bond product variants (`src/data/onboarding.js`).
 
@@ -63,11 +63,11 @@ Everyone starts at `/login` and signs in with **Sign in with Microsoft**.
 
 After finishing, new staff land on their department's dashboard with a "first 90 days" banner naming their buddy and manager.
 
-**Existing staff** share one Home layout. Quick links and the tasks in **Your tasks** change by department:
+**Existing staff** share one Home layout. **Quick tools** (Emails, Kissflow, IES, Help Desk) are the same for everyone; set their links in `companyTools` in `src/config/brand.js` (a tool with `url: null` shows a "link coming soon" notice). Shortcuts and the tasks in **Your tasks** change by department:
 
 | Department | Featured widget |
 | --- | --- |
-| Claims | SLA queue |
+| Claims | Team reminders (claims work itself happens in the productivity tool, outside Rex Hub) |
 | Underwriting | Referrals awaiting decision |
 | Customer Care | Escalations |
 | HR | Leave / training approvals (approve or decline) |
@@ -76,19 +76,19 @@ After finishing, new staff land on their department's dashboard with a "first 90
 
 ## Pages
 
-Sidebar groups (from `src/config/nav.js`): **Workspace** (Home, News, Events, Milestones) · **Work** (Request Centre, Claims & Policy, Docs & HR) · **Knowledge** (Knowledge Center, Learning, Help Desk) · **Company** (Departments, People, Celebrations) · **You** (Health & Wellbeing, Rewards & Benefits) · **Management** (Admin Workspace).
+Sidebar groups (from `src/config/nav.js`): **Workspace** (Home, News, Events, Milestones) · **Work** (Request Centre, Docs & HR) · **Knowledge** (Knowledge Center, Learning, Help Desk) · **Company** (Departments, People, Celebrations) · **You** (Health & Wellbeing, Rewards & Benefits) · **Management** (Admin Workspace).
 
 Restricted items are hidden from the menu and search, and their address shows a "no access" page:
-- Claims & Policy: Claims and Underwriting
 - Admin Workspace: HR, IT, Brand & Communications, Executive Office
 
 | Page | Route | Highlights |
 | --- | --- | --- |
-| Home | `/` | Greeting with search, one dismissible notice, **Your tasks** (approvals, team queue, required training, waiting requests), quick links, company news (featured + 3), events, celebrations this week, pulse poll. Modelled on NN/g Intranet Design Annual winners and Microsoft Viva Connections: no metrics, no rotating banners |
+| Home | `/` | Greeting, one dismissible notice, **Your tasks** (approvals, team items, required training, waiting requests), **Quick tools** and shortcuts, company news (featured + 3), events, celebrations this week, pulse poll. Modelled on NN/g Intranet Design Annual winners and Microsoft Viva Connections: no metrics, no rotating banners |
 | News | `/news`, `/news/:id` | Featured story, category filter, search, article page with likes and comments |
 | Events | `/events` | Month calendar, type filters, RSVP, upcoming list |
 | Departments | `/departments`, `/departments/:id` | Team directory; each team page has culture video, head, services, team, documents, events |
 | Learning | `/learning` | Course cards with a cover image, instructor, rating, length, level and progress (required, continue, catalogue). Set a course's `image` to use a real thumbnail |
+| Course player | `/learning/:id` | Udemy/Coursera-style: video, lesson list with progress, overview, and other courses at the side. Lessons are in `lessonTitles` in `src/data/index.js`; give a lesson a `src` to play a real video. A lesson counts as done at 90% watched |
 | Request Centre | `/requests` | Requests between departments: tabs (mine, my team's queue, open, resolved), search, detail panel with comments and history; the receiving team can assign, progress, complete or reject |
 | Knowledge Center | `/knowledge`, `/knowledge/:id` | Searchable wiki of policies, SOPs, guides and FAQs, with "was this helpful?" |
 | Help Desk | `/help` | IT, HR, Finance and Facilities tickets (they land in the Request Centre), FAQs, my tickets |
@@ -98,10 +98,9 @@ Restricted items are hidden from the menu and search, and their address shows a 
 | Rewards & Benefits | `/rewards` | Benefits, pay & performance review cycle, career tracks with “You are here” and promotion criteria |
 | Admin Workspace | `/admin` | Publish news to News and the Home feed, open requests by team, overview figures |
 | People | `/people` | Search, department filter, grid/list, profile slide-over |
-| Claims & Policy | `/claims` | Claim tracker, weekly chart (hover tooltips + table view), settlement trend vs target, SLA work queue, core systems |
 | Docs & HR | `/docs` | Leave request, IT ticket, payslips, leave balances, document library with pinning |
 
-Global: ⌘K / Ctrl+K search, notifications, dark mode, responsive layout, reduced-motion support.
+Global: search field in the header on every page (⌘K / Ctrl+K), notifications, dark mode, responsive layout, reduced-motion support.
 
 ## Shareable preview
 
@@ -123,9 +122,13 @@ Global: ⌘K / Ctrl+K search, notifications, dark mode, responsive layout, reduc
 | Knowledge articles, Help Desk FAQs | `src/data/knowledge.js` |
 | Onboarding content (products, floors, IT setup…) | `src/data/onboarding.js` |
 | Milestones, birthdays, wellbeing, benefits, career tracks | `src/data/culture.js` |
-| SeamlessHR link | `src/config/brand.js` |
+| SeamlessHR link, Quick tools (Emails, Kissflow, IES) links | `src/config/brand.js` |
 
 Chart colors were checked for colorblind separation: `#3A5092` / `#EA580C` on light surfaces, `#566DAD` / `#EA580C` on dark.
+
+**Contrast.** Text meets WCAG AA (4.5:1) in light and dark mode. White text never sits on `#EA580C` (3.6:1); buttons and badges use `accent-700` `#C2410C` (5.2:1), and the brand orange stays for accents and icons. `src/index.css` raises muted greys in dark mode, unless an element sets its own `dark:text-*` colour.
+
+**Icons** are [Phosphor](https://phosphoricons.com) (`@phosphor-icons/react`, regular weight). Data files name icons as strings; map new ones in `src/components/Icon.jsx`.
 
 Walkthrough progress, requests, published news and other demo state are stored in the browser (`localStorage`). In production they must be saved server-side (signatures as an audit record).
 

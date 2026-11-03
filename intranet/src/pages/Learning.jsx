@@ -1,8 +1,8 @@
 import { useState } from 'react'
-import { BarChart3, Calculator, Clock, GraduationCap, Headphones, PlayCircle, ShieldCheck, Star, Users } from 'lucide-react'
+import { Link } from 'react-router-dom'
+import { ChartBarIcon as BarChart3, CalculatorIcon as Calculator, ClockIcon as Clock, GraduationCapIcon as GraduationCap, HeadphonesIcon as Headphones, PlayCircleIcon as PlayCircle, ShieldCheckIcon as ShieldCheck, StarIcon as Star, UsersIcon as Users } from '@phosphor-icons/react'
 import { courses } from '../data'
-import { useLocalStorage } from '../hooks/useLocalStorage'
-import { useToast } from '../components/Toast'
+import { useCourseProgress } from '../hooks/useCourseProgress'
 import Photo from '../components/Photo'
 
 const daysLeft = (d) => Math.ceil((new Date(`${d}T23:59`) - new Date()) / 86400000)
@@ -20,10 +20,10 @@ const covers = {
 
 function Cover({ course }) {
   if (course.image) return <Photo src={course.image} alt="" className="aspect-video w-full" rounded="rounded-none" />
-  const { Icon, cls } = covers[course.category] ?? { Icon: Calculator, cls: 'bg-slate-100 text-slate-600' }
+  const { Icon, cls } = covers[course.category] ?? { Icon: Calculator, cls: 'bg-slate-100 text-slate-600 dark:bg-slate-800 dark:text-slate-300' }
   return (
     <div className={`relative flex aspect-video w-full items-center justify-center overflow-hidden ${cls}`} aria-hidden="true">
-      <Icon size={56} strokeWidth={1.25} className="transition duration-300 group-hover:scale-110" />
+      <Icon size={56} weight="light" className="transition duration-300 group-hover:scale-110" />
       <span className="absolute bottom-3 left-4 text-xs font-semibold opacity-80">{course.category}</span>
     </div>
   )
@@ -34,17 +34,17 @@ function Stars({ rating }) {
     <span className="flex items-center gap-1 text-xs">
       <b className="text-amber-700 dark:text-amber-400">{rating.toFixed(1)}</b>
       <span className="flex" aria-label={`Rated ${rating} out of 5`}>
-        {[1, 2, 3, 4, 5].map((n) => <Star key={n} size={12} className={n <= Math.round(rating) ? 'fill-amber-500 text-amber-500' : 'text-slate-300 dark:text-slate-600'} />)}
+        {[1, 2, 3, 4, 5].map((n) => <Star key={n} size={12} weight="fill" className={n <= Math.round(rating) ? 'text-amber-500' : 'text-slate-300 dark:text-slate-600'} />)}
       </span>
     </span>
   )
 }
 
-function CourseCard({ course, pct, onOpen }) {
+function CourseCard({ course, pct }) {
   const left = course.due ? daysLeft(course.due) : null
   const action = pct === 100 ? 'Review' : pct > 0 ? 'Continue' : 'Start'
   return (
-    <button onClick={() => onOpen(course)} className="card card-hover group flex flex-col overflow-hidden text-left">
+    <Link to={`/learning/${course.id}`} className="card card-hover group flex flex-col overflow-hidden text-left">
       <Cover course={course} />
       <div className="flex flex-1 flex-col gap-1.5 p-4">
         {course.mandatory && (
@@ -69,15 +69,13 @@ function CourseCard({ course, pct, onOpen }) {
           <span className="inline-flex items-center gap-1.5 text-sm font-semibold text-brand-700 dark:text-brand-300"><PlayCircle size={16} /> {action}</span>
         </div>
       </div>
-    </button>
+    </Link>
   )
 }
 
 export default function Learning() {
-  const [progress, setProgress] = useLocalStorage('rex-learning', Object.fromEntries(courses.map((c) => [c.id, c.progress])))
+  const { pct } = useCourseProgress()
   const [cat, setCat] = useState('All')
-  const toast = useToast()
-  const pct = (c) => progress[c.id] ?? 0
 
   const mandatory = courses.filter((c) => c.mandatory)
   const inProgress = courses.filter((c) => !c.mandatory && pct(c) > 0 && pct(c) < 100)
@@ -86,13 +84,6 @@ export default function Learning() {
   const done = courses.filter((c) => pct(c) === 100).length
   const outstanding = mandatory.filter((c) => pct(c) < 100).length
   const mins = Math.round(courses.reduce((t, c) => t + (c.mins * pct(c)) / 100, 0))
-
-  const open = (c) => {
-    const next = Math.min(100, pct(c) + (pct(c) === 0 ? 25 : 35))
-    if (pct(c) === 100) return toast(`Opening ${c.title}`)
-    setProgress({ ...progress, [c.id]: next })
-    toast(next === 100 ? `Completed: ${c.title}` : pct(c) === 0 ? `Started: ${c.title}` : `Progress saved: ${c.title}`)
-  }
 
   return (
     <div className="space-y-8">
@@ -106,7 +97,7 @@ export default function Learning() {
       <section>
         <h2 className="mb-3 text-lg font-semibold">Required for you</h2>
         <div className="stagger grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
-          {mandatory.map((c) => <CourseCard key={c.id} course={c} pct={pct(c)} onOpen={open} />)}
+          {mandatory.map((c) => <CourseCard key={c.id} course={c} pct={pct(c)} />)}
         </div>
       </section>
 
@@ -114,7 +105,7 @@ export default function Learning() {
         <section>
           <h2 className="mb-3 text-lg font-semibold">Continue learning</h2>
           <div className="grid gap-5 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
-            {inProgress.map((c) => <CourseCard key={c.id} course={c} pct={pct(c)} onOpen={open} />)}
+            {inProgress.map((c) => <CourseCard key={c.id} course={c} pct={pct(c)} />)}
           </div>
         </section>
       )}
@@ -127,7 +118,7 @@ export default function Learning() {
           </div>
         </div>
         <div className="stagger grid gap-5 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
-          {catalogue.map((c) => <CourseCard key={c.id} course={c} pct={pct(c)} onOpen={open} />)}
+          {catalogue.map((c) => <CourseCard key={c.id} course={c} pct={pct(c)} />)}
         </div>
       </section>
     </div>

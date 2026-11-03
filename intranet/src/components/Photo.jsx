@@ -24,7 +24,7 @@ export default function Photo({ src, alt = '', className = '', label, rounded = 
           <img src={brand.logo.white} alt="" aria-hidden="true" className="absolute top-1/2 left-1/2 hidden w-1/2 max-w-40 -translate-x-1/2 -translate-y-1/2 opacity-15 dark:block" />
         </div>
       )}
-      {label && <span className="chip absolute bottom-2 left-2 bg-black/35 text-white backdrop-blur">{label}</span>}
+      {label && <span className="chip absolute bottom-2 left-2 bg-black/60 text-white backdrop-blur">{label}</span>}
     </div>
   )
 }

@@ -1,5 +1,5 @@
 import { Link, useParams } from 'react-router-dom'
-import { ArrowLeft, ArrowRight, Copy, FileText, Mail, MapPin, Users } from 'lucide-react'
+import { ArrowLeftIcon as ArrowLeft, ArrowRightIcon as ArrowRight, CopyIcon as Copy, FileTextIcon as FileText, EnvelopeSimpleIcon as Mail, MapPinIcon as MapPin, UsersIcon as Users } from '@phosphor-icons/react'
 import { departmentTour as departments } from '../data/onboarding'
 import { documents, events, people } from '../data'
 import { useToast } from '../components/Toast'

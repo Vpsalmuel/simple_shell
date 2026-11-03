@@ -1,6 +1,6 @@
 import { useMemo, useState } from 'react'
 import { useSearchParams } from 'react-router-dom'
-import { CalendarPlus, DoorOpen, Download, FileText, Laptop, Pin, Search, Wallet } from 'lucide-react'
+import { CalendarPlusIcon as CalendarPlus, DoorOpenIcon as DoorOpen, DownloadSimpleIcon as Download, FileTextIcon as FileText, LaptopIcon as Laptop, PushPinIcon as Pin, MagnifyingGlassIcon as Search, WalletIcon as Wallet } from '@phosphor-icons/react'
 import { documents, leaveBalance } from '../data'
 import { useLocalStorage } from '../hooks/useLocalStorage'
 import { useToast } from '../components/Toast'
@@ -9,7 +9,13 @@ import MeetingRoomModal from '../components/MeetingRoomModal'
 import SectionHeader from '../components/SectionHeader'
 import { EmptyIllustration } from '../components/Illustrations'
 
-const typeTone = { PDF: 'bg-rose-100 text-rose-700', XLSX: 'bg-emerald-100 text-emerald-700', DOCX: 'bg-sky-100 text-sky-700', PPTX: 'bg-accent-100 text-accent-700', ZIP: 'bg-slate-200 text-slate-700' }
+const typeTone = {
+  PDF: 'bg-rose-100 text-rose-700 dark:bg-rose-500/20 dark:text-rose-200',
+  XLSX: 'bg-emerald-100 text-emerald-700 dark:bg-emerald-500/20 dark:text-emerald-200',
+  DOCX: 'bg-sky-100 text-sky-700 dark:bg-sky-500/20 dark:text-sky-200',
+  PPTX: 'bg-accent-100 text-accent-800 dark:bg-accent-600/25 dark:text-accent-200',
+  ZIP: 'bg-slate-200 text-slate-700 dark:bg-slate-700 dark:text-slate-100',
+}
 
 function LeaveForm({ onDone }) {
   const [form, setForm] = useState({ type: 'Annual', from: '', to: '', note: '' })
@@ -84,7 +90,7 @@ export default function Docs() {
         <section className="stagger grid gap-4 sm:grid-cols-2 lg:col-span-2">
           {actions.map((a) => (
             <button key={a.key} onClick={() => (a.key === 'payslip' ? toast('October payslip downloaded') : setModal(a.key))} className="card card-hover group p-5 text-left">
-              <span className="flex h-11 w-11 items-center justify-center rounded-xl bg-accent-50 text-accent-600 transition group-hover:bg-accent-600 group-hover:text-white dark:bg-accent-700/20"><a.icon size={20} /></span>
+              <span className="flex h-11 w-11 items-center justify-center rounded-xl bg-accent-50 text-accent-600 transition group-hover:bg-accent-700 group-hover:text-white dark:bg-accent-700/20"><a.icon size={20} /></span>
               <p className="mt-4 font-semibold">{a.label}</p>
               <p className="text-sm text-slate-500">{a.desc}</p>
             </button>
@@ -131,7 +137,7 @@ export default function Docs() {
                   <p className="flex items-center gap-2 truncate font-medium"><FileText size={14} className="shrink-0 text-slate-400" /><span className="truncate">{d.title}</span></p>
                   <p className="truncate text-xs text-slate-500">{d.owner} · {d.size} · Updated {new Date(d.updated).toLocaleDateString(undefined, { day: 'numeric', month: 'short', year: 'numeric' })}</p>
                 </div>
-                <button onClick={() => togglePin(d.id)} className={`btn-ghost p-2 ${pinned ? 'text-accent-600' : ''}`} aria-pressed={pinned} aria-label={pinned ? 'Unpin' : 'Pin'}><Pin size={16} className={pinned ? 'fill-current' : ''} /></button>
+                <button onClick={() => togglePin(d.id)} className={`btn-ghost p-2 ${pinned ? 'text-accent-600' : ''}`} aria-pressed={pinned} aria-label={pinned ? 'Unpin' : 'Pin'}><Pin size={16} weight={pinned ? 'fill' : 'regular'} /></button>
                 <button onClick={() => toast(`Downloading ${d.title}`)} className="btn-ghost p-2" aria-label={`Download ${d.title}`}><Download size={16} /></button>
               </li>
             )
