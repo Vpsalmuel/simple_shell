@@ -3,13 +3,13 @@
 
 // Milestones are work anniversaries only (stakeholder decision). Years are counted from each person's joining date.
 export const milestones = [
-  { id: 'm1', person: 'Marcus Vance', years: 4, date: '2026-09-12', message: 'Marcus has transformed how our Customer Experience team works.', reactions: { '🎉': 15, '👏': 11, '❤️': 6 } },
-  { id: 'm2', person: 'Thomas Mueller', years: 9, date: '2026-08-20', message: 'Nine years of welcoming and onboarding hundreds of colleagues.', reactions: { '🎉': 16, '👏': 9, '❤️': 8 } },
-  { id: 'm3', person: 'David Kojo', years: 8, date: '2026-05-10', message: 'Eight years keeping our systems running and secure.', reactions: { '🎉': 21, '👏': 14, '❤️': 7 } },
-  { id: 'm4', person: 'Amanda Lin', years: 5, date: '2026-04-18', message: 'Five years keeping our budgets and reimbursements in order.', reactions: { '🎉': 12, '👏': 10, '❤️': 5 } },
-  { id: 'm5', person: 'Sarah Jenkins', years: 6, date: '2026-03-15', message: 'Six years in Claims, and buddy to many of our new joiners.', reactions: { '🎉': 18, '👏': 12, '❤️': 11 } },
-  { id: 'm6', person: 'Elena Rostova', years: 5, date: '2026-02-14', message: 'Five years telling the Rex story inside and out.', reactions: { '🎉': 13, '👏': 9, '❤️': 6 } },
-  { id: 'm7', person: 'Victoria Hawthorne', years: 11, date: '2026-01-10', message: '11 years leading Rex Insurance. Thank you for your continued leadership.', reactions: { '🎉': 41, '👏': 33, '❤️': 27 } },
+  { id: 'm1', person: 'Marcus Vance', years: 4, date: '2026-09-12', message: 'Marcus has transformed how our Customer Experience team works.', reactions: { celebrate: 15, applaud: 11, love: 6 } },
+  { id: 'm2', person: 'Thomas Mueller', years: 9, date: '2026-08-20', message: 'Nine years of welcoming and onboarding hundreds of colleagues.', reactions: { celebrate: 16, applaud: 9, love: 8 } },
+  { id: 'm3', person: 'David Kojo', years: 8, date: '2026-05-10', message: 'Eight years keeping our systems running and secure.', reactions: { celebrate: 21, applaud: 14, love: 7 } },
+  { id: 'm4', person: 'Amanda Lin', years: 5, date: '2026-04-18', message: 'Five years keeping our budgets and reimbursements in order.', reactions: { celebrate: 12, applaud: 10, love: 5 } },
+  { id: 'm5', person: 'Sarah Jenkins', years: 6, date: '2026-03-15', message: 'Six years in Claims, and buddy to many of our new joiners.', reactions: { celebrate: 18, applaud: 12, love: 11 } },
+  { id: 'm6', person: 'Elena Rostova', years: 5, date: '2026-02-14', message: 'Five years telling the Rex story inside and out.', reactions: { celebrate: 13, applaud: 9, love: 6 } },
+  { id: 'm7', person: 'Victoria Hawthorne', years: 11, date: '2026-01-10', message: '11 years leading Rex Insurance. Thank you for your continued leadership.', reactions: { celebrate: 41, applaud: 33, love: 27 } },
 ]
 
 // Birthdays as MM-DD. Sarah (06-08) and Amanda (06-09) come from the prototype; the rest are samples.
@@ -49,7 +49,7 @@ export const wellbeingTabs = [
       ['Self-guided support', 'Use the daily checklist on this page to build small habits that help.'],
     ],
     contact: { label: 'Counsellor hotline', value: 'Ext. 884-PEACE', // placeholder number
-      note: 'Confidential, weekdays 8:00–18:00' },
+      note: 'Confidential, weekdays 8:00-18:00' },
   },
   {
     id: 'fitness', label: 'Fitness & run club', icon: 'Dumbbell',

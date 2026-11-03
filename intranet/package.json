@@ -12,6 +12,7 @@
     "start": "node server/index.js"
   },
   "dependencies": {
+    "@azure/msal-browser": "^5.25.1",
     "@google/genai": "^2.31.0",
     "express": "^4.22.3",
     "lucide-react": "^0.460.0",

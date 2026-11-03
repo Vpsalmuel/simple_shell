@@ -18,7 +18,7 @@ function Stat({ icon: Ico, label, value, to }) {
   const inner = (
     <>
       <span className="flex h-11 w-11 shrink-0 items-center justify-center rounded-xl bg-brand-50 text-brand-700 dark:bg-slate-800 dark:text-brand-200"><Ico size={20} /></span>
-      <span><span className="block font-display text-2xl font-extrabold tabular-nums">{value}</span><span className="block text-xs text-slate-500">{label}</span></span>
+      <span><span className="block font-display text-2xl font-bold tabular-nums">{value}</span><span className="block text-xs text-slate-500">{label}</span></span>
     </>
   )
   return to ? <Link to={to} className="card card-hover flex items-center gap-4 p-5">{inner}</Link> : <div className="card flex items-center gap-4 p-5">{inner}</div>
@@ -47,7 +47,7 @@ export default function Admin() {
     <div className="space-y-6">
       <div>
         <p className="text-sm font-medium text-accent-700 dark:text-accent-400">Signed in as {user.dept} admin</p>
-        <h1 className="text-2xl font-extrabold text-slate-900 sm:text-3xl dark:text-white">Admin Workspace</h1>
+        <h1 className="text-2xl font-bold text-slate-900 sm:text-3xl dark:text-white">Admin Workspace</h1>
         <p className="mt-1 text-sm text-slate-500">Publish company news and keep an eye on requests across departments.</p>
       </div>
 

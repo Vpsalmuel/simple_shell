@@ -1,8 +1,10 @@
-import { createContext, useContext, useMemo } from 'react'
+import { createContext, useContext, useEffect, useMemo, useState } from 'react'
 import { useLocalStorage } from '../hooks/useLocalStorage'
 import { walkthroughSteps } from '../data/onboarding'
+import { mapDepartment, restoreSession, signInWithMicrosoft, signOutOfMicrosoft, ssoConfigured } from '../auth/microsoft'
 
-// Demo personas. In production the signed-in user (and `newStaff`) comes from SSO / the HR system.
+// Demo personas, used when Microsoft sign-in isn't configured. With SSO the user comes from Microsoft;
+// whether someone is new staff should come from the HR system (not available from Microsoft alone).
 export const personas = [
   { id: 'new', firstName: 'Samuel', lastName: 'Adebayo', role: 'Junior Claims Analyst', dept: 'Claims', newStaff: true, manager: 'Arthur Pendelton', buddy: 'Sarah Jenkins' },
   { id: 'claims', firstName: 'Sarah', lastName: 'Jenkins', role: 'Senior Claims Specialist', dept: 'Claims' },
@@ -19,15 +21,45 @@ const UserContext = createContext(null)
 
 export function UserProvider({ children }) {
   const [personaId, setPersonaId] = useLocalStorage('rex-persona', 'claims')
+  const [demoSignedIn, setDemoSignedIn] = useLocalStorage('rex-signed-in', false)
   // { [stepId]: true } plus per-step detail (videos watched, policies signed)
   const [progress, setProgress] = useLocalStorage('rex-walkthrough', {})
+  const [ssoUser, setSsoUser] = useState(null)
+  const [ready, setReady] = useState(!ssoConfigured)
+
+  useEffect(() => {
+    if (!ssoConfigured) return
+    restoreSession().then(setSsoUser).catch(() => setSsoUser(null)).finally(() => setReady(true))
+  }, [])
 
   const value = useMemo(() => {
-    const user = personas.find((p) => p.id === personaId) ?? personas[1]
+    let user
+    if (ssoUser) {
+      const [first, ...rest] = (ssoUser.name ?? '').split(' ')
+      user = {
+        id: ssoUser.email,
+        firstName: ssoUser.firstName ?? first,
+        lastName: ssoUser.lastName ?? rest.join(' '),
+        role: ssoUser.jobTitle ?? 'Rex Insurance',
+        dept: mapDepartment(ssoUser.department),
+        email: ssoUser.email,
+      }
+    } else {
+      user = personas.find((p) => p.id === personaId) ?? personas[1]
+    }
     const completed = walkthroughSteps.filter((s) => progress[s.id]).length
     const walkthroughDone = completed === walkthroughSteps.length
     return {
-      user: { ...user, name: `${user.firstName} ${user.lastName}` },
+      ready,
+      ssoConfigured,
+      signedIn: ssoConfigured ? Boolean(ssoUser) : demoSignedIn,
+      signIn: (id) => {
+        if (ssoConfigured) return signInWithMicrosoft()
+        setPersonaId(id)
+        setDemoSignedIn(true)
+      },
+      signOut: () => (ssoConfigured ? signOutOfMicrosoft() : setDemoSignedIn(false)),
+      user: { ...user, name: `${user.firstName} ${user.lastName}`.trim() },
       setPersonaId,
       progress,
       updateProgress: (patch) => setProgress((p) => ({ ...p, ...patch })),
@@ -36,7 +68,7 @@ export function UserProvider({ children }) {
       // New staff are held in the walkthrough until every step is complete.
       blocked: Boolean(user.newStaff) && !walkthroughDone,
     }
-  }, [personaId, progress, setPersonaId, setProgress])
+  }, [ready, ssoUser, demoSignedIn, personaId, progress, setPersonaId, setDemoSignedIn, setProgress])
 
   return <UserContext.Provider value={value}>{children}</UserContext.Provider>
 }

@@ -15,7 +15,7 @@ function Checklist() {
   const pct = Math.round((done.length / wellbeingChecklist.length) * 100)
   return (
     <section className="card p-5">
-      <SectionHeader title="Today’s wellbeing checklist" subtitle="Small habits, reset every morning" action={<span className="font-display text-2xl font-extrabold tabular-nums text-accent-600">{pct}%</span>} />
+      <SectionHeader title="Today’s wellbeing checklist" subtitle="Small habits, reset every morning" action={<span className="font-display text-2xl font-bold tabular-nums text-accent-600">{pct}%</span>} />
       <div className="mb-4 h-2 rounded-full bg-slate-100 dark:bg-slate-800"><div className="h-2 rounded-full bg-emerald-500 transition-[width] duration-500" style={{ width: `${pct}%` }} /></div>
       <ul className="space-y-2">
         {wellbeingChecklist.map((c) => {
@@ -31,7 +31,7 @@ function Checklist() {
           )
         })}
       </ul>
-      {pct === 100 && <p className="animate-fade-up mt-3 rounded-xl bg-emerald-50 p-3 text-sm font-medium text-emerald-700 dark:bg-emerald-500/10 dark:text-emerald-300">All done for today. Well looked after. 🌿</p>}
+      {pct === 100 && <p className="animate-fade-up mt-3 rounded-xl bg-emerald-50 p-3 text-sm font-medium text-emerald-700 dark:bg-emerald-500/10 dark:text-emerald-300">All done for today. Well looked after.</p>}
     </section>
   )
 }
@@ -51,7 +51,7 @@ function Hike() {
         <p className="flex items-center gap-2"><CalendarDays size={16} className="text-slate-400" />{date}, {nextHike.time}</p>
         <p className="flex items-center gap-2"><MapPin size={16} className="text-slate-400" />Meet at the main gate</p>
         <p className="flex items-center gap-2"><Users size={16} className="text-slate-400" /><b className="tabular-nums">{slots}</b> places left</p>
-        <button onClick={() => { setJoined(!joined); toast(joined ? 'You’ve left the hike' : 'You’re on the hike list') }} className={`btn mt-2 w-full ${joined ? 'bg-emerald-600 text-white hover:bg-emerald-700' : 'bg-brand-700 text-white hover:bg-brand-800'}`}>{joined ? 'You’re going ✓' : 'Join the hike'}</button>
+        <button onClick={() => { setJoined(!joined); toast(joined ? 'You’ve left the hike' : 'You’re on the hike list') }} className={`btn mt-2 w-full ${joined ? 'bg-emerald-600 text-white hover:bg-emerald-700' : 'bg-brand-700 text-white hover:bg-brand-800'}`}>{joined ? <><Check size={16} /> You’re going</> : 'Join the hike'}</button>
       </div>
     </section>
   )
@@ -63,7 +63,7 @@ export default function Wellbeing() {
   return (
     <div className="space-y-6">
       <div>
-        <h1 className="text-2xl font-extrabold text-slate-900 sm:text-3xl dark:text-white">Health & Wellbeing</h1>
+        <h1 className="text-2xl font-bold text-slate-900 sm:text-3xl dark:text-white">Health & Wellbeing</h1>
         <p className="mt-1 text-sm text-slate-500">Medical cover, confidential support and ways to stay active.</p>
       </div>
       <div className="grid gap-6 xl:grid-cols-[1fr_360px] [&>*]:min-w-0">

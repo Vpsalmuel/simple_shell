@@ -19,9 +19,9 @@ export default function Photo({ src, alt = '', className = '', label, rounded = 
       )}
       {state === 'loading' && <div className="skeleton absolute inset-0" />}
       {state === 'fallback' && (
-        <div className="absolute inset-0 bg-gradient-to-br from-brand-600 to-brand-800" role={alt ? 'img' : undefined} aria-label={alt || undefined}>
-          <div className="absolute -top-1/2 -right-1/4 h-full w-3/4 rounded-full bg-accent-600/30 blur-2xl" />
-          <img src={brand.logo.white} alt="" aria-hidden="true" className="absolute top-1/2 left-1/2 w-1/2 max-w-40 -translate-x-1/2 -translate-y-1/2 opacity-20" />
+        <div className="absolute inset-0 bg-gradient-to-br from-brand-100 to-brand-50 dark:from-slate-800 dark:to-slate-900" role={alt ? 'img' : undefined} aria-label={alt || undefined}>
+          <img src={brand.logo.navy} alt="" aria-hidden="true" className="absolute top-1/2 left-1/2 w-1/2 max-w-40 -translate-x-1/2 -translate-y-1/2 opacity-15 dark:hidden" />
+          <img src={brand.logo.white} alt="" aria-hidden="true" className="absolute top-1/2 left-1/2 hidden w-1/2 max-w-40 -translate-x-1/2 -translate-y-1/2 opacity-15 dark:block" />
         </div>
       )}
       {label && <span className="chip absolute bottom-2 left-2 bg-black/35 text-white backdrop-blur">{label}</span>}

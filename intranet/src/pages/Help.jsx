@@ -37,7 +37,7 @@ export default function Help() {
   return (
     <div className="space-y-8">
       <div>
-        <h1 className="text-2xl font-extrabold text-slate-900 sm:text-3xl dark:text-white">Help Desk</h1>
+        <h1 className="text-2xl font-bold text-slate-900 sm:text-3xl dark:text-white">Help Desk</h1>
         <p className="mt-1 flex items-center gap-1.5 text-sm text-slate-500"><Clock size={14} /> Standard tickets are picked up within 2 working hours.</p>
       </div>
 
@@ -70,7 +70,7 @@ export default function Help() {
           </ul>
         </section>
         <section className="card p-5">
-          <SectionHeader title="My help tickets" action={<Link to="/requests?tab=mine" className="text-sm font-medium text-brand-600 hover:underline dark:text-brand-300">All requests</Link>} />
+          <SectionHeader title="My help tickets" action={<Link to="/requests?tab=mine" className="text-sm font-medium text-brand-600 hover:underline dark:text-brand-300">All my requests</Link>} />
           {mine.length === 0 ? <p className="text-sm text-slate-500">You haven’t raised any help tickets yet.</p> : (
             <ul className="space-y-3">
               {mine.map((r) => (

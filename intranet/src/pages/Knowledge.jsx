@@ -15,7 +15,7 @@ function Article({ a }) {
       <article>
         <Link to="/knowledge" className="inline-flex items-center gap-1 text-sm font-medium text-brand-600 hover:underline dark:text-brand-300"><ArrowLeft size={14} /> Knowledge Center</Link>
         <span className="chip mt-4 bg-brand-50 text-brand-700 dark:bg-slate-800 dark:text-brand-200">{a.category}</span>
-        <h1 className="mt-2 text-3xl font-extrabold text-balance">{a.title}</h1>
+        <h1 className="mt-2 text-3xl font-bold text-balance">{a.title}</h1>
         <p className="mt-2 text-sm text-slate-500">Owned by {a.owner} · Updated {fmt(a.updated)}</p>
         <div className="mt-6 max-w-[65ch] space-y-6">
           <p className="text-lg text-slate-700 dark:text-slate-300">{a.excerpt}</p>
@@ -55,9 +55,8 @@ export default function Knowledge() {
 
   return (
     <div className="space-y-6">
-      <section className="relative overflow-hidden rounded-3xl bg-brand-700 p-6 text-white sm:p-10">
-        <div className="pointer-events-none absolute -top-1/2 -right-20 h-[180%] w-1/2 rounded-full bg-accent-600/30 blur-3xl" />
-        <h1 className="relative text-3xl font-extrabold sm:text-4xl">Knowledge Center</h1>
+      <section className="relative overflow-hidden rounded-2xl bg-brand-700 p-6 text-white sm:p-10">
+        <h1 className="relative text-3xl font-bold sm:text-4xl">Knowledge Center</h1>
         <p className="relative mt-2 text-brand-100">Policies, procedures, guides and answers, all in one place.</p>
         <div className="relative mt-6 max-w-xl">
           <Search size={18} className="absolute top-1/2 left-4 -translate-y-1/2 text-slate-400" />

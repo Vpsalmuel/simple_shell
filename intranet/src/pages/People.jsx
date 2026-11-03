@@ -73,7 +73,7 @@ export default function People() {
   return (
     <div className="space-y-6">
       <div>
-        <h1 className="text-2xl font-extrabold text-slate-900 sm:text-3xl dark:text-white">People directory</h1>
+        <h1 className="text-2xl font-bold text-slate-900 sm:text-3xl dark:text-white">People directory</h1>
         <p className="mt-1 text-sm text-slate-500">{people.length} colleagues across {departments.length} departments</p>
       </div>
 

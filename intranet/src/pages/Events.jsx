@@ -1,5 +1,5 @@
 import { useMemo, useState } from 'react'
-import { CalendarDays, ChevronLeft, ChevronRight, Clock, List, MapPin, Users } from 'lucide-react'
+import { CalendarDays, Check, ChevronLeft, ChevronRight, Clock, List, MapPin, Users } from 'lucide-react'
 import { events } from '../data'
 import { useLocalStorage } from '../hooks/useLocalStorage'
 import { useToast } from '../components/Toast'
@@ -31,20 +31,20 @@ function EventCard({ e, going, onToggle }) {
     <article className="card flex gap-4 p-4">
       <div className="flex h-14 w-14 shrink-0 flex-col items-center justify-center rounded-xl bg-brand-700 text-white">
         <span className="text-[10px] font-semibold uppercase">{new Date(`${e.date}T00:00`).toLocaleDateString(undefined, { month: 'short' })}</span>
-        <span className="font-display text-xl leading-none font-extrabold">{new Date(`${e.date}T00:00`).getDate()}</span>
+        <span className="font-display text-xl leading-none font-bold">{new Date(`${e.date}T00:00`).getDate()}</span>
       </div>
       <div className="min-w-0 flex-1">
         <span className={`chip ${typeTone[e.type]}`}>{e.type}</span>
         <h3 className="mt-1.5 font-semibold">{e.title}</h3>
         <p className="mt-1 text-sm text-slate-500">{e.desc}</p>
         <div className="mt-2 flex flex-wrap gap-x-4 gap-y-1 text-xs text-slate-500">
-          <span className="inline-flex items-center gap-1"><Clock size={12} /> {e.time}–{e.end}</span>
+          <span className="inline-flex items-center gap-1"><Clock size={12} /> {e.time}-{e.end}</span>
           <span className="inline-flex items-center gap-1"><MapPin size={12} /> {e.place}</span>
           <span className="inline-flex items-center gap-1"><Users size={12} /> {e.host}</span>
         </div>
       </div>
       <button onClick={() => onToggle(e)} className={`btn shrink-0 self-start px-3 py-1.5 ${going ? 'bg-emerald-600 text-white hover:bg-emerald-700' : 'border border-slate-200 hover:border-brand-400 dark:border-slate-700'}`}>
-        {going ? 'Going ✓' : 'RSVP'}
+        {going ? <><Check size={14} /> Going</> : 'RSVP'}
       </button>
     </article>
   )
@@ -75,7 +75,7 @@ export default function Events() {
     <div className="space-y-6">
       <div className="flex flex-wrap items-end justify-between gap-4">
         <div>
-          <h1 className="text-2xl font-extrabold text-slate-900 sm:text-3xl dark:text-white">Events</h1>
+          <h1 className="text-2xl font-bold text-slate-900 sm:text-3xl dark:text-white">Events</h1>
           <p className="mt-1 text-sm text-slate-500">{upcoming.length} upcoming · you’re going to {rsvp.length}</p>
         </div>
         <div className="flex rounded-xl border border-slate-200 bg-white p-1 dark:border-slate-700 dark:bg-slate-900">

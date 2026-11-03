@@ -1,5 +1,5 @@
 import { useState } from 'react'
-import { MessageCircle, Plus, Send } from 'lucide-react'
+import { Heart, MessageCircle, PartyPopper, Plus, Send, ThumbsUp } from 'lucide-react'
 import { people } from '../data'
 import { milestones as seed } from '../data/culture'
 import { adminDepts } from '../config/nav'
@@ -9,7 +9,12 @@ import { useToast } from '../components/Toast'
 import Avatar from '../components/Avatar'
 import Modal from '../components/Modal'
 
-const emojis = ['🎉', '👏', '❤️']
+// Reactions: id matches the counts in culture.js.
+const reactionTypes = [
+  { id: 'celebrate', label: 'Celebrate', Icon: PartyPopper },
+  { id: 'applaud', label: 'Applaud', Icon: ThumbsUp },
+  { id: 'love', label: 'Love', Icon: Heart },
+]
 const fmt = (d) => new Date(`${d}T00:00`).toLocaleDateString(undefined, { day: 'numeric', month: 'long', year: 'numeric' })
 
 function MilestoneCard({ m, user }) {
@@ -33,16 +38,16 @@ function MilestoneCard({ m, user }) {
           <p className="font-display text-lg font-bold">{m.person}</p>
           <p className="truncate text-sm text-slate-500">{person?.role}</p>
         </div>
-        <span className="flex h-12 w-12 shrink-0 flex-col items-center justify-center rounded-xl bg-accent-600 font-display text-white"><span className="text-lg leading-none font-extrabold">{m.years}</span><span className="text-[9px] font-semibold uppercase">{m.years === 1 ? 'year' : 'years'}</span></span>
+        <span className="flex h-12 w-12 shrink-0 flex-col items-center justify-center rounded-xl bg-accent-600 font-display text-white"><span className="text-lg leading-none font-bold">{m.years}</span><span className="text-[9px] font-semibold uppercase">{m.years === 1 ? 'year' : 'years'}</span></span>
       </header>
       <p className="mt-4 leading-relaxed text-slate-700 dark:text-slate-300">{m.message}</p>
       <p className="mt-2 text-xs text-slate-400">{fmt(m.date)}</p>
       <div className="mt-4 flex flex-wrap items-center gap-2 border-t border-slate-100 pt-4 dark:border-slate-800">
-        {emojis.map((e) => {
+        {reactionTypes.map(({ id: e, label, Icon }) => {
           const on = mine.includes(e)
           return (
-            <button key={e} onClick={() => react(e)} aria-pressed={on} className={`chip gap-1.5 px-3 py-1 text-sm transition ${on ? 'bg-accent-100 text-accent-800 ring-1 ring-accent-400 dark:bg-accent-700/30 dark:text-accent-300' : 'bg-slate-100 text-slate-600 hover:bg-slate-200 dark:bg-slate-800 dark:text-slate-300'}`}>
-              <span aria-hidden="true">{e}</span><span className="tabular-nums">{(m.reactions?.[e] ?? 0) + (on ? 1 : 0)}</span>
+            <button key={e} onClick={() => react(e)} aria-pressed={on} aria-label={label} title={label} className={`chip gap-1.5 px-3 py-1 text-sm transition ${on ? 'bg-accent-100 text-accent-800 ring-1 ring-accent-400 dark:bg-accent-700/30 dark:text-accent-300' : 'bg-slate-100 text-slate-600 hover:bg-slate-200 dark:bg-slate-800 dark:text-slate-300'}`}>
+              <Icon size={14} className={on ? 'fill-current' : ''} /><span className="tabular-nums">{(m.reactions?.[e] ?? 0) + (on ? 1 : 0)}</span>
             </button>
           )
         })}
@@ -85,7 +90,7 @@ export default function Milestones() {
     <div className="mx-auto max-w-3xl space-y-6">
       <div className="flex flex-wrap items-end justify-between gap-4">
         <div>
-          <h1 className="text-2xl font-extrabold text-slate-900 sm:text-3xl dark:text-white">Milestones</h1>
+          <h1 className="text-2xl font-bold text-slate-900 sm:text-3xl dark:text-white">Milestones</h1>
           <p className="mt-1 text-sm text-slate-500">Work anniversaries across Rex. Thank you for your years with us.</p>
         </div>
         {canShare && <button onClick={() => setSharing(true)} className="btn bg-accent-600 text-white hover:bg-accent-700"><Plus size={16} /> Share an anniversary</button>}

@@ -49,7 +49,7 @@ function Sidebar({ onNavigate }) {
         ))}
       </nav>
       <div className="flex items-center justify-between gap-2 border-t border-white/10 px-6 py-3 text-[11px] text-brand-200">
-        <span>IT help: Ext. 999 · 7am–7pm</span>
+        <span>IT help: Ext. 999 · 7am-7pm</span>
         <span>© {new Date().getFullYear()} {brand.name.split(' ')[0]}</span>
       </div>
     </div>
@@ -64,7 +64,7 @@ export default function Layout() {
   const [notes, setNotes] = useState(initialNotifications)
   const [dark, setDark] = useLocalStorage('rex-dark', false)
   const location = useLocation()
-  const { user, blocked } = useUser()
+  const { user, blocked, ready, signedIn, signOut, ssoConfigured } = useUser()
   // First visit per person: show the guided tour once.
   const [toured, setToured] = useLocalStorage(`rex-tour-${user.id}`, false)
   const [tourOpen, setTourOpen] = useState(false)
@@ -80,6 +80,13 @@ export default function Layout() {
   useEffect(() => {
     document.documentElement.classList.toggle('dark', dark)
   }, [dark])
+
+  // Other pages (e.g. the Home search bar) open search with a 'rex:search' event.
+  useEffect(() => {
+    const open = () => setSearchOpen(true)
+    window.addEventListener('rex:search', open)
+    return () => window.removeEventListener('rex:search', open)
+  }, [])
 
   useEffect(() => {
     const onKey = (e) => {
@@ -99,6 +106,8 @@ export default function Layout() {
   }, [location.pathname])
 
   // New staff stay in the walkthrough until it is complete.
+  if (!ready) return <div className="flex min-h-[100dvh] items-center justify-center text-sm text-slate-500">Signing you in…</div>
+  if (!signedIn) return <Navigate to="/login" replace />
   if (blocked) return <Navigate to="/welcome" replace />
 
   return (
@@ -123,7 +132,7 @@ export default function Layout() {
           <button
             data-tour="search"
             onClick={() => setSearchOpen(true)}
-            className="ml-auto flex h-10 items-center gap-2 rounded-xl border border-slate-200 bg-slate-50 px-3 text-sm text-slate-400 transition hover:border-brand-300 sm:w-80 lg:ml-0 dark:border-slate-800 dark:bg-slate-900"
+            className={`${location.pathname === '/' ? 'invisible ' : ''}ml-auto flex h-10 items-center gap-2 rounded-xl border border-slate-200 bg-slate-50 px-3 text-sm text-slate-400 transition hover:border-brand-300 sm:w-80 lg:ml-0 dark:border-slate-800 dark:bg-slate-900`}
           >
             <Search size={16} />
             <span className="hidden flex-1 text-left sm:inline">Search Rex Hub…</span>
@@ -167,11 +176,11 @@ export default function Layout() {
                   <div className="border-b border-slate-100 px-3 pt-2 pb-3 dark:border-slate-800">
                     <p className="text-sm font-semibold">{user.name}</p>
                     <p className="text-xs text-slate-500">{user.role} · {user.dept}</p>
-                    <PersonaSwitcher className="mt-3" />
+                    {!ssoConfigured && <PersonaSwitcher className="mt-3" />}
                   </div>
                   <button onClick={() => { setMenuOpen(false); setTourOpen(true) }} className="btn-ghost w-full justify-start"><Compass size={16} /> Take the tour</button>
                   <button className="btn-ghost w-full justify-start"><Settings size={16} /> Settings</button>
-                  <button className="btn-ghost w-full justify-start"><LogOut size={16} /> Sign out</button>
+                  <button onClick={() => { setMenuOpen(false); signOut() }} className="btn-ghost w-full justify-start"><LogOut size={16} /> Sign out</button>
                 </div>
               )}
             </div>

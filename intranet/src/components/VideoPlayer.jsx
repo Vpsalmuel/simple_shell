@@ -49,8 +49,6 @@ export default function VideoPlayer({ src, poster, duration = '2:00', title, wat
 
   return (
     <div className={`relative overflow-hidden rounded-2xl bg-gradient-to-br from-brand-700 via-brand-800 to-brand-950 text-white ${compact ? 'aspect-[16/10]' : 'aspect-video'}`}>
-      <div className="absolute -top-1/3 -right-1/4 h-full w-2/3 rounded-full bg-accent-600/25 blur-3xl" aria-hidden="true" />
-      <div className="absolute -bottom-1/2 -left-1/4 h-full w-2/3 rounded-full bg-brand-400/20 blur-3xl" aria-hidden="true" />
       <button
         onClick={() => (pos >= total ? (setPos(0), setPlaying(true)) : setPlaying(!playing))}
         className="absolute inset-0 flex items-center justify-center"

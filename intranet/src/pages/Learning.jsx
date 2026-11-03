@@ -1,119 +1,133 @@
 import { useState } from 'react'
-import { AlertTriangle, Award, BookOpen, CheckCircle2, Clock, PlayCircle } from 'lucide-react'
+import { BarChart3, Calculator, Clock, GraduationCap, Headphones, PlayCircle, ShieldCheck, Star, Users } from 'lucide-react'
 import { courses } from '../data'
 import { useLocalStorage } from '../hooks/useLocalStorage'
 import { useToast } from '../components/Toast'
-import SectionHeader from '../components/SectionHeader'
+import Photo from '../components/Photo'
 
 const daysLeft = (d) => Math.ceil((new Date(`${d}T23:59`) - new Date()) / 86400000)
 const hours = (m) => (m >= 60 ? `${Math.floor(m / 60)}h${m % 60 ? ` ${m % 60}m` : ''}` : `${m} min`)
+const shortDate = (d) => new Date(`${d}T00:00`).toLocaleDateString(undefined, { day: 'numeric', month: 'short' })
 
-function Ring({ pct, size = 44 }) {
-  const r = (size - 6) / 2
-  const c = 2 * Math.PI * r
+// Cover used until a course has its own thumbnail image: a tinted field with the category's icon.
+const covers = {
+  Compliance: { Icon: ShieldCheck, cls: 'bg-brand-100 text-brand-700 dark:bg-brand-900/60 dark:text-brand-200' },
+  Insurance: { Icon: GraduationCap, cls: 'bg-accent-100 text-accent-700 dark:bg-accent-700/25 dark:text-accent-400' },
+  Customer: { Icon: Headphones, cls: 'bg-emerald-100 text-emerald-700 dark:bg-emerald-500/15 dark:text-emerald-300' },
+  'Tools & data': { Icon: BarChart3, cls: 'bg-sky-100 text-sky-700 dark:bg-sky-500/15 dark:text-sky-300' },
+  Leadership: { Icon: Users, cls: 'bg-amber-100 text-amber-800 dark:bg-amber-500/15 dark:text-amber-300' },
+}
+
+function Cover({ course }) {
+  if (course.image) return <Photo src={course.image} alt="" className="aspect-video w-full" rounded="rounded-none" />
+  const { Icon, cls } = covers[course.category] ?? { Icon: Calculator, cls: 'bg-slate-100 text-slate-600' }
   return (
-    <svg width={size} height={size} viewBox={`0 0 ${size} ${size}`} className="shrink-0 -rotate-90" role="img" aria-label={`${pct}% complete`}>
-      <circle cx={size / 2} cy={size / 2} r={r} fill="none" strokeWidth="5" className="stroke-slate-100 dark:stroke-slate-800" />
-      <circle cx={size / 2} cy={size / 2} r={r} fill="none" strokeWidth="5" strokeLinecap="round" stroke={pct === 100 ? '#10b981' : 'var(--color-chart-2)'} strokeDasharray={c} strokeDashoffset={c * (1 - pct / 100)} className="transition-[stroke-dashoffset] duration-700" />
-    </svg>
+    <div className={`relative flex aspect-video w-full items-center justify-center overflow-hidden ${cls}`} aria-hidden="true">
+      <Icon size={56} strokeWidth={1.25} className="transition duration-300 group-hover:scale-110" />
+      <span className="absolute bottom-3 left-4 text-xs font-semibold opacity-80">{course.category}</span>
+    </div>
+  )
+}
+
+function Stars({ rating }) {
+  return (
+    <span className="flex items-center gap-1 text-xs">
+      <b className="text-amber-700 dark:text-amber-400">{rating.toFixed(1)}</b>
+      <span className="flex" aria-label={`Rated ${rating} out of 5`}>
+        {[1, 2, 3, 4, 5].map((n) => <Star key={n} size={12} className={n <= Math.round(rating) ? 'fill-amber-500 text-amber-500' : 'text-slate-300 dark:text-slate-600'} />)}
+      </span>
+    </span>
+  )
+}
+
+function CourseCard({ course, pct, onOpen }) {
+  const left = course.due ? daysLeft(course.due) : null
+  const action = pct === 100 ? 'Review' : pct > 0 ? 'Continue' : 'Start'
+  return (
+    <button onClick={() => onOpen(course)} className="card card-hover group flex flex-col overflow-hidden text-left">
+      <Cover course={course} />
+      <div className="flex flex-1 flex-col gap-1.5 p-4">
+        {course.mandatory && (
+          <p className={`text-xs font-semibold ${pct === 100 ? 'text-emerald-700 dark:text-emerald-400' : left <= 21 ? 'text-accent-700 dark:text-accent-400' : 'text-slate-500'}`}>
+            {pct === 100 ? 'Required, completed' : `Required, due ${shortDate(course.due)} (${left} days)`}
+          </p>
+        )}
+        <h3 className="line-clamp-2 font-semibold leading-snug text-slate-900 group-hover:text-brand-700 dark:text-white dark:group-hover:text-brand-300">{course.title}</h3>
+        <p className="text-xs text-slate-500">{course.instructor}</p>
+        <div className="flex items-center gap-1.5">
+          <Stars rating={course.rating} />
+          <span className="text-xs text-slate-400">({course.reviews})</span>
+        </div>
+        <p className="flex items-center gap-1 text-xs text-slate-500"><Clock size={12} /> {hours(course.mins)}, {course.level.toLowerCase()}</p>
+        <div className="mt-auto pt-3">
+          {pct > 0 && (
+            <div className="mb-2">
+              <div className="h-1.5 rounded-full bg-slate-100 dark:bg-slate-800"><div className={`h-1.5 rounded-full ${pct === 100 ? 'bg-emerald-500' : 'bg-accent-600'}`} style={{ width: `${pct}%` }} /></div>
+              <p className="mt-1 text-xs text-slate-500">{pct}% complete</p>
+            </div>
+          )}
+          <span className="inline-flex items-center gap-1.5 text-sm font-semibold text-brand-700 dark:text-brand-300"><PlayCircle size={16} /> {action}</span>
+        </div>
+      </div>
+    </button>
   )
 }
 
 export default function Learning() {
-  // Demo progress per course, starting from the sample data.
   const [progress, setProgress] = useLocalStorage('rex-learning', Object.fromEntries(courses.map((c) => [c.id, c.progress])))
   const [cat, setCat] = useState('All')
   const toast = useToast()
   const pct = (c) => progress[c.id] ?? 0
-  const cats = ['All', ...new Set(courses.map((c) => c.category))]
 
   const mandatory = courses.filter((c) => c.mandatory)
   const inProgress = courses.filter((c) => !c.mandatory && pct(c) > 0 && pct(c) < 100)
+  const cats = ['All', ...new Set(courses.filter((c) => !c.mandatory).map((c) => c.category))]
   const catalogue = courses.filter((c) => !c.mandatory && (cat === 'All' || c.category === cat))
-  const done = courses.filter((c) => pct(c) === 100)
-  const mins = courses.reduce((t, c) => t + (c.mins * pct(c)) / 100, 0)
+  const done = courses.filter((c) => pct(c) === 100).length
+  const outstanding = mandatory.filter((c) => pct(c) < 100).length
+  const mins = Math.round(courses.reduce((t, c) => t + (c.mins * pct(c)) / 100, 0))
 
-  const advance = (c) => {
+  const open = (c) => {
     const next = Math.min(100, pct(c) + (pct(c) === 0 ? 25 : 35))
+    if (pct(c) === 100) return toast(`Opening ${c.title}`)
     setProgress({ ...progress, [c.id]: next })
     toast(next === 100 ? `Completed: ${c.title}` : pct(c) === 0 ? `Started: ${c.title}` : `Progress saved: ${c.title}`)
   }
 
-  const action = (c) => (pct(c) === 100 ? 'Review' : pct(c) > 0 ? 'Continue' : 'Start')
-
   return (
-    <div className="space-y-6">
+    <div className="space-y-8">
       <div>
-        <h1 className="text-2xl font-extrabold text-slate-900 sm:text-3xl dark:text-white">Learning</h1>
-        <p className="mt-1 text-sm text-slate-500">Required training and courses to grow your career at Rex.</p>
+        <h1 className="text-2xl font-bold text-slate-900 sm:text-3xl dark:text-white">Learning</h1>
+        <p className="mt-1 text-sm text-slate-500">
+          {hours(mins)} learned this year, {done} {done === 1 ? 'course' : 'courses'} completed{outstanding ? `, ${outstanding} required ${outstanding === 1 ? 'course' : 'courses'} to finish` : ''}.
+        </p>
       </div>
 
-      <section className="stagger grid grid-cols-1 gap-4 sm:grid-cols-3" aria-label="Your learning summary">
-        <div className="card flex items-center gap-4 p-5"><span className="flex h-11 w-11 items-center justify-center rounded-xl bg-brand-50 text-brand-700 dark:bg-slate-800 dark:text-brand-200"><Clock size={20} /></span><div><p className="font-display text-2xl font-extrabold tabular-nums">{hours(Math.round(mins))}</p><p className="text-xs text-slate-500">Learning time this year</p></div></div>
-        <div className="card flex items-center gap-4 p-5"><span className="flex h-11 w-11 items-center justify-center rounded-xl bg-emerald-50 text-emerald-600 dark:bg-emerald-500/10"><Award size={20} /></span><div><p className="font-display text-2xl font-extrabold tabular-nums">{done.length}</p><p className="text-xs text-slate-500">Courses completed</p></div></div>
-        <div className="card flex items-center gap-4 p-5"><span className="flex h-11 w-11 items-center justify-center rounded-xl bg-accent-50 text-accent-600 dark:bg-accent-700/20"><BookOpen size={20} /></span><div><p className="font-display text-2xl font-extrabold tabular-nums">{mandatory.filter((c) => pct(c) < 100).length}</p><p className="text-xs text-slate-500">Required courses outstanding</p></div></div>
-      </section>
-
-      <section className="card p-5">
-        <SectionHeader title="Required for you" subtitle="Compliance training every colleague must complete" />
-        <ul className="divide-y divide-slate-100 dark:divide-slate-800">
-          {mandatory.map((c) => {
-            const left = daysLeft(c.due)
-            const complete = pct(c) === 100
-            return (
-              <li key={c.id} className="flex flex-col gap-3 py-4 first:pt-0 last:pb-0 sm:flex-row sm:items-center">
-                <div className="flex flex-1 items-center gap-4">
-                  <Ring pct={pct(c)} />
-                  <div className="min-w-0">
-                    <p className="font-semibold">{c.title}</p>
-                    <p className="text-xs text-slate-500">{hours(c.mins)} · {pct(c)}% complete</p>
-                  </div>
-                </div>
-                {complete ? (
-                  <span className="chip gap-1 self-start bg-emerald-50 text-emerald-700 sm:self-auto dark:bg-emerald-500/10 dark:text-emerald-400"><CheckCircle2 size={12} /> Completed</span>
-                ) : (
-                  <span className={`chip gap-1 self-start sm:self-auto ${left <= 21 ? 'bg-amber-50 text-amber-700 dark:bg-amber-500/10 dark:text-amber-400' : 'bg-slate-100 text-slate-600 dark:bg-slate-800 dark:text-slate-300'}`}>
-                    {left <= 21 && <AlertTriangle size={12} />} Due {new Date(`${c.due}T00:00`).toLocaleDateString(undefined, { day: 'numeric', month: 'short' })} · {left} days
-                  </span>
-                )}
-                <button onClick={() => advance(c)} className={complete ? 'btn-ghost border border-slate-200 dark:border-slate-700' : 'btn-primary'}><PlayCircle size={16} /> {action(c)}</button>
-              </li>
-            )
-          })}
-        </ul>
+      <section>
+        <h2 className="mb-3 text-lg font-semibold">Required for you</h2>
+        <div className="stagger grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
+          {mandatory.map((c) => <CourseCard key={c.id} course={c} pct={pct(c)} onOpen={open} />)}
+        </div>
       </section>
 
       {inProgress.length > 0 && (
         <section>
-          <SectionHeader title="Continue learning" />
-          <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
-            {inProgress.map((c) => (
-              <button key={c.id} onClick={() => advance(c)} className="card card-hover flex items-center gap-4 p-4 text-left">
-                <Ring pct={pct(c)} />
-                <span className="min-w-0"><span className="block truncate font-semibold">{c.title}</span><span className="text-xs text-slate-500">{pct(c)}% · {c.category}</span></span>
-              </button>
-            ))}
+          <h2 className="mb-3 text-lg font-semibold">Continue learning</h2>
+          <div className="grid gap-5 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
+            {inProgress.map((c) => <CourseCard key={c.id} course={c} pct={pct(c)} onOpen={open} />)}
           </div>
         </section>
       )}
 
       <section>
-        <SectionHeader title="Course catalogue" subtitle={`${courses.filter((c) => !c.mandatory).length} courses`} />
-        <div className="-mx-1 mb-4 flex gap-2 overflow-x-auto px-1 pb-1">
-          {cats.filter((c) => c !== 'Compliance').map((c) => <button key={c} onClick={() => setCat(c)} className={`chip shrink-0 px-3 py-1.5 text-sm transition ${cat === c ? 'bg-brand-700 text-white' : 'bg-white text-slate-600 ring-1 ring-slate-200 hover:bg-slate-50 dark:bg-slate-900 dark:text-slate-300 dark:ring-slate-700'}`}>{c}</button>)}
+        <div className="mb-3 flex flex-col gap-3 sm:flex-row sm:items-end sm:justify-between">
+          <h2 className="text-lg font-semibold">Course catalogue</h2>
+          <div className="-mx-1 flex gap-2 overflow-x-auto px-1 pb-1" role="tablist">
+            {cats.map((c) => <button key={c} role="tab" aria-selected={cat === c} onClick={() => setCat(c)} className={`chip shrink-0 px-3 py-1.5 text-sm transition ${cat === c ? 'bg-brand-700 text-white' : 'bg-white text-slate-600 ring-1 ring-slate-200 hover:bg-slate-50 dark:bg-slate-900 dark:text-slate-300 dark:ring-slate-700'}`}>{c}</button>)}
+          </div>
         </div>
-        <div className="stagger grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
-          {catalogue.map((c) => (
-            <article key={c.id} className="card card-hover flex flex-col p-5">
-              <div className="flex items-start justify-between gap-3">
-                <span className="chip bg-brand-50 text-brand-700 dark:bg-slate-800 dark:text-brand-200">{c.category}</span>
-                {pct(c) > 0 && <Ring pct={pct(c)} size={32} />}
-              </div>
-              <h3 className="mt-3 font-display text-lg leading-snug font-bold">{c.title}</h3>
-              <p className="mt-1 text-xs text-slate-500">{hours(c.mins)} · {c.level}</p>
-              <button onClick={() => advance(c)} className="btn mt-4 self-start border border-slate-200 px-3 py-1.5 hover:border-brand-400 dark:border-slate-700"><PlayCircle size={16} /> {action(c)}</button>
-            </article>
-          ))}
+        <div className="stagger grid gap-5 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
+          {catalogue.map((c) => <CourseCard key={c.id} course={c} pct={pct(c)} onOpen={open} />)}
         </div>
       </section>
     </div>

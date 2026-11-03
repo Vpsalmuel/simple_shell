@@ -1,6 +1,6 @@
 import { useEffect, useRef, useState } from 'react'
 import { Navigate, useNavigate } from 'react-router-dom'
-import { ArrowLeft, ArrowRight, CalendarCheck, Check, CheckCircle2, ChevronDown, FileSignature, Lock, MapPin, Quote, RotateCcw, Star } from 'lucide-react'
+import { ArrowLeft, ArrowRight, CalendarCheck, LogOut, Check, CheckCircle2, ChevronDown, FileSignature, Lock, MapPin, Quote, RotateCcw, Star } from 'lucide-react'
 import { company, departmentTour, feedbackSlots, floors, itSetup, mdMessage, performance, policies, products, values, walkthroughSteps, workplaceNorms } from '../data/onboarding'
 import { people } from '../data'
 import { useUser } from '../context/UserContext'
@@ -60,7 +60,7 @@ function CompanyStep() {
       <div className="stagger grid grid-cols-2 gap-3 md:grid-cols-4">
         {company.stats.map((s) => (
           <div key={s.label} className="card p-4 text-center">
-            <p className="font-display text-3xl font-extrabold text-brand-700 dark:text-white">{s.value}</p>
+            <p className="font-display text-3xl font-bold text-brand-700 dark:text-white">{s.value}</p>
             <p className="mt-1 text-xs text-slate-500">{s.label}</p>
           </div>
         ))}
@@ -86,8 +86,8 @@ function MdStep({ progress, update }) {
     <div className="grid gap-8 lg:grid-cols-[1.3fr_1fr]">
       <VideoPlayer title={`A welcome from ${mdMessage.name}`} {...mdMessage.video} watched={progress.mdVideo} onComplete={() => update({ mdVideo: true })} />
       <figure className="card relative p-6">
-        <Quote className="absolute top-5 right-5 text-accent-200 dark:text-accent-700/40" size={40} />
-        <div className="space-y-3 text-sm leading-relaxed text-slate-600 dark:text-slate-300">{mdMessage.letter.map((p, i) => <p key={i}>{p}</p>)}</div>
+        <Quote className="absolute top-5 right-5 hidden text-accent-200 sm:block dark:text-accent-700/40" size={40} />
+        <div className="space-y-3 text-sm leading-relaxed text-slate-600 sm:pr-12 dark:text-slate-300">{mdMessage.letter.map((p, i) => <p key={i}>{p}</p>)}</div>
         <figcaption className="mt-6 flex items-center gap-3 border-t border-slate-100 pt-4 dark:border-slate-800">
           <Avatar name={mdMessage.name} />
           <span><span className="block font-semibold">{mdMessage.name}</span><span className="block text-xs text-slate-500">{mdMessage.title}</span></span>
@@ -281,7 +281,7 @@ function LocationsStep({ user }) {
           return (
             <li key={f.floor} className={`card flex flex-col gap-3 p-4 sm:flex-row sm:items-center ${mine ? 'ring-2 ring-accent-500' : ''}`}>
               <span className={`flex h-14 w-14 shrink-0 flex-col items-center justify-center rounded-xl font-display ${mine ? 'bg-accent-600 text-white' : 'bg-brand-700 text-white'}`}>
-                <span className="text-[10px] font-semibold uppercase opacity-80">Floor</span><span className="text-xl leading-none font-extrabold">{f.floor}</span>
+                <span className="text-[10px] font-semibold uppercase opacity-80">Floor</span><span className="text-xl leading-none font-bold">{f.floor}</span>
               </span>
               <div className="flex-1">
                 <p className="font-display font-bold">{f.name}{mine && <span className="chip ml-2 bg-accent-50 text-accent-700 dark:bg-accent-700/20 dark:text-accent-400">Your team</span>}</p>
@@ -408,12 +408,13 @@ const stepViews = {
 }
 
 export default function Walkthrough() {
-  const { user, progress, updateProgress, resetWalkthrough, walkthroughDone } = useUser()
+  const { user, progress, updateProgress, resetWalkthrough, walkthroughDone, ready, signedIn, ssoConfigured, signOut } = useUser()
   const navigate = useNavigate()
   const firstOpen = walkthroughSteps.findIndex((s) => !progress[s.id])
   const [index, setIndex] = useState(firstOpen === -1 ? walkthroughSteps.length : firstOpen)
   useEffect(() => { window.scrollTo({ top: 0 }) }, [index])
 
+  if (ready && !signedIn) return <Navigate to="/login" replace />
   if (!user.newStaff) return <Navigate to="/" replace />
 
   const step = walkthroughSteps[index]
@@ -436,7 +437,10 @@ export default function Walkthrough() {
             <div className="h-1.5 flex-1 rounded-full bg-slate-100 dark:bg-slate-800"><div className="h-1.5 rounded-full bg-accent-600 transition-all duration-500" style={{ width: `${pct}%` }} /></div>
             <span className="text-xs font-medium text-slate-500">{pct}% complete</span>
           </div>
-          <PersonaSwitcher className="ml-auto md:ml-0" />
+          <div className="ml-auto flex min-w-0 items-center gap-2 md:ml-0">
+            {!ssoConfigured && <PersonaSwitcher />}
+            <button onClick={signOut} className="btn-ghost px-2 py-1.5 text-sm sm:px-3" aria-label="Sign out"><LogOut size={16} className="sm:hidden" /><span className="hidden sm:inline">Sign out</span></button>
+          </div>
         </div>
       </header>
 
@@ -480,7 +484,7 @@ export default function Walkthrough() {
           {step ? (
             <div key={step.id} className="animate-fade-up">
               <p className="text-sm font-medium text-accent-700 dark:text-accent-400">Step {index + 1} of {walkthroughSteps.length}</p>
-              <h1 className="mt-1 text-2xl font-extrabold text-slate-900 sm:text-3xl dark:text-white">{index === 0 ? `Welcome to Rex, ${user.firstName}` : step.label}</h1>
+              <h1 className="mt-1 text-2xl font-bold text-slate-900 sm:text-3xl dark:text-white">{index === 0 ? `Welcome to Rex, ${user.firstName}` : step.label}</h1>
               <p className="mt-1 mb-8 text-slate-500">{step.blurb}</p>
               <View progress={progress} update={updateProgress} user={user} />
               <div className="mt-10 flex flex-col-reverse items-stretch justify-between gap-3 border-t border-slate-200 pt-6 sm:flex-row sm:items-center dark:border-slate-800">
@@ -496,7 +500,7 @@ export default function Walkthrough() {
           ) : (
             <div className="animate-fade-up card mx-auto max-w-xl p-10 text-center">
               <CelebrateIllustration className="mx-auto h-40 w-auto animate-pop" />
-              <h1 className="mt-6 text-3xl font-extrabold">You’re all set, {user.firstName}!</h1>
+              <h1 className="mt-6 text-3xl font-bold">You’re all set, {user.firstName}!</h1>
               <p className="mt-2 text-slate-500">You’ve met the company, your team and every department, signed {policies.length} policies and booked time with {user.buddy}. Rex Hub is now unlocked.</p>
               <button onClick={() => navigate('/')} disabled={!walkthroughDone} className="btn-primary mt-8 px-6 py-3 text-base">Enter Rex Hub <ArrowRight size={18} /></button>
               <button onClick={() => { resetWalkthrough(); setIndex(0) }} className="btn-ghost mx-auto mt-3 text-xs"><RotateCcw size={14} /> Restart walkthrough (demo)</button>

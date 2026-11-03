@@ -40,10 +40,9 @@ function Detail({ d }) {
     <div className="space-y-6">
       <Link to="/departments" className="inline-flex items-center gap-1 text-sm font-medium text-brand-600 hover:underline dark:text-brand-300"><ArrowLeft size={14} /> All departments</Link>
 
-      <section className="relative overflow-hidden rounded-3xl bg-brand-700 p-6 text-white sm:p-8">
-        <div className="pointer-events-none absolute -top-1/2 -right-20 h-[180%] w-1/2 rounded-full bg-accent-600/30 blur-3xl" />
+      <section className="relative overflow-hidden rounded-2xl bg-brand-700 p-6 text-white sm:p-8">
         <p className="relative text-sm text-brand-200">Department</p>
-        <h1 className="relative mt-1 text-3xl font-extrabold sm:text-4xl">{d.name}</h1>
+        <h1 className="relative mt-1 text-3xl font-bold sm:text-4xl">{d.name}</h1>
         <p className="relative mt-2 max-w-2xl text-brand-100">{d.what}</p>
         <div className="relative mt-5 flex flex-wrap gap-x-6 gap-y-2 text-sm text-brand-100">
           <span className="inline-flex items-center gap-1.5"><Users size={16} /> {d.headcount} people</span>
@@ -110,7 +109,7 @@ export default function Departments() {
   return (
     <div className="space-y-6">
       <div>
-        <h1 className="text-2xl font-extrabold text-slate-900 sm:text-3xl dark:text-white">Departments</h1>
+        <h1 className="text-2xl font-bold text-slate-900 sm:text-3xl dark:text-white">Departments</h1>
         <p className="mt-1 text-sm text-slate-500">{departments.length} teams · {departments.reduce((t, d) => t + d.headcount, 0)} colleagues</p>
       </div>
       <div className="stagger grid gap-5 sm:grid-cols-2 xl:grid-cols-4">

@@ -18,7 +18,7 @@ export default function Rewards() {
   return (
     <div className="space-y-6">
       <div>
-        <h1 className="text-2xl font-extrabold text-slate-900 sm:text-3xl dark:text-white">Rewards & Benefits</h1>
+        <h1 className="text-2xl font-bold text-slate-900 sm:text-3xl dark:text-white">Rewards & Benefits</h1>
         <p className="mt-1 text-sm text-slate-500">What Rex offers you, and how to grow your career here.</p>
       </div>
 
@@ -29,7 +29,7 @@ export default function Rewards() {
               <span className="flex h-11 w-11 items-center justify-center rounded-xl bg-accent-50 text-accent-600 dark:bg-accent-700/20"><Icon name={b.icon} size={20} /></span>
               <span className="mt-4 block font-display text-lg font-bold">{b.title}</span>
               <span className="mt-1 block text-sm text-slate-600 dark:text-slate-300">{b.text}</span>
-              {b.to && <span className="mt-3 inline-flex items-center gap-1 text-sm font-medium text-brand-600 dark:text-brand-300">Learn more <ArrowRight size={14} /></span>}
+              {b.to && <span className="mt-3 inline-flex items-center gap-1 text-sm font-medium text-brand-600 dark:text-brand-300">{b.to === '/learning' ? 'Browse courses' : 'See wellbeing benefits'} <ArrowRight size={14} /></span>}
             </>
           )
           return b.to ? <Link key={b.title} to={b.to} className="card card-hover p-5">{inner}</Link> : <div key={b.title} className="card p-5">{inner}</div>

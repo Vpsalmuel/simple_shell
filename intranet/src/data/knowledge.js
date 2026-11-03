@@ -16,7 +16,7 @@ export const articles = [
   { id: 'products', title: 'Insurance products portfolio', category: 'Products', excerpt: 'Personal and commercial lines we underwrite, with their variants.', owner: 'Underwriting', updated: '2026-10-01', views: 5200,
     body: [['Main lines', 'Motor, Fire, Agric, Energy, Engineering, Travel, Marine, Bond and Aviation insurance.'], ['Where to learn more', 'Each product’s variants are listed in the new-staff walkthrough and the Underwriting workbench.']] },
   { id: 'office-faq', title: 'General office FAQs', category: 'FAQs', excerpt: 'Parking, the café, dress code and building access.', owner: 'People & Culture', updated: '2026-09-01', views: 1800,
-    body: [['When does the café open?', 'From 7:30 on working days.'], ['Where can I park?', 'Staff parking is in the basement. Register your car plate with Facilities.'], ['What should I wear?', 'Business casual on office days (Tue–Thu). Client-facing roles wear full business attire in scheduled meetings.'], ['I lost my access card', 'Report it to reception straight away for a replacement.']] },
+    body: [['When does the café open?', 'From 7:30 on working days.'], ['Where can I park?', 'Staff parking is in the basement. Register your car plate with Facilities.'], ['What should I wear?', 'Business casual on office days (Tue-Thu). Client-facing roles wear full business attire in scheduled meetings.'], ['I lost my access card', 'Report it to reception straight away for a replacement.']] },
 ]
 
 export const helpCategories = [

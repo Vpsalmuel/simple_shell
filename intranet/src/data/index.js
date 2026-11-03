@@ -7,7 +7,7 @@ export const departments = ['Executive Office', 'Brand & Communications', 'Claim
 export const people = [
   { id: 1, name: 'Sarah Jenkins', joined: '2020-03-15', role: 'Senior Claims Specialist / Onboarding Buddy', dept: 'Claims', location: 'Lagos Main Campus, Block C', email: 'sarah.jenkins@rexinsurance.com', phone: 'Ext. 309', status: 'online', manager: 'Arthur Pendelton', skills: ['Communication', 'Analysis', 'Insurance Logic'], bio: 'Dedicated claims investigator with over 5 years of tenure. Onboarding buddy supporting Samuel Adebayo’s learning track.' },
   { id: 2, name: 'Arthur Pendelton', role: 'VP of Claims', dept: 'Claims', location: 'Lagos Main Campus, Block C Executive', email: 'arthur.pendelton@rexinsurance.com', phone: 'Ext. 300', status: 'meeting', manager: 'Victoria Hawthorne', skills: ['Leadership', 'Strategic Planning', 'Risk Mitigation'], bio: 'Oversees all claims operations across motor, property and general liability portfolios.' },
-  { id: 3, name: 'Victoria Hawthorne', joined: '2015-01-10', role: 'Managing Director & CEO', dept: 'Executive Office', location: 'Executive Leadership Office', email: 'victoria.hawthorne@rexinsurance.com', phone: 'Via the executive office', status: 'away', manager: '—', skills: ['Strategy', 'Leadership'], bio: 'Leads Rex Insurance and its executive board.' },
+  { id: 3, name: 'Victoria Hawthorne', joined: '2015-01-10', role: 'Managing Director & CEO', dept: 'Executive Office', location: 'Executive Leadership Office', email: 'victoria.hawthorne@rexinsurance.com', phone: 'Via the executive office', status: 'away', manager: '-', skills: ['Strategy', 'Leadership'], bio: 'Leads Rex Insurance and its executive board.' },
   { id: 4, name: 'Rebecca Sterling', joined: '2019-11-01', role: 'Lead Commercial Underwriter', dept: 'Underwriting', location: 'Lagos Main Campus, Block B', email: 'rebecca.sterling@rexinsurance.com', phone: 'Ext. 320', status: 'online', manager: 'Victoria Hawthorne', skills: ['Communication', 'Analysis', 'Insurance Logic'], bio: 'Manages underwriting checklists for commercial assets. Fan of risk mitigation structures and deep compliance audits.' },
   { id: 5, name: 'Samuel Adebayo', joined: '2026-05-24', role: 'Junior Claims Analyst', dept: 'Claims', location: 'Lagos Main Campus, Block C', email: 'samuel.adebayo@rexinsurance.com', phone: 'Ext. 312', status: 'online', manager: 'Arthur Pendelton', skills: ['Communication', 'Analysis', 'Insurance Logic'], bio: 'Joined the company this year. Driven to improve claimant fast-tracking while learning core underwriting assessment.' },
   { id: 6, name: 'Ibrahim Musa', role: 'Actuarial Analyst', dept: 'Actuarial', location: 'Lagos Main Campus', email: 'ibrahim.musa@rexinsurance.com', phone: 'Ext. 330', status: 'offline', manager: 'Victoria Hawthorne', skills: ['Reserving', 'Python'] },
@@ -36,7 +36,7 @@ export const news = [
     body: ['Our first usage-based motor product is live for 2,000 customers across three pilot states. Drivers who share trip data through the Rex app can save up to 20% on renewal.', 'Underwriting spent six months modelling driving behaviour with the Actuarial team. Early results show safer drivers opting in, which improves the risk pool for everyone.', 'Customer Care has a new script for telematics questions, and Claims can now see trip data for any motor claim from an enrolled customer.'] },
   { id: 2, category: 'Claims', title: 'Average claim settlement down to 6.2 days', excerpt: 'The new triage workflow cut handling time by 31%. Here is how the team did it.', author: 'Arthur Pendelton', date: '2026-10-22', readMins: 3, likes: 67, comments: 14, image: null,
     body: ['Twelve weeks ago the average claim took 8.1 days to settle. This week it was 6.2.', 'The biggest change was triage: simple claims under ₦500,000 now go straight to a fast-track queue with pre-approved settlement limits.', 'Next up: same-day settlement for windscreen and minor motor damage.'] },
-  { id: 3, category: 'People', title: 'Meet the Customer Care team behind our 4.7★ rating', excerpt: 'A day on the frontline with the team that handles 3,000 calls a week.', author: 'Thomas Mueller', date: '2026-10-20', readMins: 5, likes: 38, comments: 6, image: null,
+  { id: 3, category: 'People', title: 'Meet the Customer Care team behind our 4.7-star rating', excerpt: 'A day on the frontline with the team that handles 3,000 calls a week.', author: 'Thomas Mueller', date: '2026-10-20', readMins: 5, likes: 38, comments: 6, image: null,
     body: ['From 7am the phones start ringing. Marcus Vance’s team of 40 handles policy questions, claims updates and the occasional very upset customer.', 'Their secret? Call back before the customer has to chase, and never end a call without a clear next step.'] },
   { id: 4, category: 'IT', title: 'Single sign-on rolls out to all core systems', excerpt: 'One login for the policy admin, claims portal and HR. Migration dates inside.', author: 'David Kojo', date: '2026-10-18', readMins: 2, likes: 25, comments: 3, image: null,
     body: ['From 3 November you will sign in once to reach policy admin, the claims workbench, HR and email.', 'Multi-factor authentication stays on for every system. Keep your authenticator app handy during the switch.'] },
@@ -61,23 +61,18 @@ export const events = [
 ]
 
 // `mandatory` courses are assigned to everyone with a due date. `progress` is the demo user's completion %.
+// `rating` and `reviews` are sample values. Set `image` to a course thumbnail URL to replace the cover.
 export const courses = [
-  { id: 'aml', title: 'Anti-money laundering essentials', category: 'Compliance', mins: 40, level: 'All staff', mandatory: true, due: '2026-11-15', progress: 60 },
-  { id: 'ndpa', title: 'Data protection (NDPA) in practice', category: 'Compliance', mins: 30, level: 'All staff', mandatory: true, due: '2026-11-15', progress: 0 },
-  { id: 'cyber', title: 'Cyber security awareness', category: 'Compliance', mins: 25, level: 'All staff', mandatory: true, due: '2026-12-31', progress: 100 },
-  { id: 'claims101', title: 'Claims handling fundamentals', category: 'Insurance', mins: 90, level: 'Beginner', progress: 0 },
-  { id: 'uw', title: 'Introduction to underwriting', category: 'Insurance', mins: 75, level: 'Beginner', progress: 35 },
-  { id: 'ifrs17', title: 'IFRS 17 for non-accountants', category: 'Insurance', mins: 60, level: 'Intermediate', progress: 0 },
-  { id: 'cx', title: 'Handling difficult conversations', category: 'Customer', mins: 45, level: 'All staff', progress: 0 },
-  { id: 'excel', title: 'Excel for analysis', category: 'Tools & data', mins: 120, level: 'Intermediate', progress: 0 },
-  { id: 'lead', title: 'First-time manager programme', category: 'Leadership', mins: 240, level: 'Managers', progress: 0 },
-  { id: 'feedback', title: 'Giving and receiving feedback', category: 'Leadership', mins: 35, level: 'All staff', progress: 0 },
-]
-
-export const kudos = [
-  { id: 1, from: 'Arthur Pendelton', to: 'Chloe Chen', message: 'Closed a complex flood claim in 3 days and the customer sent a thank-you letter.', value: 'Client Empathy' },
-  { id: 2, from: 'Marcus Vance', to: 'David Kojo', message: 'The new chat widget halved our wait times. Brilliant work.', value: 'Digital Precision' },
-  { id: 3, from: 'Arthur Pendelton', to: 'Fatima Bello', message: 'Cleared the claims audit backlog while the team was stretched.', value: 'Continuous Growth' },
+  { id: 'aml', title: 'Anti-money laundering essentials', instructor: 'David Okon', rating: 4.6, reviews: 212, category: 'Compliance', mins: 40, level: 'All staff', mandatory: true, due: '2026-11-15', progress: 60 },
+  { id: 'ndpa', title: 'Data protection (NDPA) in practice', instructor: 'David Okon', rating: 4.4, reviews: 167, category: 'Compliance', mins: 30, level: 'All staff', mandatory: true, due: '2026-11-15', progress: 0 },
+  { id: 'cyber', title: 'Cyber security awareness', instructor: 'David Kojo', rating: 4.7, reviews: 301, category: 'Compliance', mins: 25, level: 'All staff', mandatory: true, due: '2026-12-31', progress: 100 },
+  { id: 'claims101', title: 'Claims handling fundamentals', instructor: 'Arthur Pendelton', rating: 4.8, reviews: 96, category: 'Insurance', mins: 90, level: 'Beginner', progress: 0 },
+  { id: 'uw', title: 'Introduction to underwriting', instructor: 'Rebecca Sterling', rating: 4.7, reviews: 84, category: 'Insurance', mins: 75, level: 'Beginner', progress: 35 },
+  { id: 'ifrs17', title: 'IFRS 17 for non-accountants', instructor: 'Amanda Lin', rating: 4.3, reviews: 58, category: 'Insurance', mins: 60, level: 'Intermediate', progress: 0 },
+  { id: 'cx', title: 'Handling difficult conversations', instructor: 'Marcus Vance', rating: 4.9, reviews: 143, category: 'Customer', mins: 45, level: 'All staff', progress: 0 },
+  { id: 'excel', title: 'Excel for analysis', instructor: 'Amanda Lin', rating: 4.6, reviews: 189, category: 'Tools & data', mins: 120, level: 'Intermediate', progress: 0 },
+  { id: 'lead', title: 'First-time manager programme', instructor: 'Thomas Mueller', rating: 4.5, reviews: 47, category: 'Leadership', mins: 240, level: 'Managers', progress: 0 },
+  { id: 'feedback', title: 'Giving and receiving feedback', instructor: 'Thomas Mueller', rating: 4.6, reviews: 72, category: 'Leadership', mins: 35, level: 'All staff', progress: 0 },
 ]
 
 export const quickLinks = [
@@ -146,7 +141,7 @@ export const leaveBalance = [
 ]
 
 export const notifications = [
-  { id: 1, text: 'Arthur Pendelton approved your leave request (11–13 Nov).', time: '12m', unread: true },
+  { id: 1, text: 'Arthur Pendelton approved your leave request (11-13 Nov).', time: '12m', unread: true },
   { id: 2, text: 'CLM-24-08755 is due for approval today.', time: '1h', unread: true },
   { id: 3, text: 'New document: Q3 town hall slides.', time: '3h', unread: false },
 ]

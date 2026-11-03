@@ -21,7 +21,7 @@ export const company = {
   formerName: 'Metropulse Insurance',
   mission: 'To secure the futures of our clients through transparent, robust and accessible insurance products.',
   vision: 'To be the most trusted insurer in the markets we serve.',
-  // Sample figures — replace with official numbers.
+  // Sample figures: replace with official numbers.
   stats: [
     { label: 'Founded', value: '2010' },
     { label: 'Customers protected', value: '1.2M' },
@@ -54,9 +54,9 @@ export const values = [
 ]
 
 export const workplaceNorms = [
-  { title: 'Office days (Tue–Thu)', text: 'Business casual. Client-facing roles wear full business attire during scheduled meetings.' },
+  { title: 'Office days (Tue-Thu)', text: 'Business casual. Client-facing roles wear full business attire during scheduled meetings.' },
   { title: 'Remote days (Mon & Fri)', text: 'Casual but presentable for video calls. Use a quiet background, with a professional virtual background if needed.' },
-  { title: 'Core hours', text: 'Be reachable 10:00–16:00 on working days, and keep your Teams status up to date.' },
+  { title: 'Core hours', text: 'Be reachable 10:00-16:00 on working days, and keep your Teams status up to date.' },
 ]
 
 export const products = [
@@ -108,7 +108,7 @@ export const departmentTour = [
   { id: 'compliance', dept: 'Legal & Compliance', name: 'Legal & Compliance', head: 'David Okon', headcount: 15, location: 'HQ, floor 4', services: ['Contract reviews', 'Regulatory questions', 'Gifts register'], contact: 'compliance@rexinsurance.com', what: 'Keeps us on the right side of the regulator and the law.', video: { src: null, duration: '2:05' } },
 ]
 
-// Sample policy text — replace with the approved policy documents.
+// Sample policy text: replace with the approved policy documents.
 export const policies = [
   { id: 'conduct', title: 'Code of Conduct', version: 'v4.2', pages: 'approx. 6 min read', sections: [
     ['Purpose', 'This Code sets out the standards of behaviour expected of everyone who works for or on behalf of Rex Insurance.'],

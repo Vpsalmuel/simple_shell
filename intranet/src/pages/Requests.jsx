@@ -172,7 +172,7 @@ export default function Requests() {
     <div className="space-y-6">
       <div className="flex flex-wrap items-end justify-between gap-4">
         <div>
-          <h1 className="text-2xl font-extrabold text-slate-900 sm:text-3xl dark:text-white">Request Centre</h1>
+          <h1 className="text-2xl font-bold text-slate-900 sm:text-3xl dark:text-white">Request Centre</h1>
           <p className="mt-1 text-sm text-slate-500">Ask another department for help, and track what’s been asked of yours.</p>
         </div>
         <button onClick={() => setCreating(true)} className="btn bg-accent-600 text-white hover:bg-accent-700"><Plus size={16} /> New request</button>
@@ -187,7 +187,7 @@ export default function Requests() {
         ].map(([label, n, t]) => (
           <button key={label} onClick={() => setTab(t)} className={`card card-hover p-4 text-left ${tab === t ? 'ring-2 ring-brand-500' : ''}`}>
             <p className="text-xs text-slate-500">{label}</p>
-            <p className="mt-1 font-display text-2xl font-extrabold tabular-nums">{n}</p>
+            <p className="mt-1 font-display text-2xl font-bold tabular-nums">{n}</p>
           </button>
         ))}
       </section>

@@ -110,7 +110,7 @@ function SettlementTrend() {
 
   return (
     <section className="card p-5">
-      <SectionHeader title="Average settlement time" subtitle="Days from registration to payment, last 12 weeks" action={<span className="font-display text-2xl font-extrabold tabular-nums">{last}<span className="text-sm font-medium text-slate-500"> days</span></span>} />
+      <SectionHeader title="Average settlement time" subtitle="Days from registration to payment, last 12 weeks" action={<span className="font-display text-2xl font-bold tabular-nums">{last}<span className="text-sm font-medium text-slate-500"> days</span></span>} />
       <div className="relative">
         <svg viewBox={`0 0 ${w} ${h}`} preserveAspectRatio="none" className="h-40 w-full overflow-visible" onMouseMove={onMove} onMouseLeave={() => setHover(null)} role="img" aria-label={`Average settlement time fell from ${settlementTrend[0]} to ${last} days over 12 weeks; target ${target} days.`}>
           {[5, 6, 7, 8, 9].map((t) => <line key={t} x1="0" x2={w} y1={y(t)} y2={y(t)} className="stroke-slate-100 dark:stroke-slate-800" strokeDasharray="3 4" vectorEffect="non-scaling-stroke" />)}
@@ -179,7 +179,7 @@ export default function Claims() {
     <div className="space-y-6">
       <div className="flex flex-wrap items-end justify-between gap-4">
         <div>
-          <h1 className="text-2xl font-extrabold text-slate-900 sm:text-3xl dark:text-white">Claims & policy hub</h1>
+          <h1 className="text-2xl font-bold text-slate-900 sm:text-3xl dark:text-white">Claims & policy hub</h1>
           <p className="mt-1 text-sm text-slate-500">Your queue, live performance, and core insurance systems in one place.</p>
         </div>
         <button className="btn-primary">Register new claim</button>

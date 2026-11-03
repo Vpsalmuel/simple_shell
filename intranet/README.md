@@ -35,7 +35,14 @@ A chat assistant (bottom-right button) powered by Google Gemini, as in the AI St
 - `GEMINI_MODEL`: optional; defaults to the prototype's model.
 - The shareable preview has no server, so it always runs in offline mode.
 
-Use **account menu → View as** to preview each staff type (demo only; real sign-in will decide this).
+## Sign-in (Microsoft single sign-on)
+
+Everyone starts at `/login` and signs in with **Sign in with Microsoft**.
+
+- **Demo mode (default):** with no Azure settings, the button opens a clearly labelled picker of demo colleagues, and **account menu → View as** switches between them.
+- **Microsoft mode:** your IT team registers Rex Hub in **Microsoft Entra ID** (App registrations → New registration → platform **Single-page application**, redirect URI = your site's address, e.g. `https://hub.rexinsurance.com`; API permission **Microsoft Graph → User.Read**, delegated). Put the **Application (client) ID** and **Directory (tenant) ID** in `.env` as `VITE_AZURE_CLIENT_ID` and `VITE_AZURE_TENANT_ID`, then rebuild. Names, job titles and departments then come from Microsoft, and "View as" disappears.
+- Microsoft does not know who is *new staff*: that flag (which locks people into onboarding) needs to come from your HR system. Until then, Microsoft-mode users are treated as existing staff.
+- The Microsoft path is built on Microsoft's official MSAL library (`src/auth/microsoft.js`) but has not been tested against your tenant yet.
 
 ## Staff types
 
@@ -56,7 +63,7 @@ Use **account menu → View as** to preview each staff type (demo only; real sig
 
 After finishing, new staff land on their department's dashboard with a "first 90 days" banner naming their buddy and manager.
 
-**Existing staff** share one Home layout. KPIs (with 8-week sparklines), quick links and a featured widget change by department:
+**Existing staff** share one Home layout. Quick links and the tasks in **Your tasks** change by department:
 
 | Department | Featured widget |
 | --- | --- |
@@ -77,11 +84,11 @@ Restricted items are hidden from the menu and search, and their address shows a 
 
 | Page | Route | Highlights |
 | --- | --- | --- |
-| Home | `/` | Department dashboard, announcements, news, events RSVP, poll, kudos, celebrations |
+| Home | `/` | Greeting with search, one dismissible notice, **Your tasks** (approvals, team queue, required training, waiting requests), quick links, company news (featured + 3), events, celebrations this week, pulse poll. Modelled on NN/g Intranet Design Annual winners and Microsoft Viva Connections: no metrics, no rotating banners |
 | News | `/news`, `/news/:id` | Featured story, category filter, search, article page with likes and comments |
 | Events | `/events` | Month calendar, type filters, RSVP, upcoming list |
 | Departments | `/departments`, `/departments/:id` | Team directory; each team page has culture video, head, services, team, documents, events |
-| Learning | `/learning` | Required compliance courses with due dates, progress, course catalogue |
+| Learning | `/learning` | Course cards with a cover image, instructor, rating, length, level and progress (required, continue, catalogue). Set a course's `image` to use a real thumbnail |
 | Request Centre | `/requests` | Requests between departments: tabs (mine, my team's queue, open, resolved), search, detail panel with comments and history; the receiving team can assign, progress, complete or reject |
 | Knowledge Center | `/knowledge`, `/knowledge/:id` | Searchable wiki of policies, SOPs, guides and FAQs, with "was this helpful?" |
 | Help Desk | `/help` | IT, HR, Finance and Facilities tickets (they land in the Request Centre), FAQs, my tickets |

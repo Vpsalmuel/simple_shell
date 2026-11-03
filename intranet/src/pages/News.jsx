@@ -59,7 +59,7 @@ function Article({ id, news }) {
       <article>
         <Link to="/news" className="inline-flex items-center gap-1 text-sm font-medium text-brand-600 hover:underline dark:text-brand-300"><ArrowLeft size={14} /> All news</Link>
         <span className="chip mt-4 bg-accent-50 text-accent-700 dark:bg-accent-700/20 dark:text-accent-400">{n.category}</span>
-        <h1 className="mt-2 text-3xl font-extrabold text-balance text-slate-900 sm:text-4xl dark:text-white">{n.title}</h1>
+        <h1 className="mt-2 text-3xl font-bold text-balance text-slate-900 sm:text-4xl dark:text-white">{n.title}</h1>
         <div className="mt-3"><Meta n={n} liked={liked} toggle={toggle} /></div>
         <Photo src={n.image} alt="" className="mt-6 aspect-[2/1] w-full" rounded="rounded-2xl" />
         <div className="mt-6 max-w-[65ch] space-y-4 text-[1.05rem] leading-relaxed text-slate-700 dark:text-slate-300">
@@ -116,7 +116,7 @@ export default function News() {
   return (
     <div className="space-y-6">
       <div>
-        <h1 className="text-2xl font-extrabold text-slate-900 sm:text-3xl dark:text-white">News</h1>
+        <h1 className="text-2xl font-bold text-slate-900 sm:text-3xl dark:text-white">News</h1>
         <p className="mt-1 text-sm text-slate-500">Stories, results and updates from across Rex.</p>
       </div>
 
@@ -125,7 +125,7 @@ export default function News() {
           <Photo src={featured.image} alt="" className="aspect-[16/10] w-full md:aspect-auto md:h-full" rounded="rounded-none" />
           <div className="flex flex-col justify-center gap-3 p-6 sm:p-8">
             <span className="chip w-fit bg-accent-600 text-white">Featured · {featured.category}</span>
-            <h2 className="text-2xl font-extrabold text-balance group-hover:text-brand-600 dark:group-hover:text-brand-300">{featured.title}</h2>
+            <h2 className="text-2xl font-bold text-balance group-hover:text-brand-600 dark:group-hover:text-brand-300">{featured.title}</h2>
             <p className="text-slate-600 dark:text-slate-300">{featured.excerpt}</p>
             <div className="text-xs text-slate-500">{featured.author} · {fmtDate(featured.date)} · {featured.readMins} min read</div>
           </div>
