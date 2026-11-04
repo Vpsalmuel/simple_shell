@@ -1,0 +1,149 @@
+@import "tailwindcss";
+
+@custom-variant dark (&:where(.dark, .dark *));
+
+/*
+ * Brand tokens — swap these hex values for your company palette.
+ * brand = primary (nav, buttons), accent = highlights, success/warn/danger = status.
+ */
+@theme {
+  --font-sans: "Geist", ui-sans-serif, system-ui, sans-serif;
+  --font-display: "Geist", ui-sans-serif, system-ui, sans-serif;
+
+  /* Chart series — validated for colorblind separation (dataviz validator, light on #fff). */
+  --color-chart-1: #3a5092;
+  --color-chart-2: #ea580c;
+
+  --color-brand-50: #eef1f9;
+  --color-brand-100: #d9dff0;
+  --color-brand-200: #b4c0e1;
+  --color-brand-300: #8597c9;
+  --color-brand-400: #566dad;
+  --color-brand-500: #3a5092;
+  --color-brand-600: #2c3f7c;
+  --color-brand-700: #1e2d64; /* Rex primary */
+  --color-brand-800: #18244f;
+  --color-brand-900: #121b3c;
+  --color-brand-950: #0b1126;
+
+  --color-accent-50: #fff7ed;
+  --color-accent-100: #ffedd5;
+  --color-accent-200: #fed7aa;
+  --color-accent-300: #fdba74;
+  --color-accent-400: #fb923c;
+  --color-accent-500: #f97316;
+  --color-accent-600: #ea580c; /* Rex secondary */
+  --color-accent-700: #c2410c; /* use behind white text: 5.2:1 (600 is only 3.6:1) */
+  --color-accent-800: #9a3412;
+  --color-accent-900: #7c2d12;
+}
+
+/* Dark-mode chart steps, validated against the dark card surface (#0f172a). */
+.dark {
+  --color-chart-1: #566dad;
+  color-scheme: dark;
+}
+
+/* Light-mode contrast floor: slate-400 text is only 2.6:1 on white, so text using it reads as slate-500 (4.8:1). */
+html:not(.dark) .text-slate-400 { color: var(--color-slate-500); }
+
+/*
+ * Dark-mode contrast floor (WCAG AA 4.5:1 on slate-900 cards). Muted greys tuned for white
+ * surfaces are too dim on dark ones, so they step up. Unlayered, so these win over utilities.
+ * Elements that set their own dark:text-* colour are left alone.
+ */
+.dark .text-slate-500:not([class*="dark:text-"]),
+.dark .text-slate-400:not([class*="dark:text-"]) { color: var(--color-slate-400); }
+.dark .text-slate-600:not([class*="dark:text-"]),
+.dark .text-slate-700:not([class*="dark:text-"]) { color: var(--color-slate-300); }
+.dark .text-slate-800:not([class*="dark:text-"]),
+.dark .text-slate-900:not([class*="dark:text-"]),
+.dark .text-brand-800:not([class*="dark:text-"]),
+.dark .text-brand-900:not([class*="dark:text-"]) { color: var(--color-slate-100); }
+.dark .text-brand-700:not([class*="dark:text-"]),
+.dark .text-brand-600:not([class*="dark:text-"]) { color: var(--color-brand-200); }
+.dark .text-accent-700:not([class*="dark:text-"]),
+.dark .text-accent-600:not([class*="dark:text-"]) { color: var(--color-accent-400); }
+
+@layer base {
+  h1, h2, h3 {
+    @apply font-display;
+  }
+  h1, h2 {
+    @apply tracking-tight;
+  }
+  h1, h2, h3 {
+    text-wrap: balance;
+  }
+  body {
+    @apply bg-slate-50 text-slate-800 antialiased dark:bg-slate-950 dark:text-slate-200;
+  }
+}
+
+@utility card {
+  @apply rounded-2xl border border-slate-200/80 bg-white shadow-[0_1px_2px_rgba(30,45,100,0.05)] dark:border-slate-800 dark:bg-slate-900;
+}
+
+@utility card-hover {
+  @apply transition duration-200 hover:-translate-y-0.5 hover:border-slate-300 hover:shadow-[0_12px_28px_-14px_rgba(30,45,100,0.28)] active:translate-y-0 dark:hover:border-slate-700 dark:hover:shadow-black/40;
+}
+
+@utility btn {
+  @apply inline-flex items-center justify-center gap-2 rounded-xl px-4 py-2 text-sm font-medium whitespace-nowrap transition active:scale-[0.98] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand-500 disabled:opacity-50;
+}
+
+@utility btn-primary {
+  @apply btn bg-brand-700 text-white hover:bg-brand-800 dark:bg-brand-500 dark:hover:bg-brand-400;
+}
+
+@utility btn-ghost {
+  @apply btn text-slate-600 hover:bg-slate-100 dark:text-slate-300 dark:hover:bg-slate-800;
+}
+
+@utility input {
+  @apply w-full rounded-xl border border-slate-200 bg-white px-3 py-2 text-sm outline-none transition placeholder:text-slate-400 focus:border-brand-400 focus:ring-4 focus:ring-brand-100 dark:border-slate-700 dark:bg-slate-900 dark:focus:ring-brand-900;
+}
+
+@utility chip {
+  @apply inline-flex items-center rounded-full px-2.5 py-0.5 text-xs font-medium;
+}
+
+@keyframes fade-up {
+  from { opacity: 0; transform: translateY(8px); }
+  to { opacity: 1; transform: none; }
+}
+.animate-fade-up { animation: fade-up 0.35s ease-out both; }
+
+/* Staggered entrance for direct children of a grid/list. */
+.stagger > * { animation: fade-up 0.5s cubic-bezier(0.2, 0.7, 0.2, 1) both; }
+.stagger > *:nth-child(2) { animation-delay: 60ms; }
+.stagger > *:nth-child(3) { animation-delay: 120ms; }
+.stagger > *:nth-child(4) { animation-delay: 180ms; }
+.stagger > *:nth-child(5) { animation-delay: 240ms; }
+.stagger > *:nth-child(6) { animation-delay: 300ms; }
+.stagger > *:nth-child(n+7) { animation-delay: 340ms; }
+
+@keyframes shimmer {
+  from { background-position: -400px 0; }
+  to { background-position: 400px 0; }
+}
+.skeleton {
+  background: linear-gradient(90deg, rgb(241 245 249) 0%, rgb(226 232 240) 50%, rgb(241 245 249) 100%);
+  background-size: 800px 100%;
+  animation: shimmer 1.4s linear infinite;
+}
+.dark .skeleton {
+  background: linear-gradient(90deg, rgb(30 41 59) 0%, rgb(51 65 85) 50%, rgb(30 41 59) 100%);
+  background-size: 800px 100%;
+}
+
+@keyframes pop {
+  0% { transform: scale(0.6); opacity: 0; }
+  60% { transform: scale(1.08); opacity: 1; }
+  100% { transform: scale(1); }
+}
+.animate-pop { animation: pop 0.45s cubic-bezier(0.2, 0.7, 0.2, 1) both; }
+
+@media (prefers-reduced-motion: reduce) {
+  .animate-fade-up, .animate-pop, .stagger > *, .card-hover, .skeleton { animation: none; transition: none; }
+}
