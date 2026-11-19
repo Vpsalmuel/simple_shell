@@ -22,5 +22,8 @@ export const companyTools = [
   { id: 'kissflow', label: 'Kissflow', desc: 'Workflows and approvals', icon: 'Kanban', url: null },
   { id: 'ies', label: 'IES', desc: 'Insurance enterprise system', icon: 'Desktop', url: null },
   { id: 'help', label: 'Help Desk', desc: 'IT and HR support', icon: 'LifeBuoy', internal: '/help' },
+  // Moved into Quick tools after the 17 Nov review.
+  { id: 'room', label: 'Book a room', desc: 'Meeting rooms, via SeamlessHR', icon: 'DoorOpen', action: 'meetingRoom' },
+  { id: 'payslips', label: 'Payslips', desc: 'Download your payslip', icon: 'Wallet', url: null },
 ]
 

@@ -27,6 +27,8 @@ export function UserProvider({ children }) {
   const [demoSignedIn, setDemoSignedIn] = useLocalStorage('rex-signed-in', false)
   // { [stepId]: true } plus per-step detail (videos watched, policies signed)
   const [progress, setProgress] = useLocalStorage('rex-walkthrough', {})
+  // Profile photos people upload themselves (20 Aug review), keyed by user id. Demo: stored in this browser.
+  const [photos, setPhotos] = useLocalStorage('rex-photos', {})
   const [ssoUser, setSsoUser] = useState(null)
   const [ready, setReady] = useState(!ssoConfigured)
 
@@ -64,7 +66,8 @@ export function UserProvider({ children }) {
         setDemoSignedIn(true)
       },
       signOut: () => (ssoConfigured ? signOutOfMicrosoft() : setDemoSignedIn(false)),
-      user: { ...user, name: `${user.firstName} ${user.lastName}`.trim() },
+      user: { ...user, name: `${user.firstName} ${user.lastName}`.trim(), photo: photos[user.id] ?? null },
+      setPhoto: (dataUrl) => setPhotos((p) => ({ ...p, [user.id]: dataUrl })),
       setPersonaId,
       progress,
       updateProgress: (patch) => setProgress((p) => ({ ...p, ...patch })),
@@ -73,7 +76,7 @@ export function UserProvider({ children }) {
       // New staff are held in the walkthrough until every step is complete.
       blocked: Boolean(user.newStaff) && !walkthroughDone,
     }
-  }, [ready, ssoUser, demoSignedIn, personaId, progress, setPersonaId, setDemoSignedIn, setProgress])
+  }, [ready, ssoUser, demoSignedIn, personaId, progress, photos, setPersonaId, setDemoSignedIn, setProgress, setPhotos])
 
   return <UserContext.Provider value={value}>{children}</UserContext.Provider>
 }

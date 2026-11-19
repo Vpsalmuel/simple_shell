@@ -65,7 +65,13 @@ export const wellbeingTabs = [
 ]
 
 // Next monthly hike (the prototype's 07:40 start time, moved to the next upcoming Saturday).
-export const nextHike = { date: '2026-11-14', time: '07:40', place: 'Lekki Conservation Centre', slots: 12 }
+export const nextHike = { date: '2026-12-12', time: '07:40', place: 'Lekki Conservation Centre', slots: 12 }
+
+// REAP mental-health programme (20 Aug review). Set `url` to the programme's sign-up page when HCM shares it.
+export const reap = { name: 'REAP programme', url: null, text: 'Free, confidential mental-health support for you and your family: counselling, stress management and wellbeing check-ins.' }
+
+// Gym Champion of the month (20 Aug review). Sample entry; HCM updates it monthly.
+export const gymChampion = { name: 'Marcus Vance', month: '2026-11', stat: '18 gym visits and 4 run club sessions', quote: 'Thirty minutes before work changed my whole day.' }
 
 export const benefits = [
   { icon: 'Trophy', title: 'Annual performance bonus', text: 'A discretionary bonus of 5% to 20% of base salary, based on company results and your goals.' },

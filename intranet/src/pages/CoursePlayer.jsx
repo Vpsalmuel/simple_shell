@@ -22,7 +22,7 @@ export default function CoursePlayer() {
 
   useEffect(() => { setLessonId(firstOpen?.id); setTab('overview'); window.scrollTo?.(0, 0) }, [id]) // eslint-disable-line react-hooks/exhaustive-deps
 
-  if (!course) return <Navigate to="/learning" replace />
+  if (!course) return <Navigate to="/knowledge?tab=courses" replace />
 
   const index = Math.max(0, course.lessons.findIndex((l) => l.id === lessonId))
   const lesson = course.lessons[index]
@@ -71,12 +71,12 @@ export default function CoursePlayer() {
   return (
     <div className="space-y-5">
       <nav className="flex items-center gap-1.5 text-sm text-slate-500 dark:text-slate-400" aria-label="Breadcrumb">
-        <Link to="/learning" className="inline-flex items-center gap-1 font-medium hover:text-brand-700 dark:hover:text-white"><ArrowLeft size={14} /> Learning</Link>
+        <Link to="/knowledge?tab=courses" className="inline-flex items-center gap-1 hover:text-slate-900 dark:hover:text-white"><ArrowLeft size={14} /> Courses</Link>
         <ChevronRight size={14} className="text-slate-300 dark:text-slate-600" />
         <span>{course.category}</span>
       </nav>
 
-      <div className="grid gap-6 lg:grid-cols-[minmax(0,1fr)_22rem] [&>*]:min-w-0">
+      <div className="grid grid-cols-1 gap-6 lg:grid-cols-[minmax(0,1fr)_22rem] [&>*]:min-w-0">
         <div className="space-y-5">
           <VideoPlayer
             key={lesson.id}
@@ -92,7 +92,7 @@ export default function CoursePlayer() {
           <div className="flex flex-col gap-4 sm:flex-row sm:items-start sm:justify-between">
             <div className="min-w-0">
               <p className="text-sm font-medium text-accent-700 dark:text-accent-400">Lesson {index + 1} of {course.lessons.length}</p>
-              <h1 className="mt-1 text-2xl font-bold text-slate-900 dark:text-white">{course.title}</h1>
+              <h1 className="mt-1 text-2xl font-semibold text-slate-900 dark:text-white">{course.title}</h1>
               <div className="mt-2 flex flex-wrap items-center gap-x-3 gap-y-1 text-sm text-slate-600 dark:text-slate-300">
                 <span>{course.instructor}</span>
                 <span className="flex items-center gap-1"><Star size={14} weight="fill" className="text-amber-500" /> <b className="text-slate-900 dark:text-white">{course.rating.toFixed(1)}</b> ({course.reviews} ratings)</span>

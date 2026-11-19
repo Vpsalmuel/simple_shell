@@ -1,34 +1,27 @@
-import { MedalIcon as Award, BookOpenIcon as BookOpen, BuildingsIcon as Building2, CalendarDotsIcon as CalendarDays, FileTextIcon as FileText, GiftIcon as Gift, GraduationCapIcon as GraduationCap, HeartbeatIcon as HeartPulse, TrayIcon as Inbox, SquaresFourIcon as LayoutDashboard, GridFourIcon as LayoutGrid, LifebuoyIcon as LifeBuoy, NewspaperIcon as Newspaper, ConfettiIcon as PartyPopper, ShieldCheckIcon as ShieldCheck, UsersIcon as Users } from '@phosphor-icons/react'
+import { BuildingsIcon as Building2, CalendarDotsIcon as CalendarDays, ConfettiIcon as PartyPopper, HeartbeatIcon as HeartPulse, HouseIcon as House, TrayIcon as Inbox, BooksIcon as Books, GridFourIcon as LayoutGrid, LifebuoyIcon as LifeBuoy, NewspaperIcon as Newspaper } from '@phosphor-icons/react'
 
 // Departments whose staff can open the Admin Workspace.
 export const adminDepts = ['HR', 'IT', 'Brand & Communications', 'Executive Office']
 
 // Single source for the sidebar, search and route access.
 // `depts` limits an item to those departments; omit it for everyone.
+// Removed after the 17 Nov review: Docs & HR, Milestones (now part of Celebrations), Rewards & Benefits.
+// People ("find employee") removed after the 20 Aug review. Knowledge Center and Learning are merged.
 export const navGroups = [
   { label: 'Workspace', items: [
-    { to: '/', label: 'Home', icon: LayoutDashboard, end: true },
+    { to: '/', label: 'Home', icon: House, end: true },
     { to: '/news', label: 'News', icon: Newspaper },
     { to: '/events', label: 'Events', icon: CalendarDays },
-    { to: '/milestones', label: 'Milestones', icon: Award },
+    { to: '/celebrations', label: 'Celebrations', icon: PartyPopper },
   ] },
-  { label: 'Work', items: [
-    { to: '/requests', label: 'Request Centre', icon: Inbox },
-    { to: '/docs', label: 'Docs & HR', icon: FileText },
-  ] },
-  { label: 'Knowledge', items: [
-    { to: '/knowledge', label: 'Knowledge Center', icon: BookOpen },
-    { to: '/learning', label: 'Learning', icon: GraduationCap },
+  { label: 'Self-service', items: [
+    { to: '/requests', label: 'Requests', icon: Inbox },
+    { to: '/knowledge', label: 'Knowledge & Learning', icon: Books },
     { to: '/help', label: 'Help Desk', icon: LifeBuoy },
   ] },
   { label: 'Company', items: [
     { to: '/departments', label: 'Departments', icon: Building2 },
-    { to: '/people', label: 'People', icon: Users },
-    { to: '/celebrations', label: 'Celebrations', icon: PartyPopper },
-  ] },
-  { label: 'You', items: [
     { to: '/wellbeing', label: 'Health & Wellbeing', icon: HeartPulse },
-    { to: '/rewards', label: 'Rewards & Benefits', icon: Gift },
   ] },
   { label: 'Management', items: [
     { to: '/admin', label: 'Admin Workspace', icon: LayoutGrid, depts: adminDepts },

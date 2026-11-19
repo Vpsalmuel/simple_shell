@@ -1,19 +1,20 @@
 // Walkthrough content for new staff. Replace copy, video `src` URLs and policy text with the real material.
 // A video with `src: null` renders as a placeholder player so the flow can still be tested.
 
+// Order follows the 17 Nov review: Meet your team and Meet the departments come right before Schedule buddy feedback.
 export const walkthroughSteps = [
   { id: 'md', label: "MD's welcome", blurb: 'Please watch the welcome message from our Managing Director/CEO.' },
   { id: 'company', label: 'Company overview', blurb: 'Our history, mission and where we are going' },
   { id: 'values', label: 'Our values', blurb: 'What we stand for, every day' },
-  { id: 'culture', label: 'Culture & workplace norms', blurb: 'How we work together, in the office and remote' },
+  { id: 'culture', label: 'Culture & dress code', blurb: 'How we work together, and what to wear' },
   { id: 'products', label: 'Insurance products', blurb: 'What we sell and who it protects' },
   { id: 'locations', label: 'Office locations', blurb: 'Find your way around headquarters' },
-  { id: 'team', label: 'Meet your team', blurb: 'Your manager, your buddy and your colleagues' },
-  { id: 'departments', label: 'Meet the departments', blurb: 'Culture videos from every team' },
   { id: 'policies', label: 'HR & IT Policies', blurb: 'Read and sign the policies that apply to everyone' },
   { id: 'tools', label: 'Your tools & IT setup', blurb: 'Get signed in to the systems you need' },
   { id: 'performance', label: 'Performance management', blurb: 'How we set goals and review progress' },
-  { id: 'feedback', label: 'Schedule buddy feedback', blurb: 'Book your first-week check-in' },
+  { id: 'team', label: 'Meet your team', blurb: 'Your manager, your buddy and your colleagues' },
+  { id: 'departments', label: 'Meet the departments', blurb: 'Culture videos from every team' },
+  { id: 'feedback', label: 'Schedule buddy feedback', blurb: 'Book your first-week check-in, Monday to Friday' },
 ]
 
 export const company = {
@@ -54,9 +55,17 @@ export const values = [
 ]
 
 export const workplaceNorms = [
-  { title: 'Office days (Tue-Thu)', text: 'Business casual. Client-facing roles wear full business attire during scheduled meetings.' },
-  { title: 'Remote days (Mon & Fri)', text: 'Casual but presentable for video calls. Use a quiet background, with a professional virtual background if needed.' },
-  { title: 'Core hours', text: 'Be reachable 10:00-16:00 on working days, and keep your Teams status up to date.' },
+  { title: 'Office days', text: 'Tuesday to Thursday in the office. Monday and Friday are remote unless your team agrees otherwise.' },
+  { title: 'Core hours', text: 'Be reachable 10:00 to 16:00 on working days, and keep your Teams status up to date.' },
+  { title: 'Meetings', text: 'Start on time, share an agenda, and end with clear next steps and owners.' },
+]
+
+// Dress code sits under company culture (20 Aug review). Sample wording for HR to confirm.
+export const dressCode = [
+  { title: 'Office days', text: 'Business casual: shirts or blouses, trousers or skirts, smart native wear.' },
+  { title: 'Client meetings', text: 'Full business attire when you meet clients, brokers or regulators.' },
+  { title: 'Remote days', text: 'Casual but presentable on video calls, with a quiet or plain background.' },
+  { title: 'Fridays', text: 'Smart casual or native attire. Keep it neat; no sportswear or slippers.' },
 ]
 
 export const products = [

@@ -8,7 +8,7 @@ export default function MeetingRoomModal({ open, onClose }) {
   return (
     <Modal open={open} onClose={onClose} title="Book a meeting room">
       <div className="space-y-5 text-sm">
-        <div className="flex gap-3 rounded-2xl bg-brand-50 p-4 text-brand-800 dark:bg-slate-800 dark:text-brand-100">
+        <div className="flex gap-3 rounded-xl bg-brand-50 p-4 text-brand-800 dark:bg-slate-800 dark:text-brand-100">
           <CalendarClock size={20} className="mt-0.5 shrink-0" />
           <p>This goes to <b>{app.name}</b>. Meeting rooms are booked there, not in Rex Hub.</p>
         </div>

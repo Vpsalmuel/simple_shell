@@ -6,6 +6,7 @@ import express from 'express'
 import path from 'node:path'
 import { fileURLToPath } from 'node:url'
 import { GoogleGenAI } from '@google/genai'
+import { siteGuideText } from '../src/config/siteGuide.js'
 
 try {
   process.loadEnvFile()
@@ -25,9 +26,10 @@ app.use(express.json({ limit: '64kb' }))
 const systemInstruction = (user) =>
   `You are Rex AI, the assistant inside Rex Hub, the staff intranet of Rex Insurance (formerly Metropulse Insurance). ` +
   `You are talking to ${user.name || 'a colleague'}, ${user.role || 'staff'} in ${user.dept || 'the company'}. ` +
-  `Be warm, concise and practical. Point people to the right Rex Hub page when it helps: Request Centre (ask another team for something), ` +
-  `Help Desk (IT, HR, Finance and Facilities tickets), Knowledge Center (policies, SOPs, FAQs), Learning, Docs & HR (leave, payslips, documents), ` +
-  `People, Departments, News and Events. Never invent policy details, figures or names; if you are not sure, say so and suggest the Knowledge Center ` +
+  `Be warm, concise and practical. You also guide people around Rex Hub: when someone asks where something is or how to do something, ` +
+  `name the page, say where it is in the left menu, and give the steps in a short list. The pages are: ${siteGuideText} ` +
+  `Leave requests are made in Kissflow and meeting rooms are booked in SeamlessHR. ` +
+  `Never invent policy details, figures or names; if you are not sure, say so and suggest Knowledge & Learning ` +
   `or the Help Desk. Do not discuss servers, ports or API configuration. Use short Markdown lists and bold where useful.`
 
 app.post('/api/chat', async (req, res) => {

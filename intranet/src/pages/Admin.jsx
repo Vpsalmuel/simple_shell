@@ -1,7 +1,6 @@
 import { useState } from 'react'
 import { Link } from 'react-router-dom'
-import { TrayIcon as Inbox, MegaphoneIcon as Megaphone, NewspaperIcon as Newspaper, TrashIcon as Trash2, UsersIcon as Users } from '@phosphor-icons/react'
-import { people } from '../data'
+import { MegaphoneIcon as Megaphone, TrashIcon as Trash2 } from '@phosphor-icons/react'
 import { closedStatuses, initialRequests, requestDepts } from '../data/requests'
 import { useLocalStorage } from '../hooks/useLocalStorage'
 import { useNews } from '../hooks/useNews'
@@ -9,25 +8,25 @@ import { useUser } from '../context/UserContext'
 import { useToast } from '../components/Toast'
 import Photo from '../components/Photo'
 import SectionHeader from '../components/SectionHeader'
+import PageHeader from '../components/PageHeader'
 
 const categories = ['Company', 'Product', 'Claims', 'People', 'IT', 'Wellbeing', 'Compliance']
 const audiences = ['Everyone', 'New staff', 'Existing staff', 'Management']
 const blank = { title: '', category: 'Company', excerpt: '', body: '', audience: 'Everyone', featured: false }
 
-function Stat({ icon: Ico, label, value, to }) {
-  const inner = (
-    <>
-      <span className="flex h-11 w-11 shrink-0 items-center justify-center rounded-xl bg-brand-50 text-brand-700 dark:bg-slate-800 dark:text-brand-200"><Ico size={20} /></span>
-      <span><span className="block font-display text-2xl font-bold tabular-nums">{value}</span><span className="block text-xs text-slate-500">{label}</span></span>
-    </>
+function Stat({ label, value, to }) {
+  return (
+    <Link to={to} className="group px-5 py-4 transition-colors hover:bg-slate-50 dark:hover:bg-slate-800/50">
+      <span className="block text-xs text-slate-500">{label}</span>
+      <span className="mt-1 block text-[22px] leading-tight font-semibold text-slate-900 tabular-nums group-hover:text-brand-700 dark:text-white dark:group-hover:text-brand-300">{value}</span>
+    </Link>
   )
-  return to ? <Link to={to} className="card card-hover flex items-center gap-4 p-5">{inner}</Link> : <div className="card flex items-center gap-4 p-5">{inner}</div>
 }
 
 export default function Admin() {
   const { user } = useUser()
   const toast = useToast()
-  const [requests] = useLocalStorage('rex-requests', initialRequests)
+  const [requests] = useLocalStorage('rex-requests-v2', initialRequests)
   const { news, posts, publish, remove } = useNews()
   const [f, setF] = useState(blank)
   const set = (k) => (e) => setF({ ...f, [k]: e.target.value })
@@ -44,21 +43,16 @@ export default function Admin() {
   }
 
   return (
-    <div className="space-y-6">
-      <div>
-        <p className="text-sm font-medium text-accent-700 dark:text-accent-400">Signed in as {user.dept} admin</p>
-        <h1 className="text-2xl font-bold text-slate-900 sm:text-3xl dark:text-white">Admin Workspace</h1>
-        <p className="mt-1 text-sm text-slate-500">Publish company news and keep an eye on requests across departments.</p>
-      </div>
+    <div className="space-y-8">
+      <PageHeader title="Admin Workspace" description={`Signed in as ${user.dept}. Publish company news, share recognition and keep an eye on requests.`} actions={<Link to="/celebrations" className="btn-secondary">Share recognition</Link>} />
 
-      <section className="stagger grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-4" aria-label="Overview">
-        <Stat icon={Inbox} label="Open requests, all teams" value={open.length} to="/requests?tab=open" />
-        <Stat icon={Inbox} label={`${user.dept} queue`} value={open.filter((r) => r.to === user.dept).length} to="/requests?tab=queue" />
-        <Stat icon={Newspaper} label="Published stories" value={news.length} to="/news" />
-        <Stat icon={Users} label="Colleagues on Rex Hub" value={people.length} to="/people" />
+      <section className="card grid divide-y divide-slate-100 overflow-hidden sm:grid-cols-3 sm:divide-x sm:divide-y-0 dark:divide-slate-800" aria-label="Overview">
+        <Stat label="Open requests, all teams" value={open.length} to="/requests?tab=open" />
+        <Stat label={`${user.dept} queue`} value={open.filter((r) => r.to === user.dept).length} to="/requests?tab=queue" />
+        <Stat label="Published stories" value={news.length} to="/news" />
       </section>
 
-      <div className="grid gap-6 xl:grid-cols-[1fr_380px] [&>*]:min-w-0">
+      <div className="grid gap-8 xl:grid-cols-[minmax(0,1fr)_22rem]">
         <section className="card self-start p-5">
           <SectionHeader title="Publish news" subtitle="Appears on the News page and in everyone’s Home feed" />
           <form onSubmit={submit} className="grid gap-4 md:grid-cols-2">
@@ -89,10 +83,10 @@ export default function Admin() {
           <section className="card overflow-hidden">
             <Photo src={null} label={f.category} className="aspect-[16/8] w-full" rounded="rounded-none" />
             <div className="p-5">
-              <p className="text-xs font-semibold tracking-wider text-slate-400 uppercase">Preview</p>
-              <p className="mt-1 font-display text-lg font-bold">{f.title || 'Your headline'}</p>
+              <p className="text-xs font-medium text-slate-500">Preview</p>
+              <p className="mt-1 text-[15px] font-semibold">{f.title || 'Your headline'}</p>
               <p className="mt-1 text-sm text-slate-500">{f.excerpt || 'Your one-sentence summary.'}</p>
-              <p className="mt-3 text-xs text-slate-400">{user.name} · for {f.audience.toLowerCase()}</p>
+              <p className="mt-3 text-xs text-slate-500">{user.name}, for {f.audience.toLowerCase()}</p>
             </div>
           </section>
 
@@ -102,7 +96,7 @@ export default function Admin() {
               {byDept.map((d) => (
                 <li key={d.dept}>
                   <div className="mb-1 flex justify-between text-sm"><span>{d.dept}</span><span className="font-medium tabular-nums">{d.n}</span></div>
-                  <div className="h-2 rounded-full bg-slate-100 dark:bg-slate-800"><div className="h-2 rounded-full bg-[var(--color-chart-1)] transition-[width] duration-700" style={{ width: `${(d.n / max) * 100}%` }} /></div>
+                  <div className="h-1.5 rounded-full bg-slate-100 dark:bg-slate-800"><div className="h-1.5 rounded-full bg-[var(--color-chart-1)] transition-[width] duration-700" style={{ width: `${(d.n / max) * 100}%` }} /></div>
                 </li>
               ))}
             </ul>

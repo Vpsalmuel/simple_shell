@@ -5,11 +5,11 @@ import Portal from './Portal'
 // Tour steps from the AI Studio prototype. `target` is a data-tour value; the first visible match is used.
 const steps = [
   { title: 'Welcome to Rex Hub', text: 'A quick tour of your new digital workspace. It takes about 30 seconds.' },
-  { target: ['nav', 'menu'], title: 'Everything in one menu', text: 'Your tools, teams and company news live here, grouped into Workspace, Work, Knowledge, Company and You.' },
-  { target: ['search'], title: 'Search everything', text: 'Find colleagues, pages, news, documents and requests. Shortcut: Ctrl+K (⌘K on Mac).' },
-  { target: ['tools'], title: 'Your quick tools', text: 'Emails, Kissflow, IES and the Help Desk, one click from Home.' },
-  { target: ['rexai'], title: 'Ask Rex AI', text: 'Got a question? Rex AI can point you to the right policy, page or person.' },
-  { target: ['profile'], title: 'Your profile', text: 'Your settings live here. You can replay this tour from this menu at any time.' },
+  { target: ['nav', 'menu'], title: 'Everything in one menu', text: 'Everything lives here, grouped into Workspace, Self-service and Company.' },
+  { target: ['search'], title: 'Search everything', text: 'Find pages, policies, courses, documents and news. Shortcut: Ctrl+K (⌘K on Mac).' },
+  { target: ['tools'], title: 'Your quick tools', text: 'Emails, Kissflow, IES, Help Desk, room booking and payslips, one click from Home.' },
+  { target: ['rexai'], title: 'Ask Rex AI', text: 'Ask Rex AI anything, including where to find something in Rex Hub.' },
+  { target: ['profile'], title: 'Your profile', text: 'Change your profile photo, replay this tour or sign out from here.' },
 ]
 
 function findTarget(names) {
@@ -63,16 +63,16 @@ export default function GuidedTour({ open, onClose }) {
     <Portal>
       <div className="fixed inset-0 z-[70]" role="dialog" aria-modal="true" aria-labelledby="tour-title">
         {rect ? (
-          <div className="pointer-events-none fixed rounded-2xl ring-4 ring-accent-500 transition-all duration-300" style={{ left: rect.left - pad, top: rect.top - pad, width: rect.width + pad * 2, height: rect.height + pad * 2, boxShadow: '0 0 0 9999px rgba(11, 17, 38, 0.6)' }} />
+          <div className="pointer-events-none fixed rounded-xl ring-4 ring-accent-500 transition-all duration-300" style={{ left: rect.left - pad, top: rect.top - pad, width: rect.width + pad * 2, height: rect.height + pad * 2, boxShadow: '0 0 0 9999px rgba(11, 17, 38, 0.6)' }} />
         ) : (
           <div className="fixed inset-0 bg-brand-950/60" />
         )}
-        <div key={i} className="animate-fade-up fixed rounded-2xl bg-white p-5 shadow-2xl dark:bg-slate-900" style={{ ...pos, width: cardW }}>
+        <div key={i} className="animate-fade-up fixed rounded-xl bg-white p-5 shadow-[0_24px_60px_-20px_rgba(30,45,100,0.4)] dark:bg-slate-900" style={{ ...pos, width: cardW }}>
           <div className="flex items-start justify-between gap-3">
             <p className="text-xs font-semibold text-accent-700 dark:text-accent-400">{i + 1} of {steps.length}</p>
             <button onClick={onClose} className="btn-ghost -m-1.5 p-1.5" aria-label="Skip tour"><X size={16} /></button>
           </div>
-          <h2 id="tour-title" className="mt-1 text-lg font-bold">{step.title}</h2>
+          <h2 id="tour-title" className="mt-1 text-base font-semibold">{step.title}</h2>
           <p className="mt-1 text-sm text-slate-600 dark:text-slate-300">{step.text}</p>
           <div className="mt-4 flex items-center gap-2">
             <div className="flex flex-1 gap-1" aria-hidden="true">{steps.map((_, n) => <span key={n} className={`h-1.5 rounded-full transition-all ${n === i ? 'w-5 bg-accent-600' : 'w-1.5 bg-slate-300 dark:bg-slate-600'}`} />)}</div>
