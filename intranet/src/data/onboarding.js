@@ -3,18 +3,18 @@
 
 // Order follows the 17 Nov review: Meet your team and Meet the departments come right before Schedule buddy feedback.
 export const walkthroughSteps = [
-  { id: 'md', label: "MD's welcome", blurb: 'Please watch the welcome message from our Managing Director/CEO.' },
-  { id: 'company', label: 'Company overview', blurb: 'Our history, mission and where we are going' },
-  { id: 'values', label: 'Our values', blurb: 'What we stand for, every day' },
-  { id: 'culture', label: 'Culture & dress code', blurb: 'How we work together, and what to wear' },
-  { id: 'products', label: 'Insurance products', blurb: 'What we sell and who it protects' },
-  { id: 'locations', label: 'Office locations', blurb: 'Find your way around headquarters' },
-  { id: 'policies', label: 'HR & IT Policies', blurb: 'Read and sign the policies that apply to everyone' },
-  { id: 'tools', label: 'Your tools & IT setup', blurb: 'Get signed in to the systems you need' },
-  { id: 'performance', label: 'Performance management', blurb: 'How we set goals and review progress' },
-  { id: 'team', label: 'Meet your team', blurb: 'Your manager, your buddy and your colleagues' },
-  { id: 'departments', label: 'Meet the departments', blurb: 'Culture videos from every team' },
-  { id: 'feedback', label: 'Schedule buddy feedback', blurb: 'Book your first-week check-in, Monday to Friday' },
+  { id: 'md', group: 'Getting to know Rex', label: "MD's welcome", blurb: 'Please watch the welcome message from our Managing Director/CEO.' },
+  { id: 'company', group: 'Getting to know Rex', label: 'Company overview', blurb: 'Our history, mission and where we are going' },
+  { id: 'values', group: 'Getting to know Rex', label: 'Our values', blurb: 'What we stand for, every day' },
+  { id: 'culture', group: 'Getting to know Rex', label: 'Culture & dress code', blurb: 'How we work together, and what to wear' },
+  { id: 'products', group: 'Getting to know Rex', label: 'Insurance products', blurb: 'What we sell and who it protects' },
+  { id: 'locations', group: 'Getting to know Rex', label: 'Office locations', blurb: 'Find your way around headquarters' },
+  { id: 'policies', group: 'Getting set up', label: 'HR & IT Policies', blurb: 'Read and sign the policies that apply to everyone' },
+  { id: 'tools', group: 'Getting set up', label: 'Your tools & IT setup', blurb: 'Get signed in to the systems you need' },
+  { id: 'performance', group: 'Getting set up', label: 'Performance management', blurb: 'How we set goals and review progress' },
+  { id: 'team', group: 'Meeting your people', label: 'Meet your team', blurb: 'Your manager, your buddy and your colleagues' },
+  { id: 'departments', group: 'Meeting your people', label: 'Meet the departments', blurb: 'Culture videos from every team' },
+  { id: 'feedback', group: 'Meeting your people', label: 'Schedule buddy feedback', blurb: 'Book your first-week check-in, Monday to Friday' },
 ]
 
 export const company = {

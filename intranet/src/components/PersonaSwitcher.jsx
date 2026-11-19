@@ -7,7 +7,7 @@ export default function PersonaSwitcher({ className = '' }) {
   return (
     <label className={`flex min-w-0 items-center gap-2 text-xs text-slate-500 ${className}`}>
       <Eye size={14} className="shrink-0" />
-      <span className="sr-only sm:not-sr-only">View as</span>
+      <span className="sr-only whitespace-nowrap sm:not-sr-only">View as</span>
       <select
         value={user.id}
         onChange={(e) => setPersonaId(e.target.value)}

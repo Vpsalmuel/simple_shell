@@ -441,12 +441,53 @@ const stepViews = {
   team: TeamStep, departments: DepartmentsStep, policies: PoliciesStep, tools: ToolsStep, performance: PerformanceStep, feedback: FeedbackStep,
 }
 
+// The step list: a vertical stepper grouped into three chapters, with a rail joining the markers.
+function Stepper({ index, progress, unlocked, onPick }) {
+  const groups = [...new Set(walkthroughSteps.map((s) => s.group))]
+  return (
+    <div className="space-y-6">
+      {groups.map((g) => (
+        <div key={g}>
+          <p className="mb-2 px-3 text-xs font-medium text-slate-500">{g}</p>
+          <ol>
+            {walkthroughSteps.map((s, i) => {
+              if (s.group !== g) return null
+              const done = progress[s.id]
+              const can = unlocked(i)
+              const current = i === index
+              const last = walkthroughSteps[i + 1]?.group !== g
+              return (
+                <li key={s.id} className="relative" ref={current ? (el) => el?.scrollIntoView({ block: 'nearest' }) : undefined}>
+                  {!last && <span aria-hidden="true" className={`absolute top-8 bottom-0 left-[23px] w-px ${done ? 'bg-emerald-500/60' : 'bg-slate-200 dark:bg-slate-700'}`} />}
+                  <button
+                    disabled={!can}
+                    onClick={() => onPick(i)}
+                    aria-current={current ? 'step' : undefined}
+                    className={`group relative flex w-full items-center gap-3 rounded-lg px-3 py-2 text-left text-sm transition-colors ${current ? 'bg-brand-50 dark:bg-brand-500/15' : can ? 'hover:bg-slate-100 dark:hover:bg-slate-800/70' : 'cursor-not-allowed'}`}
+                  >
+                    <span className={`relative z-10 flex h-[22px] w-[22px] shrink-0 items-center justify-center rounded-full text-[11px] font-semibold tabular-nums ${done ? 'bg-emerald-600 text-white' : current ? 'bg-brand-700 text-white ring-4 ring-brand-100 dark:bg-brand-300 dark:text-slate-900 dark:ring-brand-500/25' : can ? 'border border-slate-300 bg-white text-slate-600 dark:border-slate-600 dark:bg-slate-900 dark:text-slate-300' : 'border border-slate-200 bg-white text-slate-500 dark:border-slate-700 dark:bg-slate-900 dark:text-slate-400'}`}>
+                      {done ? <Check size={12} weight="bold" /> : i + 1}
+                    </span>
+                    <span className={`min-w-0 flex-1 ${current ? 'font-medium text-brand-900 dark:text-white' : done || can ? 'text-slate-700 dark:text-slate-200' : 'text-slate-500'}`}>{s.label}</span>
+                    {!can && <Lock size={12} className="shrink-0 text-slate-400" aria-label="Locked" />}
+                  </button>
+                </li>
+              )
+            })}
+          </ol>
+        </div>
+      ))}
+    </div>
+  )
+}
+
 export default function Walkthrough() {
   const { user, progress, updateProgress, resetWalkthrough, walkthroughDone, ready, signedIn, ssoConfigured, signOut } = useUser()
   const navigate = useNavigate()
   const firstOpen = walkthroughSteps.findIndex((s) => !progress[s.id])
   const [index, setIndex] = useState(firstOpen === -1 ? walkthroughSteps.length : firstOpen)
-  useEffect(() => { window.scrollTo({ top: 0 }) }, [index])
+  const [stepsOpen, setStepsOpen] = useState(false)
+  useEffect(() => { window.scrollTo({ top: 0 }); setStepsOpen(false) }, [index])
 
   if (ready && !signedIn) return <Navigate to="/login" replace />
   if (!user.newStaff) return <Navigate to="/" replace />
@@ -454,7 +495,8 @@ export default function Walkthrough() {
   const step = walkthroughSteps[index]
   const req = step ? requirement(step.id, progress) : { met: true }
   const unlocked = (i) => walkthroughSteps.slice(0, i).every((s) => progress[s.id])
-  const pct = Math.round((walkthroughSteps.filter((s) => progress[s.id]).length / walkthroughSteps.length) * 100)
+  const doneCount = walkthroughSteps.filter((s) => progress[s.id]).length
+  const pct = Math.round((doneCount / walkthroughSteps.length) * 100)
   const View = step ? stepViews[step.id] : null
 
   const next = () => {
@@ -462,87 +504,93 @@ export default function Walkthrough() {
     setIndex(index + 1)
   }
 
-  return (
-    <div className="min-h-screen bg-slate-50 dark:bg-slate-950">
-      <header className="sticky top-0 z-20 border-b border-slate-200 bg-slate-50/85 backdrop-blur-md dark:border-slate-800 dark:bg-slate-950/85">
-        <div className="mx-auto flex h-14 max-w-6xl items-center gap-4 px-4 sm:px-6">
-          <Logo className="h-7 w-auto" />
-          <div className="hidden flex-1 items-center gap-3 md:flex">
-            <div className="h-1 flex-1 rounded-full bg-slate-200 dark:bg-slate-800"><div className="h-1 rounded-full bg-brand-700 transition-[width] duration-500 dark:bg-brand-400" style={{ width: `${pct}%` }} /></div>
-            <span className="text-xs font-medium text-slate-500">{pct}% complete</span>
-          </div>
-          <div className="ml-auto flex min-w-0 items-center gap-2 md:ml-0">
-            {!ssoConfigured && <PersonaSwitcher />}
-            <button onClick={signOut} className="btn-ghost px-2 py-1.5 text-sm sm:px-3" aria-label="Sign out"><LogOut size={16} className="sm:hidden" /><span className="hidden sm:inline">Sign out</span></button>
-          </div>
-        </div>
-      </header>
+  const progressBlock = (
+    <div>
+      <div className="flex items-baseline justify-between text-xs">
+        <span className="font-medium text-slate-900 dark:text-white">{doneCount} of {walkthroughSteps.length} steps</span>
+        <span className="text-slate-500 tabular-nums">{pct}%</span>
+      </div>
+      <div className="mt-2 h-1 rounded-full bg-slate-200 dark:bg-slate-800"><div className="h-1 rounded-full bg-brand-700 transition-[width] duration-500 dark:bg-brand-400" style={{ width: `${pct}%` }} /></div>
+    </div>
+  )
 
-      <div className="mx-auto grid max-w-6xl gap-10 px-4 py-8 sm:px-6 lg:grid-cols-[15rem_1fr] lg:py-10">
-        <nav aria-label="Walkthrough steps" className="min-w-0 lg:sticky lg:top-20 lg:self-start">
-          <div className="mb-2 flex items-baseline justify-between px-1">
-            <p className="text-xs font-medium text-slate-500">Your first day</p>
-            <p className="text-xs text-slate-500 tabular-nums">{walkthroughSteps.filter((s) => progress[s.id]).length} of {walkthroughSteps.length}</p>
+  return (
+    <div className="min-h-[100dvh] bg-white lg:grid lg:grid-cols-[18rem_minmax(0,1fr)] dark:bg-slate-950">
+      {/* Left rail: fixed height; the step list scrolls inside it (17 Nov feedback). */}
+      <aside className="hidden border-r border-slate-200 bg-slate-50 lg:sticky lg:top-0 lg:flex lg:h-[100dvh] lg:flex-col dark:border-slate-800 dark:bg-slate-900/60">
+        <div className="space-y-6 px-5 pt-6 pb-5">
+          <Logo className="h-7 w-auto" />
+          <div>
+            <p className="text-[15px] font-semibold text-slate-900 dark:text-white">Your first days at Rex</p>
+            <p className="mt-0.5 text-xs text-slate-500">Rex Hub unlocks when all steps are done.</p>
           </div>
-          {/* The step list scrolls inside its own panel so every step stays reachable (17 Nov feedback). */}
-          <ol className="steps-scroll flex gap-1.5 overflow-x-auto pb-1 lg:max-h-[min(24rem,calc(100dvh-16rem))] lg:flex-col lg:gap-0.5 lg:overflow-x-hidden lg:overflow-y-scroll lg:rounded-xl lg:border lg:border-slate-200 lg:bg-white lg:p-1.5 lg:pb-1.5 dark:lg:border-slate-800 dark:lg:bg-slate-900">
-            {walkthroughSteps.map((s, i) => {
-              const done = progress[s.id]
-              const can = unlocked(i)
-              const current = i === index
-              return (
-                <li key={s.id} className="shrink-0" ref={current ? (el) => el?.scrollIntoView({ block: 'nearest', inline: 'nearest' }) : undefined}>
-                  <button
-                    disabled={!can}
-                    onClick={() => setIndex(i)}
-                    aria-current={current ? 'step' : undefined}
-                    className={`flex w-full items-center gap-2.5 rounded-lg border px-2.5 py-2 text-left text-sm transition-colors lg:border-0 ${current ? 'border-brand-200 bg-brand-50 text-brand-900 dark:border-brand-700 dark:bg-brand-500/15 dark:text-white' : can ? 'border-slate-200 bg-white hover:bg-slate-50 dark:border-slate-800 dark:bg-slate-900 lg:bg-transparent dark:hover:bg-slate-800/60' : 'cursor-not-allowed border-slate-200 bg-white text-slate-500 dark:border-slate-800 dark:bg-slate-900 lg:bg-transparent'}`}
-                  >
-                    <span className={`flex h-6 w-6 shrink-0 items-center justify-center rounded-full text-[11px] font-semibold tabular-nums ${done ? 'bg-emerald-600 text-white' : current ? 'bg-brand-700 text-white dark:bg-brand-500' : 'bg-slate-100 text-slate-500 dark:bg-slate-800 dark:text-slate-400'}`}>
-                      {done ? <Check size={12} weight="bold" /> : can ? i + 1 : <Lock size={11} />}
-                    </span>
-                    <span className="font-medium whitespace-nowrap lg:whitespace-normal">{s.label}</span>
-                  </button>
-                </li>
-              )
-            })}
-          </ol>
+          {progressBlock}
+        </div>
+        <nav aria-label="Walkthrough steps" className="steps-scroll relative min-h-0 flex-1 overflow-y-auto border-t border-slate-200 px-2 py-5 dark:border-slate-800">
+          <Stepper index={index} progress={progress} unlocked={unlocked} onPick={setIndex} />
+        </nav>
+        <div className="space-y-3 border-t border-slate-200 px-5 py-4 dark:border-slate-800">
           {user.buddy && (
-            <div className="mt-4 hidden items-center gap-3 px-1 text-sm lg:flex">
+            <div className="flex items-center gap-3">
               <Avatar name={user.buddy} size="sm" />
-              <span className="min-w-0"><span className="block text-xs text-slate-500">Your buddy</span><span className="block truncate font-medium text-slate-900 dark:text-white">{user.buddy}</span></span>
+              <span className="min-w-0 flex-1"><span className="block text-xs text-slate-500">Your buddy</span><span className="block truncate text-sm font-medium text-slate-900 dark:text-white">{user.buddy}</span></span>
             </div>
           )}
-          <p className="mt-4 hidden px-1 text-xs leading-relaxed text-slate-500 lg:block">Rex Hub unlocks once you finish all {walkthroughSteps.length} steps. Your progress is saved.</p>
-        </nav>
+          {!ssoConfigured && <PersonaSwitcher />}
+          <button onClick={signOut} className="btn-ghost -ml-2.5 h-8 px-2.5 text-xs"><LogOut size={14} /> Sign out</button>
+        </div>
+      </aside>
 
-        <main className="min-w-0">
+      <div className="flex min-h-[100dvh] min-w-0 flex-col">
+        {/* Mobile header: logo, progress and a toggle for the step list. */}
+        <header className="sticky top-0 z-20 border-b border-slate-200 bg-white/90 px-4 py-3 backdrop-blur-md lg:hidden dark:border-slate-800 dark:bg-slate-950/90">
+          <div className="flex items-center gap-3">
+            <Logo className="h-6 w-auto" />
+            <button onClick={() => setStepsOpen(!stepsOpen)} aria-expanded={stepsOpen} className="btn-secondary ml-auto h-8 px-3 text-xs">
+              {step ? `Step ${index + 1} of ${walkthroughSteps.length}` : 'All steps'} <ChevronDown size={14} className={`transition-transform ${stepsOpen ? 'rotate-180' : ''}`} />
+            </button>
+            <button onClick={signOut} className="btn-ghost h-8 w-8 px-0" aria-label="Sign out"><LogOut size={16} /></button>
+          </div>
+          <div className="mt-3">{progressBlock}</div>
+          {stepsOpen && (
+            <nav aria-label="Walkthrough steps" className="steps-scroll animate-fade-up mt-3 max-h-[55dvh] overflow-y-auto border-t border-slate-200 pt-3 dark:border-slate-800">
+              <Stepper index={index} progress={progress} unlocked={unlocked} onPick={setIndex} />
+              {!ssoConfigured && <div className="mt-4 border-t border-slate-200 px-3 pt-3 dark:border-slate-800"><PersonaSwitcher /></div>}
+            </nav>
+          )}
+        </header>
+
+        <main className="mx-auto w-full max-w-4xl flex-1 px-5 py-10 sm:px-8 lg:px-12 lg:py-14">
           {step ? (
             <div key={step.id} className="animate-fade-up">
-              <p className="text-xs font-medium text-slate-500">Step {index + 1} of {walkthroughSteps.length}</p>
-              <h1 className="mt-1 text-2xl font-semibold text-slate-900 dark:text-white">{index === 0 ? `Welcome to Rex, ${user.firstName}` : step.label}</h1>
-              <p className="mt-1 mb-8 text-sm text-slate-500">{step.blurb}</p>
+              <p className="text-xs font-medium text-slate-500">{step.group}, step {index + 1} of {walkthroughSteps.length}</p>
+              <h1 className="mt-2 text-[28px] leading-tight font-semibold text-slate-900 dark:text-white">{index === 0 ? `Welcome to Rex, ${user.firstName}` : step.label}</h1>
+              <p className="mt-2 mb-10 max-w-[60ch] text-[15px] text-slate-600 dark:text-slate-300">{step.blurb}</p>
               <View progress={progress} update={updateProgress} user={user} />
-              <div className="mt-10 flex flex-col-reverse items-stretch justify-between gap-3 border-t border-slate-200 pt-6 sm:flex-row sm:items-center dark:border-slate-800">
-                <button onClick={() => setIndex(index - 1)} disabled={index === 0} className="btn-ghost"><ArrowLeft size={16} /> Back</button>
-                <div className="flex flex-col items-stretch gap-2 sm:flex-row sm:items-center">
-                  {!req.met && <span className="text-center text-xs text-slate-500">{req.hint}</span>}
-                  <button onClick={next} disabled={!req.met} className="btn-primary px-5">
-                    {index === walkthroughSteps.length - 1 ? 'Finish' : 'Continue'} <ArrowRight size={16} />
-                  </button>
-                </div>
-              </div>
             </div>
           ) : (
-            <div className="animate-fade-up card mx-auto max-w-xl p-10 text-center">
-              <CelebrateIllustration className="mx-auto h-40 w-auto animate-pop" />
-              <h1 className="mt-6 text-2xl font-semibold">You’re all set, {user.firstName}!</h1>
-              <p className="mt-2 text-slate-500">You’ve met the company, your team and every department, signed {policies.length} policies and booked time with {user.buddy}. Rex Hub is now unlocked.</p>
-              <button onClick={() => navigate('/')} disabled={!walkthroughDone} className="btn-primary mt-8 h-10 px-5">Enter Rex Hub <ArrowRight size={18} /></button>
-              <button onClick={() => { resetWalkthrough(); setIndex(0) }} className="btn-ghost mx-auto mt-3 text-xs"><RotateCcw size={14} /> Restart walkthrough (demo)</button>
+            <div className="animate-fade-up mx-auto max-w-lg py-10 text-center">
+              <CelebrateIllustration className="mx-auto h-36 w-auto animate-pop" />
+              <h1 className="mt-8 text-[28px] leading-tight font-semibold text-slate-900 dark:text-white">You’re all set, {user.firstName}</h1>
+              <p className="mt-3 text-[15px] text-slate-600 dark:text-slate-300">You’ve met the company, your team and every department, signed {policies.length} policies and booked time with {user.buddy}. Rex Hub is now unlocked.</p>
+              <button onClick={() => navigate('/')} disabled={!walkthroughDone} className="btn-primary mt-8 h-10 px-5">Enter Rex Hub <ArrowRight size={16} /></button>
+              <button onClick={() => { resetWalkthrough(); setIndex(0) }} className="btn-ghost mx-auto mt-3 h-8 text-xs"><RotateCcw size={14} /> Restart walkthrough (demo)</button>
             </div>
           )}
         </main>
+
+        {step && (
+          <footer className="sticky bottom-0 z-10 border-t border-slate-200 bg-white/90 backdrop-blur-md dark:border-slate-800 dark:bg-slate-950/90">
+            <div className="mx-auto flex w-full max-w-4xl items-center gap-3 px-5 py-3 sm:px-8 lg:px-12">
+              <button onClick={() => setIndex(index - 1)} disabled={index === 0} className="btn-ghost -ml-3"><ArrowLeft size={16} /> Back</button>
+              <span className="ml-auto hidden text-right text-xs text-slate-500 sm:block">{req.met ? (walkthroughSteps[index + 1] ? `Next: ${walkthroughSteps[index + 1].label}` : 'Last step') : req.hint}</span>
+              <button onClick={next} disabled={!req.met} className="btn-primary ml-auto px-5 sm:ml-0">
+                {index === walkthroughSteps.length - 1 ? 'Finish' : 'Continue'} <ArrowRight size={16} />
+              </button>
+            </div>
+            {!req.met && <p className="px-5 pb-3 text-xs text-slate-500 sm:hidden">{req.hint}</p>}
+          </footer>
+        )}
       </div>
     </div>
   )
