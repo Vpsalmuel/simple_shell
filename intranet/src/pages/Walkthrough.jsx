@@ -503,6 +503,15 @@ export default function Walkthrough() {
     updateProgress({ [step.id]: true })
     setIndex(index + 1)
   }
+  // Testing only (demo mode): skip ahead without meeting each step's requirement.
+  const skipAll = () => {
+    updateProgress(Object.fromEntries(walkthroughSteps.map((s) => [s.id, true])))
+    setIndex(walkthroughSteps.length)
+  }
+  const testing = !ssoConfigured
+  const SkipAll = ({ className = '' }) => testing && (
+    <button onClick={skipAll} className={`btn h-8 border border-dashed border-amber-400 px-2.5 text-xs text-amber-800 hover:bg-amber-50 dark:border-amber-500/60 dark:text-amber-300 dark:hover:bg-amber-500/10 ${className}`}>Skip onboarding (test)</button>
+  )
 
   const progressBlock = (
     <div>
@@ -537,7 +546,10 @@ export default function Walkthrough() {
             </div>
           )}
           {!ssoConfigured && <PersonaSwitcher />}
-          <button onClick={signOut} className="btn-ghost -ml-2.5 h-8 px-2.5 text-xs"><LogOut size={14} /> Sign out</button>
+          <div className="flex items-center justify-between gap-2">
+            <button onClick={signOut} className="btn-ghost -ml-2.5 h-8 px-2.5 text-xs"><LogOut size={14} /> Sign out</button>
+            <SkipAll />
+          </div>
         </div>
       </aside>
 
@@ -555,7 +567,7 @@ export default function Walkthrough() {
           {stepsOpen && (
             <nav aria-label="Walkthrough steps" className="steps-scroll animate-fade-up mt-3 max-h-[55dvh] overflow-y-auto border-t border-slate-200 pt-3 dark:border-slate-800">
               <Stepper index={index} progress={progress} unlocked={unlocked} onPick={setIndex} />
-              {!ssoConfigured && <div className="mt-4 border-t border-slate-200 px-3 pt-3 dark:border-slate-800"><PersonaSwitcher /></div>}
+              {!ssoConfigured && <div className="mt-4 flex flex-wrap items-center justify-between gap-2 border-t border-slate-200 px-3 pt-3 dark:border-slate-800"><PersonaSwitcher /><SkipAll /></div>}
             </nav>
           )}
         </header>
@@ -583,6 +595,7 @@ export default function Walkthrough() {
           <footer className="sticky bottom-0 z-10 border-t border-slate-200 bg-white/90 backdrop-blur-md dark:border-slate-800 dark:bg-slate-950/90">
             <div className="mx-auto flex w-full max-w-4xl items-center gap-3 px-5 py-3 sm:px-8 lg:px-12">
               <button onClick={() => setIndex(index - 1)} disabled={index === 0} className="btn-ghost -ml-3"><ArrowLeft size={16} /> Back</button>
+              {testing && !req.met && <button onClick={next} className="btn h-8 border border-dashed border-amber-400 px-2.5 text-xs text-amber-800 hover:bg-amber-50 dark:border-amber-500/60 dark:text-amber-300 dark:hover:bg-amber-500/10">Skip step (test)</button>}
               <span className="ml-auto hidden text-right text-xs text-slate-500 sm:block">{req.met ? (walkthroughSteps[index + 1] ? `Next: ${walkthroughSteps[index + 1].label}` : 'Last step') : req.hint}</span>
               <button onClick={next} disabled={!req.met} className="btn-primary ml-auto px-5 sm:ml-0">
                 {index === walkthroughSteps.length - 1 ? 'Finish' : 'Continue'} <ArrowRight size={16} />
