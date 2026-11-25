@@ -1,7 +1,10 @@
 import { useMemo, useState } from 'react'
-import { useSearchParams } from 'react-router-dom'
-import { CalendarIcon as Calendar, TrayIcon as Inbox, ChatTextIcon as MessageSquare, PlusIcon as Plus, MagnifyingGlassIcon as Search, PaperPlaneTiltIcon as Send, XIcon as X } from '@phosphor-icons/react'
+import { Link, useSearchParams } from 'react-router-dom'
+import { ArrowRightIcon as ArrowRight, CalendarIcon as Calendar, CaretDownIcon as ChevronDown, TrayIcon as Inbox, ChatTextIcon as MessageSquare, PhoneIcon as Phone, MagnifyingGlassIcon as Search, PaperPlaneTiltIcon as Send, XIcon as X } from '@phosphor-icons/react'
 import { closedStatuses, initialRequests, priorities, requestDesks } from '../data/requests'
+import { faqs } from '../data/knowledge'
+import { deskPhotos } from '../data/photos'
+import Photo from '../components/Photo'
 import { useLocalStorage } from '../hooks/useLocalStorage'
 import { useUser } from '../context/UserContext'
 import { useToast } from '../components/Toast'
@@ -27,7 +30,7 @@ function NewRequest({ to, onCreate, onClose }) {
   const [f, setF] = useState({ title: '', to: desk(to).dept, type: desk(to).types[0], priority: 'Medium', due: '', description: '' })
   const set = (k) => (e) => setF({ ...f, [k]: e.target.value })
   return (
-    <Modal open onClose={onClose} title="New request" wide>
+    <Modal open onClose={onClose} title={`Ask ${desk(f.to).short} for help`} wide>
       <form onSubmit={(e) => { e.preventDefault(); onCreate(f) }} className="grid gap-4 sm:grid-cols-2">
         <label className="block text-sm font-medium sm:col-span-2" htmlFor="rq-title">What do you need?
           <input id="rq-title" required className="input mt-1" value={f.title} onChange={set('title')} placeholder="e.g. Access to the reinsurance ledger" />
@@ -135,12 +138,32 @@ function Detail({ req, user, onUpdate, onClose }) {
   )
 }
 
-export default function Requests() {
+function Faqs() {
+  const [open, setOpen] = useState(-1)
+  return (
+    <ul className="card divide-y divide-slate-100 dark:divide-slate-800">
+      {faqs.map((x, i) => (
+        <li key={x.q}>
+          <button onClick={() => setOpen(open === i ? -1 : i)} aria-expanded={open === i} className="flex w-full items-center justify-between gap-4 px-5 py-3.5 text-left text-sm font-medium text-slate-900 transition-colors hover:bg-slate-50 dark:text-white dark:hover:bg-slate-800/50">
+            {x.q}<ChevronDown size={16} className={`shrink-0 text-slate-400 transition-transform duration-200 ${open === i ? 'rotate-180' : ''}`} />
+          </button>
+          <div className={`grid transition-[grid-template-rows] duration-300 ease-out ${open === i ? 'grid-rows-[1fr]' : 'grid-rows-[0fr]'}`}>
+            <p className="overflow-hidden px-5 text-sm text-slate-600 dark:text-slate-300"><span className="block pb-4">{x.a}</span></p>
+          </div>
+        </li>
+      ))}
+    </ul>
+  )
+}
+
+// Help Desk: one place to ask IT, HR, Admin or Brand for help and track every request.
+// It replaces the separate Help Desk and Requests pages, which shared one ticket store and overlapped.
+export default function HelpDesk() {
   const { user } = useUser()
   const toast = useToast()
   const [requests, setRequests] = useLocalStorage('rex-requests-v2', initialRequests)
   const [params, setParams] = useSearchParams()
-  const [tab, setTab] = useState(params.get('tab') ?? 'all')
+  const [tab, setTab] = useState(params.get('tab') ?? 'mine')
   const [q, setQ] = useState('')
   const [creating, setCreating] = useState(params.get('new') === '1' ? (params.get('to') ?? requestDesks[0].dept) : null)
   const selected = requests.find((r) => r.id === params.get('id'))
@@ -172,21 +195,28 @@ export default function Requests() {
 
   return (
     <div>
-      <PageHeader title="Requests" description="Ask Brand, IT or Admin for help, and track what you’ve asked for." />
+      <PageHeader title="Help Desk" description="Ask IT, HR, Admin or Brand for help, and track everything you’ve asked for. Standard requests are picked up within 2 working hours." />
 
-      {/* 17 Nov review: one place to send requests to Brand, IT and Admin. */}
-      <section aria-label="Send a request" className="mb-10 grid gap-3 md:grid-cols-3">
+      <section aria-label="Get help" className="stagger mb-12 grid gap-4 sm:grid-cols-2 xl:grid-cols-4">
         {requestDesks.map((d) => (
-          <button key={d.dept} onClick={() => setCreating(d.dept)} className="card card-hover group flex items-start gap-4 p-5 text-left">
-            <span className="flex h-10 w-10 shrink-0 items-center justify-center rounded-lg bg-brand-50 text-brand-700 transition-colors group-hover:bg-brand-700 group-hover:text-white dark:bg-brand-500/15 dark:text-brand-200 dark:group-hover:bg-brand-500"><Icon name={d.icon} size={20} /></span>
-            <span className="min-w-0">
-              <span className="flex items-center gap-1.5 text-sm font-semibold text-slate-900 dark:text-white">Request from {d.short} <Plus size={14} className="text-slate-400 transition-colors group-hover:text-brand-700 dark:group-hover:text-brand-300" /></span>
-              <span className="mt-0.5 block text-sm text-slate-500">{d.desc}</span>
-            </span>
+          <button key={d.dept} onClick={() => setCreating(d.dept)} className="card card-lift img-zoom group flex flex-col overflow-hidden text-left">
+            <div className="relative">
+              <Photo src={deskPhotos[d.dept]} alt="" className="aspect-[16/10] w-full" rounded="rounded-none" />
+              <span className="absolute bottom-3 left-3 flex h-9 w-9 items-center justify-center rounded-lg bg-white text-brand-700 shadow-sm dark:bg-slate-900 dark:text-brand-200"><Icon name={d.icon} size={18} /></span>
+            </div>
+            <div className="flex flex-1 flex-col p-4">
+              <span className="text-sm font-semibold text-slate-900 dark:text-white">{d.short === d.dept ? d.dept : d.short}</span>
+              <span className="mt-0.5 text-sm text-slate-500">{d.desc}</span>
+              <span className="mt-4 flex items-center justify-between gap-2 text-xs">
+                <span className="inline-flex items-center gap-1 text-slate-500"><Phone size={12} />{d.contact}</span>
+                <span className="inline-flex items-center gap-1 font-medium text-brand-700 dark:text-brand-300">New request <ArrowRight size={12} className="transition-transform duration-200 group-hover:translate-x-0.5" /></span>
+              </span>
+            </div>
           </button>
         ))}
       </section>
 
+      <h2 className="section-title mb-1">Your requests</h2>
       <div className="mb-4 flex flex-col gap-3 border-b border-slate-200 lg:flex-row lg:items-end lg:justify-between dark:border-slate-800">
         <nav className="-mb-px flex gap-6 overflow-x-auto" role="tablist" aria-label="Filter requests">
           {tabs.map((t) => (
@@ -203,7 +233,7 @@ export default function Requests() {
       </div>
 
       {shown.length === 0 ? (
-        <div className="card px-6 py-12 text-center"><p className="font-medium text-slate-900 dark:text-white">No requests here</p><p className="mt-1 text-sm text-slate-500">Try another tab, or send a new request above.</p></div>
+        <div className="card px-6 py-12 text-center"><p className="font-medium text-slate-900 dark:text-white">No requests here</p><p className="mt-1 text-sm text-slate-500">Try another tab, or pick a desk above to ask for help.</p></div>
       ) : (
         <ul className="card divide-y divide-slate-100 dark:divide-slate-800">
           {shown.map((r) => (
@@ -221,6 +251,14 @@ export default function Requests() {
           ))}
         </ul>
       )}
+
+      <section className="mt-12">
+        <div className="mb-3 flex items-end justify-between gap-4">
+          <h2 className="section-title">Common questions</h2>
+          <Link to="/knowledge" className="link text-xs">Knowledge & Learning</Link>
+        </div>
+        <Faqs />
+      </section>
 
       {creating && <NewRequest to={creating} onCreate={create} onClose={() => setCreating(null)} />}
       {selected && <Detail req={selected} user={user} onUpdate={update} onClose={() => setParams({})} />}

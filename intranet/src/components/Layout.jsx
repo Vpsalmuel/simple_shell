@@ -51,11 +51,12 @@ function Sidebar({ onNavigate }) {
                   end={end}
                   onClick={onNavigate}
                   className={({ isActive }) =>
-                    `flex h-8 items-center gap-2.5 rounded-lg px-2.5 text-sm transition-colors ${isActive ? 'bg-brand-50 font-medium text-brand-800 dark:bg-brand-500/15 dark:text-white' : 'text-slate-600 hover:bg-slate-100 hover:text-slate-900 dark:text-slate-300 dark:hover:bg-slate-800 dark:hover:text-white'}`
+                    `group relative flex h-8 items-center gap-2.5 rounded-lg px-2.5 text-sm transition-colors ${isActive ? 'bg-brand-50 font-medium text-brand-800 dark:bg-brand-500/15 dark:text-white' : 'text-slate-600 hover:bg-slate-100 hover:text-slate-900 dark:text-slate-300 dark:hover:bg-slate-800 dark:hover:text-white'}`
                   }
                 >
                   {({ isActive }) => (
                     <>
+                      <span aria-hidden="true" data-active={isActive} className="nav-line absolute top-1.5 bottom-1.5 -left-3 w-[3px] rounded-r-full bg-accent-600" />
                       <Ico size={17} weight={isActive ? 'fill' : 'regular'} className={isActive ? 'text-brand-700 dark:text-brand-300' : 'text-slate-500 dark:text-slate-400'} />
                       {label}
                     </>

@@ -47,8 +47,8 @@ export default function Admin() {
       <PageHeader title="Admin Workspace" description={`Signed in as ${user.dept}. Publish company news, share recognition and keep an eye on requests.`} actions={<Link to="/celebrations" className="btn-secondary">Share recognition</Link>} />
 
       <section className="card grid divide-y divide-slate-100 overflow-hidden sm:grid-cols-3 sm:divide-x sm:divide-y-0 dark:divide-slate-800" aria-label="Overview">
-        <Stat label="Open requests, all teams" value={open.length} to="/requests?tab=open" />
-        <Stat label={`${user.dept} queue`} value={open.filter((r) => r.to === user.dept).length} to="/requests?tab=queue" />
+        <Stat label="Open requests, all teams" value={open.length} to="/help?tab=open" />
+        <Stat label={`${user.dept} queue`} value={open.filter((r) => r.to === user.dept).length} to="/help?tab=queue" />
         <Stat label="Published stories" value={news.length} to="/news" />
       </section>
 

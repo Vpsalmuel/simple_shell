@@ -8,6 +8,7 @@ import Photo from '../components/Photo'
 import SectionHeader from '../components/SectionHeader'
 import VideoPlayer from '../components/VideoPlayer'
 import PageHeader from '../components/PageHeader'
+import { departmentPhotos } from '../data/photos'
 
 // Which document-library categories belong to which department.
 const docCategories = { Claims: ['Claims'], Underwriting: ['Underwriting'], HR: ['HR'], 'Legal & Compliance': ['Compliance'], Finance: ['Templates'] }
@@ -48,6 +49,8 @@ function Detail({ d }) {
           </div>
         </PageHeader>
       </div>
+
+      <Photo src={d.image ?? departmentPhotos[d.id]} alt="" className="mb-10 aspect-[21/8] w-full" rounded="rounded-xl" />
 
       <div className="grid grid-cols-1 gap-8 lg:grid-cols-[minmax(0,1fr)_20rem]">
         <div className="min-w-0 space-y-8">
@@ -108,10 +111,10 @@ export default function Departments() {
   return (
     <div>
       <PageHeader title="Departments" description={`${departments.length} teams, ${departments.reduce((t, d) => t + d.headcount, 0)} colleagues. Names and details are being confirmed with each department.`} />
-      <div className="grid gap-5 sm:grid-cols-2 xl:grid-cols-3">
+      <div className="stagger grid gap-5 sm:grid-cols-2 xl:grid-cols-3">
         {departments.map((d) => (
-          <Link key={d.id} to={`/departments/${d.id}`} className="card card-hover group flex flex-col overflow-hidden">
-            <Photo src={d.image} alt="" className="aspect-[16/9] w-full" rounded="rounded-none" />
+          <Link key={d.id} to={`/departments/${d.id}`} className="card card-lift img-zoom group flex flex-col overflow-hidden">
+            <Photo src={d.image ?? departmentPhotos[d.id]} alt="" className="aspect-[16/9] w-full" rounded="rounded-none" />
             <div className="flex flex-1 flex-col gap-1.5 p-5">
               <h2 className="text-[15px] font-semibold text-slate-900 group-hover:text-brand-700 dark:text-white dark:group-hover:text-brand-300">{d.name}</h2>
               <p className="line-clamp-2 text-sm text-slate-500">{d.what}</p>

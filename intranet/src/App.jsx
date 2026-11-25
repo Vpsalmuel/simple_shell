@@ -1,4 +1,4 @@
-import { Navigate, Route, Routes } from 'react-router-dom'
+import { Navigate, Route, Routes, useLocation } from 'react-router-dom'
 import Layout from './components/Layout'
 import Home from './pages/Home'
 import Walkthrough from './pages/Walkthrough'
@@ -8,12 +8,17 @@ import Events from './pages/Events'
 import CoursePlayer from './pages/CoursePlayer'
 import Departments from './pages/Departments'
 import RequireAccess from './components/RequireAccess'
-import Requests from './pages/Requests'
 import Knowledge from './pages/Knowledge'
-import Help from './pages/Help'
+import HelpDesk from './pages/HelpDesk'
 import Admin from './pages/Admin'
 import Celebrations from './pages/Celebrations'
 import Wellbeing from './pages/Wellbeing'
+
+// Requests merged into the Help Desk; keep old links (and their ?tab= / ?id=) working.
+function ToHelp() {
+  const { search } = useLocation()
+  return <Navigate to={`/help${search}`} replace />
+}
 
 export default function App() {
   return (
@@ -22,11 +27,10 @@ export default function App() {
       <Route path="welcome" element={<Walkthrough />} />
       <Route element={<Layout />}>
         <Route index element={<Home />} />
-        <Route path="requests" element={<Requests />} />
         <Route path="knowledge" element={<Knowledge />} />
         <Route path="knowledge/:id" element={<Knowledge />} />
         <Route path="learning/:id" element={<CoursePlayer />} />
-        <Route path="help" element={<Help />} />
+        <Route path="help" element={<HelpDesk />} />
         <Route path="admin" element={<RequireAccess to="/admin"><Admin /></RequireAccess>} />
         <Route path="celebrations" element={<Celebrations />} />
         <Route path="wellbeing" element={<Wellbeing />} />
@@ -41,6 +45,7 @@ export default function App() {
         <Route path="milestones" element={<Navigate to="/celebrations" replace />} />
         <Route path="rewards" element={<Navigate to="/wellbeing" replace />} />
         <Route path="people" element={<Navigate to="/" replace />} />
+        <Route path="requests" element={<ToHelp />} />
         <Route path="*" element={<Home />} />
       </Route>
     </Routes>

@@ -1,9 +1,11 @@
 // Cross-department requests (adapted from the AI Studio prototype's sample tickets).
-// 17 Nov review: requests go to three departments: Brand (Brand & Communications), IT and Admin.
+// Help Desk and Requests are one page: every ticket goes to one of these desks.
+// Brand, IT and Admin come from the 17 Nov review; HR carries over from the old Help Desk.
 export const requestDesks = [
-  { dept: 'Brand & Communications', short: 'Brand', icon: 'Palette', desc: 'Branded items, design, announcements and event support', types: ['Branded items', 'Design request', 'Announcement or newsletter', 'Event support'] },
-  { dept: 'IT', short: 'IT', icon: 'Desktop', desc: 'System access, devices, email and network problems', types: ['System access', 'Device issue', 'Email or Teams', 'Network or VPN'] },
-  { dept: 'Admin', short: 'Admin', icon: 'Building2', desc: 'Facilities, office supplies, travel and courier', types: ['Facilities', 'Office supplies', 'Travel booking', 'Courier or dispatch'] },
+  { dept: 'IT', short: 'IT', icon: 'Desktop', contact: 'Ext. 999', desc: 'Access, passwords, devices, email and VPN', types: ['System access', 'Password or sign-in', 'Device issue', 'Email or Teams', 'Network or VPN'] },
+  { dept: 'HR', short: 'HR', icon: 'Users', contact: 'Ext. 210', desc: 'Leave, payroll queries, benefits and letters', types: ['Payroll query', 'Leave question', 'Benefits and HMO', 'Employment letter'] },
+  { dept: 'Admin', short: 'Admin', icon: 'Building2', contact: 'Ext. 120', desc: 'Facilities, supplies, travel and courier', types: ['Facilities', 'Office supplies', 'Travel booking', 'Courier or dispatch'] },
+  { dept: 'Brand & Communications', short: 'Brand', icon: 'Palette', contact: 'Ext. 150', desc: 'Branded items, design and announcements', types: ['Branded items', 'Design request', 'Announcement or newsletter', 'Event support'] },
 ]
 export const requestDepts = requestDesks.map((d) => d.dept)
 export const requestTypes = requestDesks.flatMap((d) => d.types)

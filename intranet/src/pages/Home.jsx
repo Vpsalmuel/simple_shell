@@ -16,6 +16,8 @@ import Icon from '../components/Icon'
 import Photo from '../components/Photo'
 import StatusBadge from '../components/StatusBadge'
 import MeetingRoomModal from '../components/MeetingRoomModal'
+import { wellbeingPhotos } from '../data/photos'
+import { gymChampion, nextHike } from '../data/culture'
 
 // Home layout: a main column for what needs action and what's new, and a right rail for the tools and
 // people things staff check daily. One card style, one radius, 15px section titles, no metrics, no carousel.
@@ -41,7 +43,7 @@ function Card({ title, action, children, className = '', ...rest }) {
   )
 }
 
-const MoreLink = ({ to, children }) => <Link to={to} className="link inline-flex items-center gap-1 text-xs">{children} <ArrowRight size={12} /></Link>
+const MoreLink = ({ to, children }) => <Link to={to} className="link group/more inline-flex items-center gap-1 text-xs">{children} <ArrowRight size={12} className="transition-transform duration-200 group-hover/more:translate-x-0.5" /></Link>
 
 // One important notice, fixed in place. People can dismiss it.
 function Notice() {
@@ -128,7 +130,7 @@ function Tasks({ user }) {
             </TaskRow>
           ))}
           {waiting.length > 0 && (
-            <TaskRow icon={Inbox} title={`${waiting.length} ${waiting.length === 1 ? 'request is' : 'requests are'} waiting for ${user.dept}`} meta="Assign, reply or close them in Requests" to="/requests?tab=queue" />
+            <TaskRow icon={Inbox} title={`${waiting.length} ${waiting.length === 1 ? 'request is' : 'requests are'} waiting for ${user.dept}`} meta="Assign, reply or close them in the Help Desk" to="/help?tab=queue" />
           )}
         </ul>
       )}
@@ -152,7 +154,7 @@ function QuickTools() {
       <div className="grid grid-cols-3 gap-1 px-3 pb-3">
         {companyTools.map((t) => (
           <ToolLink key={t.id} tool={t} onAction={() => setRoom(true)} className="group flex flex-col items-center gap-2 rounded-lg px-1 py-3 text-center transition-colors hover:bg-slate-50 dark:hover:bg-slate-800/60">
-            <span className="flex h-10 w-10 items-center justify-center rounded-lg bg-brand-50 text-brand-700 transition-colors group-hover:bg-brand-700 group-hover:text-white dark:bg-brand-500/15 dark:text-brand-200 dark:group-hover:bg-brand-500"><Icon name={t.icon} size={20} /></span>
+            <span className="icon-lift flex h-10 w-10 items-center justify-center rounded-lg bg-brand-50 text-brand-700 group-hover:bg-brand-700 group-hover:text-white dark:bg-brand-500/15 dark:text-brand-200 dark:group-hover:bg-brand-500"><Icon name={t.icon} size={20} /></span>
             <span className="text-xs leading-tight font-medium text-slate-700 dark:text-slate-200">{t.label}</span>
           </ToolLink>
         ))}
@@ -184,13 +186,34 @@ function CelebrationsCard() {
   )
 }
 
+// A photo card that points people to Health & Wellbeing: this month's hike and the Gym Champion.
+function WellbeingCard() {
+  const date = new Date(`${nextHike.date}T00:00`).toLocaleDateString(undefined, { weekday: 'short', day: 'numeric', month: 'short' })
+  return (
+    <Link to="/wellbeing" className="card card-lift img-zoom group block overflow-hidden">
+      <div className="relative">
+        <Photo src={wellbeingPhotos.fitness} alt="" className="aspect-[16/9] w-full" rounded="rounded-none" />
+        <div className="absolute inset-0 bg-gradient-to-t from-brand-950/85 via-brand-950/20 to-transparent" aria-hidden="true" />
+        <div className="absolute inset-x-0 bottom-0 p-4 text-white">
+          <p className="text-xs text-white/80">Health & Wellbeing</p>
+          <p className="mt-0.5 text-[15px] leading-snug font-semibold">Gym Champion: {gymChampion.name}</p>
+        </div>
+      </div>
+      <p className="flex items-center justify-between gap-2 px-4 py-3 text-xs text-slate-600 dark:text-slate-300">
+        <span>Next hike: {date}, {nextHike.time}</span>
+        <ArrowRight size={14} className="text-slate-400 transition-transform duration-200 group-hover:translate-x-0.5 group-hover:text-brand-700 dark:group-hover:text-brand-300" />
+      </p>
+    </Link>
+  )
+}
+
 function News() {
   const { news } = useNews()
   const featured = news.find((n) => n.featured) ?? news[0]
   const rest = news.filter((n) => n !== featured).slice(0, 4)
   return (
     <Card title="Company news" action={<MoreLink to="/news">All news</MoreLink>}>
-      <Link to={`/news/${featured.id}`} className="group mx-5 mt-1 grid gap-4 sm:grid-cols-[minmax(0,13rem)_1fr]">
+      <Link to={`/news/${featured.id}`} className="img-zoom group mx-5 mt-1 grid gap-4 sm:grid-cols-[minmax(0,13rem)_1fr]">
         <Photo src={featured.image} alt="" className="aspect-[4/3] w-full" rounded="rounded-lg" />
         <span className="min-w-0 self-center">
           <span className="text-xs font-medium text-accent-700 dark:text-accent-400">{featured.category}</span>
@@ -296,14 +319,15 @@ export default function Home() {
       {user.newStaff && <FirstNinetyDays user={user} />}
       <Notice />
       <div className="grid grid-cols-1 gap-6 lg:grid-cols-[minmax(0,1fr)_19rem] xl:gap-8">
-        <div className="min-w-0 space-y-6">
+        <div className="stagger min-w-0 space-y-6">
           <Tasks user={user} />
           <News />
           <UpcomingEvents />
         </div>
-        <aside className="min-w-0 space-y-6">
+        <aside className="stagger min-w-0 space-y-6">
           <QuickTools />
           <CelebrationsCard />
+          <WellbeingCard />
           <Poll />
         </aside>
       </div>
