@@ -3,6 +3,7 @@ import { CalendarDotsIcon as CalendarDays, CheckIcon as Check, CaretLeftIcon as 
 import { events } from '../data'
 import { useLocalStorage } from '../hooks/useLocalStorage'
 import { useToast } from '../components/Toast'
+import PageHeader from '../components/PageHeader'
 
 const types = ['Company', 'Learning', 'Social', 'Business']
 const typeTone = {
@@ -27,23 +28,24 @@ function useRsvp() {
 }
 
 function EventCard({ e, going, onToggle }) {
+  const d = new Date(`${e.date}T00:00`)
   return (
-    <article className="card flex gap-4 p-4">
-      <div className="flex h-14 w-14 shrink-0 flex-col items-center justify-center rounded-xl bg-brand-700 text-white">
-        <span className="text-[10px] font-semibold uppercase">{new Date(`${e.date}T00:00`).toLocaleDateString(undefined, { month: 'short' })}</span>
-        <span className="font-display text-xl leading-none font-bold">{new Date(`${e.date}T00:00`).getDate()}</span>
+    <article className="flex gap-4 py-4">
+      <div className="w-10 shrink-0 text-center">
+        <p className="text-[11px] font-medium text-accent-700 uppercase dark:text-accent-400">{d.toLocaleDateString(undefined, { month: 'short' })}</p>
+        <p className="text-lg leading-tight font-semibold text-slate-900 tabular-nums dark:text-white">{d.getDate()}</p>
       </div>
       <div className="min-w-0 flex-1">
-        <span className={`chip ${typeTone[e.type]}`}>{e.type}</span>
-        <h3 className="mt-1.5 font-semibold">{e.title}</h3>
-        <p className="mt-1 text-sm text-slate-500">{e.desc}</p>
-        <div className="mt-2 flex flex-wrap gap-x-4 gap-y-1 text-xs text-slate-500">
-          <span className="inline-flex items-center gap-1"><Clock size={12} /> {e.time}-{e.end}</span>
+        <h3 className="text-sm font-semibold text-slate-900 dark:text-white">{e.title}</h3>
+        <p className="mt-0.5 text-sm text-slate-600 dark:text-slate-300">{e.desc}</p>
+        <div className="mt-1.5 flex flex-wrap items-center gap-x-3 gap-y-1 text-xs text-slate-500">
+          <span className={`chip ${typeTone[e.type]}`}>{e.type}</span>
+          <span className="inline-flex items-center gap-1"><Clock size={12} /> {e.time} to {e.end}</span>
           <span className="inline-flex items-center gap-1"><MapPin size={12} /> {e.place}</span>
           <span className="inline-flex items-center gap-1"><Users size={12} /> {e.host}</span>
         </div>
       </div>
-      <button onClick={() => onToggle(e)} className={`btn shrink-0 self-start px-3 py-1.5 ${going ? 'bg-emerald-600 text-white hover:bg-emerald-700' : 'border border-slate-200 hover:border-brand-400 dark:border-slate-700'}`}>
+      <button onClick={() => onToggle(e)} aria-pressed={going} className={going ? 'btn h-8 shrink-0 self-start px-3 text-xs text-emerald-700 dark:text-emerald-300' : 'btn-secondary h-8 shrink-0 self-start px-3 text-xs'}>
         {going ? <><Check size={14} /> Going</> : 'RSVP'}
       </button>
     </article>
@@ -70,42 +72,45 @@ export default function Events() {
   const upcoming = shown.filter((e) => e.date >= ymd(today)).sort((a, b) => a.date.localeCompare(b.date))
   const dayEvents = byDay[selected] ?? []
   const toggleType = (t) => setActive(active.includes(t) ? active.filter((x) => x !== t) : [...active, t])
+  const seg = (on) => `inline-flex h-7 items-center gap-1.5 rounded-md px-2.5 text-sm transition-colors ${on ? 'bg-white text-slate-900 shadow-[0_1px_2px_rgba(30,45,100,0.12)] dark:bg-slate-700 dark:text-white' : 'text-slate-600 hover:text-slate-900 dark:text-slate-300 dark:hover:text-white'}`
 
   return (
-    <div className="space-y-6">
-      <div className="flex flex-wrap items-end justify-between gap-4">
-        <div>
-          <h1 className="text-2xl font-bold text-slate-900 sm:text-3xl dark:text-white">Events</h1>
-          <p className="mt-1 text-sm text-slate-500">{upcoming.length} upcoming · you’re going to {rsvp.length}</p>
-        </div>
-        <div className="flex rounded-xl border border-slate-200 bg-white p-1 dark:border-slate-700 dark:bg-slate-900">
-          <button onClick={() => setView('month')} className={`btn px-3 py-1.5 ${view === 'month' ? 'bg-brand-700 text-white' : 'text-slate-600 dark:text-slate-300'}`}><CalendarDays size={16} /> Month</button>
-          <button onClick={() => setView('list')} className={`btn px-3 py-1.5 ${view === 'list' ? 'bg-brand-700 text-white' : 'text-slate-600 dark:text-slate-300'}`}><List size={16} /> Upcoming</button>
-        </div>
-      </div>
+    <div>
+      <PageHeader
+        title="Events"
+        description={`${upcoming.length} upcoming. You’re going to ${rsvp.length}.`}
+        actions={
+          <div className="inline-flex rounded-lg bg-slate-100 p-1 dark:bg-slate-800" role="group" aria-label="View">
+            <button onClick={() => setView('month')} aria-pressed={view === 'month'} className={seg(view === 'month')}><CalendarDays size={16} /> Month</button>
+            <button onClick={() => setView('list')} aria-pressed={view === 'list'} className={seg(view === 'list')}><List size={16} /> Upcoming</button>
+          </div>
+        }
+      />
 
-      <div className="flex flex-wrap gap-2" role="group" aria-label="Filter by type">
+      <div className="mb-5 flex flex-wrap items-center gap-2" role="group" aria-label="Filter by type">
+        <span className="mr-1 text-xs text-slate-500">Show</span>
         {types.map((t) => (
-          <button key={t} onClick={() => toggleType(t)} aria-pressed={active.includes(t)} className={`chip px-3 py-1.5 text-sm transition ${active.includes(t) ? typeTone[t] : 'bg-white text-slate-400 ring-1 ring-slate-200 line-through dark:bg-slate-900 dark:ring-slate-700'}`}>{t}</button>
+          <button key={t} onClick={() => toggleType(t)} aria-pressed={active.includes(t)} className={`chip h-7 px-2.5 text-xs transition-colors ${active.includes(t) ? typeTone[t] : 'bg-transparent text-slate-500 ring-1 ring-slate-200 dark:ring-slate-700'}`}>{t}</button>
         ))}
       </div>
 
       {view === 'month' ? (
-        <div className="grid gap-6 xl:grid-cols-[1fr_360px] [&>*]:min-w-0">
-          <section className="card p-4 sm:p-5">
-            <div className="mb-4 flex items-center justify-between">
-              <h2 className="text-lg font-bold">{month.toLocaleDateString(undefined, { month: 'long', year: 'numeric' })}</h2>
-              <div className="flex gap-1">
-                <button onClick={() => setMonth(new Date(month.getFullYear(), month.getMonth() - 1, 1))} className="btn-ghost p-2" aria-label="Previous month"><ChevronLeft size={18} /></button>
-                <button onClick={() => { setMonth(new Date(today.getFullYear(), today.getMonth(), 1)); setSelected(ymd(today)) }} className="btn-ghost px-3 py-1.5 text-xs">Today</button>
-                <button onClick={() => setMonth(new Date(month.getFullYear(), month.getMonth() + 1, 1))} className="btn-ghost p-2" aria-label="Next month"><ChevronRight size={18} /></button>
+        <div className="grid gap-8 xl:grid-cols-[minmax(0,1fr)_20rem]">
+          <section className="card overflow-hidden">
+            <div className="flex items-center justify-between px-5 py-3">
+              <h2 className="section-title">{month.toLocaleDateString(undefined, { month: 'long', year: 'numeric' })}</h2>
+              <div className="flex items-center gap-1">
+                <button onClick={() => setMonth(new Date(month.getFullYear(), month.getMonth() - 1, 1))} className="btn-ghost h-8 w-8 px-0" aria-label="Previous month"><ChevronLeft size={16} /></button>
+                <button onClick={() => { setMonth(new Date(today.getFullYear(), today.getMonth(), 1)); setSelected(ymd(today)) }} className="btn-secondary h-8 px-3 text-xs">Today</button>
+                <button onClick={() => setMonth(new Date(month.getFullYear(), month.getMonth() + 1, 1))} className="btn-ghost h-8 w-8 px-0" aria-label="Next month"><ChevronRight size={16} /></button>
               </div>
             </div>
-            <div className="grid grid-cols-7 gap-1 text-center text-[11px] font-semibold tracking-wide text-slate-400 uppercase">
-              {weekdays.map((d) => <div key={d} className="py-1">{d}</div>)}
+            {/* Ruled grid: every day is a cell bounded by 1px lines (17 Nov review). */}
+            <div className="grid grid-cols-7 border-t border-slate-200 bg-slate-50 text-center text-xs font-medium text-slate-500 dark:border-slate-800 dark:bg-slate-900/60">
+              {weekdays.map((d) => <div key={d} className="border-r border-slate-200 py-2 last:border-r-0 dark:border-slate-800">{d}</div>)}
             </div>
-            <div className="grid grid-cols-7 gap-1">
-              {cells.map((d) => {
+            <div className="grid grid-cols-7 border-t border-slate-200 dark:border-slate-800">
+              {cells.map((d, i) => {
                 const key = ymd(d)
                 const inMonth = d.getMonth() === month.getMonth()
                 const evs = byDay[key] ?? []
@@ -117,30 +122,31 @@ export default function Events() {
                     onClick={() => setSelected(key)}
                     aria-label={`${longDate(key)}${evs.length ? `, ${evs.length} event${evs.length > 1 ? 's' : ''}` : ''}`}
                     aria-pressed={isSel}
-                    className={`flex min-h-16 flex-col items-stretch gap-1 rounded-xl p-1.5 text-left transition sm:min-h-24 ${isSel ? 'bg-brand-50 ring-2 ring-brand-500 dark:bg-slate-800' : 'hover:bg-slate-50 dark:hover:bg-slate-800/60'} ${inMonth ? '' : 'opacity-70'}`}
+                    className={`relative flex min-h-16 flex-col items-stretch gap-1 border-slate-200 p-1.5 text-left transition-colors sm:min-h-24 dark:border-slate-800 ${(i + 1) % 7 ? 'border-r' : ''} ${i < cells.length - 7 ? 'border-b' : ''} ${isSel ? 'bg-brand-50 dark:bg-brand-500/10' : inMonth ? 'hover:bg-slate-50 dark:hover:bg-slate-800/50' : 'bg-slate-50/70 dark:bg-slate-950/40'}`}
                   >
-                    <span className={`flex h-6 w-6 items-center justify-center rounded-full text-xs font-semibold ${isToday ? 'bg-accent-700 text-white' : ''}`}>{d.getDate()}</span>
-                    {evs.slice(0, 2).map((e) => <span key={e.id} className={`hidden truncate rounded-md px-1.5 py-0.5 text-[11px] font-medium sm:block ${typeTone[e.type]}`}>{e.title}</span>)}
-                    {evs.length > 0 && <span className="flex gap-0.5 sm:hidden">{evs.map((e) => <i key={e.id} className={`h-1.5 w-1.5 rounded-full ${typeTone[e.type]}`} />)}</span>}
-                    {evs.length > 2 && <span className="hidden text-[11px] text-slate-500 sm:block">+{evs.length - 2} more</span>}
+                    {isSel && <span className="pointer-events-none absolute inset-0 ring-2 ring-brand-500 ring-inset dark:ring-brand-400" />}
+                    <span className={`flex h-6 w-6 items-center justify-center rounded-full text-xs tabular-nums ${isToday ? 'bg-accent-700 font-semibold text-white' : inMonth ? 'text-slate-800 dark:text-slate-200' : 'text-slate-500'}`}>{d.getDate()}</span>
+                    {evs.slice(0, 2).map((e) => <span key={e.id} className={`hidden truncate rounded px-1.5 py-0.5 text-[11px] font-medium sm:block ${typeTone[e.type]}`}>{e.title}</span>)}
+                    {evs.length > 0 && <span className="flex gap-0.5 px-1 sm:hidden">{evs.map((e) => <i key={e.id} className={`h-1.5 w-1.5 rounded-full ${typeTone[e.type]}`} />)}</span>}
+                    {evs.length > 2 && <span className="hidden px-1 text-[11px] text-slate-500 sm:block">+{evs.length - 2} more</span>}
                   </button>
                 )
               })}
             </div>
           </section>
           <section aria-live="polite">
-            <h2 className="mb-3 text-sm font-semibold text-slate-500">{longDate(selected)}</h2>
+            <h2 className="section-title">{longDate(selected)}</h2>
             {dayEvents.length ? (
-              <div className="space-y-3">{dayEvents.map((e) => <EventCard key={e.id} e={e} going={rsvp.includes(e.id)} onToggle={toggleRsvp} />)}</div>
+              <div className="divide-y divide-slate-200 dark:divide-slate-800">{dayEvents.map((e) => <EventCard key={e.id} e={e} going={rsvp.includes(e.id)} onToggle={toggleRsvp} />)}</div>
             ) : (
-              <div className="card p-6 text-center text-sm text-slate-500">Nothing scheduled. Pick a highlighted day to see its events.</div>
+              <p className="mt-2 text-sm text-slate-500">Nothing scheduled. Pick a day with events to see them here.</p>
             )}
           </section>
         </div>
       ) : (
-        <div className="stagger space-y-3">
+        <div className="card divide-y divide-slate-100 px-5 dark:divide-slate-800">
           {upcoming.map((e) => <EventCard key={e.id} e={e} going={rsvp.includes(e.id)} onToggle={toggleRsvp} />)}
-          {upcoming.length === 0 && <div className="card p-10 text-center text-sm text-slate-500">No upcoming events for the selected types.</div>}
+          {upcoming.length === 0 && <p className="py-10 text-center text-sm text-slate-500">No upcoming events for the selected types.</p>}
         </div>
       )}
     </div>

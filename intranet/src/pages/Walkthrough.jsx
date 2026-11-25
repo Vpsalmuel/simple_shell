@@ -1,7 +1,7 @@
 import { useEffect, useRef, useState } from 'react'
 import { Navigate, useNavigate } from 'react-router-dom'
 import { ArrowLeftIcon as ArrowLeft, ArrowRightIcon as ArrowRight, CalendarCheckIcon as CalendarCheck, SignOutIcon as LogOut, CheckIcon as Check, CheckCircleIcon as CheckCircle2, CaretDownIcon as ChevronDown, SignatureIcon as FileSignature, LockIcon as Lock, MapPinIcon as MapPin, QuotesIcon as Quote, ArrowCounterClockwiseIcon as RotateCcw, StarIcon as Star } from '@phosphor-icons/react'
-import { company, departmentTour, feedbackSlots, floors, itSetup, mdMessage, performance, policies, products, values, walkthroughSteps, workplaceNorms } from '../data/onboarding'
+import { company, departmentTour, dressCode, feedbackSlots, floors, itSetup, mdMessage, performance, policies, products, values, walkthroughSteps, workplaceNorms } from '../data/onboarding'
 import { people } from '../data'
 import { useUser } from '../context/UserContext'
 import Logo from '../components/Logo'
@@ -38,7 +38,7 @@ function requirement(stepId, progress) {
       return { met: done === itSetup.length, hint: `Tick each setup task when done (${done}/${itSetup.length}).` }
     }
     case 'feedback':
-      return { met: Boolean(progress.feedback), hint: 'Book a time with your buddy.' }
+      return { met: Boolean(progress.feedback) && ![0, 6].includes(new Date(`${progress.feedback.date}T00:00`).getDay()), hint: 'Book a weekday time with your buddy.' }
     default:
       return { met: true, hint: '' }
   }
@@ -51,8 +51,8 @@ function CompanyStep() {
         <div>
           <p className="text-lg leading-relaxed text-slate-600 dark:text-slate-300">{company.intro}</p>
           <div className="mt-6 grid gap-3 sm:grid-cols-2">
-            <div className="rounded-2xl bg-brand-50 p-4 dark:bg-slate-800"><p className="text-xs font-semibold tracking-wider text-brand-600 uppercase dark:text-brand-300">Mission</p><p className="mt-1 font-medium">{company.mission}</p></div>
-            <div className="rounded-2xl bg-accent-50 p-4 dark:bg-slate-800"><p className="text-xs font-semibold tracking-wider text-accent-700 uppercase dark:text-accent-400">Vision</p><p className="mt-1 font-medium">{company.vision}</p></div>
+            <div className="rounded-xl bg-brand-50 p-4 dark:bg-slate-800"><p className="text-xs font-semibold tracking-wider text-brand-600 uppercase dark:text-brand-300">Mission</p><p className="mt-1 font-medium">{company.mission}</p></div>
+            <div className="rounded-xl bg-accent-50 p-4 dark:bg-slate-800"><p className="text-xs font-semibold tracking-wider text-accent-700 uppercase dark:text-accent-400">Vision</p><p className="mt-1 font-medium">{company.vision}</p></div>
           </div>
         </div>
         <WelcomeIllustration className="mx-auto hidden h-52 w-auto md:block" />
@@ -60,7 +60,7 @@ function CompanyStep() {
       <div className="stagger grid grid-cols-2 gap-3 md:grid-cols-4">
         {company.stats.map((s) => (
           <div key={s.label} className="card p-4 text-center">
-            <p className="font-display text-3xl font-bold text-brand-700 dark:text-white">{s.value}</p>
+            <p className="font-display text-2xl font-semibold text-brand-700 dark:text-white">{s.value}</p>
             <p className="mt-1 text-xs text-slate-500">{s.label}</p>
           </div>
         ))}
@@ -83,7 +83,7 @@ function CompanyStep() {
 
 function MdStep({ progress, update }) {
   return (
-    <div className="grid gap-8 lg:grid-cols-[1.3fr_1fr]">
+    <div className="grid grid-cols-1 gap-8 lg:grid-cols-[1.3fr_1fr]">
       <VideoPlayer title={`A welcome from ${mdMessage.name}`} {...mdMessage.video} watched={progress.mdVideo} onComplete={() => update({ mdVideo: true })} />
       <figure className="card relative p-6">
         <Quote className="absolute top-5 right-5 hidden text-accent-200 sm:block dark:text-accent-700/40" size={40} />
@@ -112,9 +112,9 @@ function ValuesStep({ progress, update }) {
         return (
           <button key={v.id} onClick={() => toggle(v.id)} aria-expanded={isOpen} className={`card card-hover p-5 text-left transition ${isOpen ? 'ring-2 ring-accent-500' : ''}`}>
             <div className="flex items-start gap-4">
-              <span className={`flex h-12 w-12 shrink-0 items-center justify-center rounded-2xl transition ${isSeen ? 'bg-accent-700 text-white' : 'bg-brand-50 text-brand-700 dark:bg-slate-800 dark:text-brand-200'}`}><Icon name={v.icon} size={22} /></span>
+              <span className={`flex h-12 w-12 shrink-0 items-center justify-center rounded-xl transition ${isSeen ? 'bg-accent-700 text-white' : 'bg-brand-50 text-brand-700 dark:bg-slate-800 dark:text-brand-200'}`}><Icon name={v.icon} size={22} /></span>
               <div className="flex-1">
-                <p className="font-display text-lg font-bold">{v.name}</p>
+                <p className="text-[15px] font-semibold">{v.name}</p>
                 <p className="text-sm text-slate-500">{v.short}</p>
               </div>
               <ChevronDown size={18} className={`shrink-0 text-slate-400 transition ${isOpen ? 'rotate-180' : ''}`} />
@@ -221,17 +221,24 @@ function PoliciesStep({ progress, update, user }) {
 }
 
 function CultureStep() {
-  return (
-    <div className="space-y-6">
-      <p className="max-w-[65ch] text-lg leading-relaxed text-slate-600 dark:text-slate-300">At Rex Insurance our culture is built on transparency, empathy and innovation. We take care of our people so they can take care of our clients.</p>
-      <div className="stagger grid gap-4 md:grid-cols-3">
-        {workplaceNorms.map((n) => (
-          <div key={n.title} className="card p-5">
-            <p className="font-display font-bold">{n.title}</p>
-            <p className="mt-1 text-sm text-slate-600 dark:text-slate-300">{n.text}</p>
+  const Block = ({ title, items }) => (
+    <section>
+      <h2 className="section-title mb-3">{title}</h2>
+      <dl className="card divide-y divide-slate-100 dark:divide-slate-800">
+        {items.map((n) => (
+          <div key={n.title} className="grid gap-1 px-5 py-3.5 sm:grid-cols-[10rem_1fr] sm:gap-6">
+            <dt className="text-sm font-medium text-slate-900 dark:text-white">{n.title}</dt>
+            <dd className="text-sm text-slate-600 dark:text-slate-300">{n.text}</dd>
           </div>
         ))}
-      </div>
+      </dl>
+    </section>
+  )
+  return (
+    <div className="space-y-10">
+      <p className="max-w-[65ch] text-[15px] leading-relaxed text-slate-600 dark:text-slate-300">At Rex Insurance our culture is built on transparency, empathy and innovation. We take care of our people so they can take care of our clients.</p>
+      <Block title="How we work" items={workplaceNorms} />
+      <Block title="Dress code" items={dressCode} />
     </div>
   )
 }
@@ -248,9 +255,9 @@ function ProductsStep({ progress, update }) {
       <div className="stagger grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
         {products.map((p) => (
           <button key={p.id} onClick={() => show(p)} className="card card-hover flex items-start gap-4 p-5 text-left">
-            <span className={`flex h-12 w-12 shrink-0 items-center justify-center rounded-2xl transition ${seen.includes(p.id) ? 'bg-accent-700 text-white' : 'bg-brand-50 text-brand-700 dark:bg-slate-800 dark:text-brand-200'}`}><Icon name={p.icon} size={22} /></span>
+            <span className={`flex h-12 w-12 shrink-0 items-center justify-center rounded-xl transition ${seen.includes(p.id) ? 'bg-accent-700 text-white' : 'bg-brand-50 text-brand-700 dark:bg-slate-800 dark:text-brand-200'}`}><Icon name={p.icon} size={22} /></span>
             <span className="min-w-0">
-              <span className="block font-display text-lg font-bold">{p.title}</span>
+              <span className="block text-[15px] font-semibold">{p.title}</span>
               <span className="block truncate text-xs text-slate-500">{p.variants.join(' · ')}</span>
             </span>
           </button>
@@ -274,7 +281,7 @@ function ProductsStep({ progress, update }) {
 function LocationsStep({ user }) {
   const myTeam = { Underwriting: 'Underwriting', Claims: 'Claims', IT: 'Technology', HR: 'People & Culture', 'Customer Care': 'Customer Care', Finance: 'Finance' }[user.dept] ?? user.dept
   return (
-    <div className="grid gap-6 lg:grid-cols-[1fr_280px]">
+    <div className="grid grid-cols-1 gap-6 lg:grid-cols-[1fr_280px]">
       <ol className="space-y-2" aria-label="Headquarters floor plan">
         {floors.map((f) => {
           const mine = f.teams.includes(myTeam)
@@ -284,7 +291,7 @@ function LocationsStep({ user }) {
                 <span className="text-[10px] font-semibold uppercase opacity-80">Floor</span><span className="text-xl leading-none font-bold">{f.floor}</span>
               </span>
               <div className="flex-1">
-                <p className="font-display font-bold">{f.name}{mine && <span className="chip ml-2 bg-accent-50 text-accent-700 dark:bg-accent-700/20 dark:text-accent-400">Your team</span>}</p>
+                <p className="font-semibold">{f.name}{mine && <span className="chip ml-2 bg-accent-50 text-accent-700 dark:bg-accent-700/20 dark:text-accent-400">Your team</span>}</p>
                 <div className="mt-1 flex flex-wrap gap-1.5">{f.teams.map((t) => <span key={t} className={`chip ${t === myTeam ? 'bg-accent-700 text-white' : 'bg-slate-100 text-slate-600 dark:bg-slate-800 dark:text-slate-300'}`}>{t}</span>)}</div>
               </div>
             </li>
@@ -307,7 +314,7 @@ function PersonCard({ name, label, highlight }) {
       <Avatar name={name} size="lg" status={p?.status} />
       <div className="min-w-0">
         <p className="text-xs font-semibold tracking-wider text-accent-700 uppercase dark:text-accent-400">{label}</p>
-        <p className="font-display text-lg font-bold">{name}</p>
+        <p className="text-[15px] font-semibold">{name}</p>
         <p className="truncate text-sm text-slate-500">{p?.role}</p>
       </div>
     </div>
@@ -322,7 +329,7 @@ function TeamStep({ user }) {
         <PersonCard name={user.manager} label="Your line manager" />
         <PersonCard name={user.buddy} label="Your onboarding buddy" highlight />
       </div>
-      <p className="rounded-2xl bg-accent-50 p-4 text-sm text-accent-800 dark:bg-accent-700/15 dark:text-accent-300">
+      <p className="rounded-xl bg-accent-50 p-4 text-sm text-accent-800 dark:bg-accent-700/15 dark:text-accent-300">
         <b>{user.buddy}</b> will guide you through your first weeks: how things really work, who to ask, and where to find things. You’ll book your first check-in with them at the end of this walkthrough.
       </p>
       {colleagues.length > 0 && (
@@ -362,33 +369,60 @@ function PerformanceStep() {
       {performance.map((p) => (
         <div key={p.title} className="card flex gap-4 p-5">
           <Star className="mt-0.5 shrink-0 text-accent-600" size={20} />
-          <div><p className="font-display font-bold">{p.title}</p><p className="mt-1 text-sm text-slate-600 dark:text-slate-300">{p.text}</p></div>
+          <div><p className="font-semibold">{p.title}</p><p className="mt-1 text-sm text-slate-600 dark:text-slate-300">{p.text}</p></div>
         </div>
       ))}
     </div>
   )
 }
 
+// The next `count` weekdays from tomorrow. Buddy check-ins are Monday to Friday only (17 Nov review).
+function nextWeekdays(count = 10) {
+  const out = []
+  const d = new Date()
+  while (out.length < count) {
+    d.setDate(d.getDate() + 1)
+    if (d.getDay() !== 0 && d.getDay() !== 6) out.push(new Date(d))
+  }
+  return out
+}
+const isoDate = (d) => `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}-${String(d.getDate()).padStart(2, '0')}`
+
 function FeedbackStep({ progress, update, user }) {
-  const tomorrow = new Date(Date.now() + 86400000).toISOString().slice(0, 10)
+  const days = nextWeekdays(10)
   const [date, setDate] = useState(progress.feedback?.date ?? '')
   const [time, setTime] = useState(progress.feedback?.time ?? '')
   const booked = progress.feedback
+  // Drop a saved booking that falls on a weekend (booked before the weekday rule).
+  const bookedOnWeekend = booked && [0, 6].includes(new Date(`${booked.date}T00:00`).getDay())
   return (
-    <div className="grid gap-6 lg:grid-cols-[1fr_320px]">
+    <div className="grid grid-cols-1 gap-6 lg:grid-cols-[1fr_320px]">
       <form onSubmit={(e) => { e.preventDefault(); update({ feedback: { date, time, with: user.buddy } }) }} className="card space-y-5 p-6">
         <p className="text-sm text-slate-600 dark:text-slate-300">Pick a 30-minute slot in your first week to talk with <b>{user.buddy}</b> about how it’s going.</p>
-        <label className="block text-sm font-medium" htmlFor="fb-date">Date
-          <input id="fb-date" type="date" required min={tomorrow} className="input mt-1" value={date} onChange={(e) => setDate(e.target.value)} />
-        </label>
+        <fieldset>
+          <legend className="text-sm font-medium">Day <span className="font-normal text-slate-500">(Monday to Friday)</span></legend>
+          <div className="mt-2 grid grid-cols-2 gap-1.5 sm:grid-cols-5">
+            {days.map((d) => {
+              const v = isoDate(d)
+              return (
+                <button type="button" key={v} onClick={() => setDate(v)} aria-pressed={date === v} className={`flex flex-col items-center rounded-lg border px-2 py-2 text-sm transition-colors ${date === v ? 'border-brand-700 bg-brand-700 text-white dark:border-brand-500 dark:bg-brand-500' : 'border-slate-200 hover:border-slate-300 dark:border-slate-700 dark:hover:border-slate-600'}`}>
+                  <span className={`text-xs ${date === v ? 'text-brand-100' : 'text-slate-500'}`}>{d.toLocaleDateString(undefined, { weekday: 'short' })}</span>
+                  <span className="font-medium">{d.toLocaleDateString(undefined, { day: 'numeric', month: 'short' })}</span>
+                </button>
+              )
+            })}
+          </div>
+        </fieldset>
         <fieldset>
           <legend className="text-sm font-medium">Time</legend>
-          <div className="mt-2 flex flex-wrap gap-2">{feedbackSlots.map((t) => <button type="button" key={t} onClick={() => setTime(t)} aria-pressed={time === t} className={`chip px-4 py-2 text-sm ${time === t ? 'bg-brand-700 text-white' : 'bg-slate-100 text-slate-700 dark:bg-slate-800 dark:text-slate-200'}`}>{t}</button>)}</div>
+          <div className="mt-2 flex flex-wrap gap-1.5">{feedbackSlots.map((t) => <button type="button" key={t} onClick={() => setTime(t)} aria-pressed={time === t} className={`btn h-9 px-4 tabular-nums ${time === t ? 'bg-brand-700 text-white dark:bg-brand-500' : 'btn-secondary'}`}>{t}</button>)}</div>
         </fieldset>
         <button className="btn-primary" disabled={!date || !time}><CalendarCheck size={16} /> {booked ? 'Update booking' : 'Book check-in'}</button>
       </form>
       <aside className={`card p-5 ${booked ? 'ring-2 ring-emerald-500' : ''}`} aria-live="polite">
-        {booked ? (
+        {bookedOnWeekend ? (
+          <p className="text-sm text-amber-700 dark:text-amber-300">Your saved check-in falls on a weekend. Pick a weekday instead.</p>
+        ) : booked ? (
           <>
             <CheckCircle2 className="text-emerald-500" size={24} />
             <p className="mt-2 font-semibold">Check-in booked</p>
@@ -407,12 +441,53 @@ const stepViews = {
   team: TeamStep, departments: DepartmentsStep, policies: PoliciesStep, tools: ToolsStep, performance: PerformanceStep, feedback: FeedbackStep,
 }
 
+// The step list: a vertical stepper grouped into three chapters, with a rail joining the markers.
+function Stepper({ index, progress, unlocked, onPick }) {
+  const groups = [...new Set(walkthroughSteps.map((s) => s.group))]
+  return (
+    <div className="space-y-6">
+      {groups.map((g) => (
+        <div key={g}>
+          <p className="mb-2 px-3 text-xs font-medium text-slate-500">{g}</p>
+          <ol>
+            {walkthroughSteps.map((s, i) => {
+              if (s.group !== g) return null
+              const done = progress[s.id]
+              const can = unlocked(i)
+              const current = i === index
+              const last = walkthroughSteps[i + 1]?.group !== g
+              return (
+                <li key={s.id} className="relative" ref={current ? (el) => el?.scrollIntoView({ block: 'nearest' }) : undefined}>
+                  {!last && <span aria-hidden="true" className={`absolute top-8 bottom-0 left-[23px] w-px ${done ? 'bg-emerald-500/60' : 'bg-slate-200 dark:bg-slate-700'}`} />}
+                  <button
+                    disabled={!can}
+                    onClick={() => onPick(i)}
+                    aria-current={current ? 'step' : undefined}
+                    className={`group relative flex w-full items-center gap-3 rounded-lg px-3 py-2 text-left text-sm transition-colors ${current ? 'bg-brand-50 dark:bg-brand-500/15' : can ? 'hover:bg-slate-100 dark:hover:bg-slate-800/70' : 'cursor-not-allowed'}`}
+                  >
+                    <span className={`relative z-10 flex h-[22px] w-[22px] shrink-0 items-center justify-center rounded-full text-[11px] font-semibold tabular-nums ${done ? 'bg-emerald-600 text-white' : current ? 'bg-brand-700 text-white ring-4 ring-brand-100 dark:bg-brand-300 dark:text-slate-900 dark:ring-brand-500/25' : can ? 'border border-slate-300 bg-white text-slate-600 dark:border-slate-600 dark:bg-slate-900 dark:text-slate-300' : 'border border-slate-200 bg-white text-slate-500 dark:border-slate-700 dark:bg-slate-900 dark:text-slate-400'}`}>
+                      {done ? <Check size={12} weight="bold" /> : i + 1}
+                    </span>
+                    <span className={`min-w-0 flex-1 ${current ? 'font-medium text-brand-900 dark:text-white' : done || can ? 'text-slate-700 dark:text-slate-200' : 'text-slate-500'}`}>{s.label}</span>
+                    {!can && <Lock size={12} className="shrink-0 text-slate-400" aria-label="Locked" />}
+                  </button>
+                </li>
+              )
+            })}
+          </ol>
+        </div>
+      ))}
+    </div>
+  )
+}
+
 export default function Walkthrough() {
   const { user, progress, updateProgress, resetWalkthrough, walkthroughDone, ready, signedIn, ssoConfigured, signOut } = useUser()
   const navigate = useNavigate()
   const firstOpen = walkthroughSteps.findIndex((s) => !progress[s.id])
   const [index, setIndex] = useState(firstOpen === -1 ? walkthroughSteps.length : firstOpen)
-  useEffect(() => { window.scrollTo({ top: 0 }) }, [index])
+  const [stepsOpen, setStepsOpen] = useState(false)
+  useEffect(() => { window.scrollTo({ top: 0 }); setStepsOpen(false) }, [index])
 
   if (ready && !signedIn) return <Navigate to="/login" replace />
   if (!user.newStaff) return <Navigate to="/" replace />
@@ -420,93 +495,115 @@ export default function Walkthrough() {
   const step = walkthroughSteps[index]
   const req = step ? requirement(step.id, progress) : { met: true }
   const unlocked = (i) => walkthroughSteps.slice(0, i).every((s) => progress[s.id])
-  const pct = Math.round((walkthroughSteps.filter((s) => progress[s.id]).length / walkthroughSteps.length) * 100)
+  const doneCount = walkthroughSteps.filter((s) => progress[s.id]).length
+  const pct = Math.round((doneCount / walkthroughSteps.length) * 100)
   const View = step ? stepViews[step.id] : null
 
   const next = () => {
     updateProgress({ [step.id]: true })
     setIndex(index + 1)
   }
+  // Testing only (demo mode): skip ahead without meeting each step's requirement.
+  const skipAll = () => {
+    updateProgress(Object.fromEntries(walkthroughSteps.map((s) => [s.id, true])))
+    setIndex(walkthroughSteps.length)
+  }
+  const testing = !ssoConfigured
+  const SkipAll = ({ className = '' }) => testing && (
+    <button onClick={skipAll} className={`btn h-8 border border-dashed border-amber-400 px-2.5 text-xs text-amber-800 hover:bg-amber-50 dark:border-amber-500/60 dark:text-amber-300 dark:hover:bg-amber-500/10 ${className}`}>Skip onboarding (test)</button>
+  )
+
+  const progressBlock = (
+    <div>
+      <div className="flex items-baseline justify-between text-xs">
+        <span className="font-medium text-slate-900 dark:text-white">{doneCount} of {walkthroughSteps.length} steps</span>
+        <span className="text-slate-500 tabular-nums">{pct}%</span>
+      </div>
+      <div className="mt-2 h-1 rounded-full bg-slate-200 dark:bg-slate-800"><div className="h-1 rounded-full bg-brand-700 transition-[width] duration-500 dark:bg-brand-400" style={{ width: `${pct}%` }} /></div>
+    </div>
+  )
 
   return (
-    <div className="min-h-screen bg-slate-50 dark:bg-slate-950">
-      <header className="sticky top-0 z-20 border-b border-slate-200/70 bg-white/85 backdrop-blur-md dark:border-slate-800 dark:bg-slate-950/85">
-        <div className="mx-auto flex h-16 max-w-6xl items-center gap-4 px-4 sm:px-6">
-          <Logo className="h-8 w-auto" />
-          <div className="hidden flex-1 items-center gap-3 md:flex">
-            <div className="h-1.5 flex-1 rounded-full bg-slate-100 dark:bg-slate-800"><div className="h-1.5 rounded-full bg-accent-600 transition-all duration-500" style={{ width: `${pct}%` }} /></div>
-            <span className="text-xs font-medium text-slate-500">{pct}% complete</span>
+    <div className="min-h-[100dvh] bg-white lg:grid lg:grid-cols-[18rem_minmax(0,1fr)] dark:bg-slate-950">
+      {/* Left rail: fixed height; the step list scrolls inside it (17 Nov feedback). */}
+      <aside className="hidden border-r border-slate-200 bg-slate-50 lg:sticky lg:top-0 lg:flex lg:h-[100dvh] lg:flex-col dark:border-slate-800 dark:bg-slate-900/60">
+        <div className="space-y-6 px-5 pt-6 pb-5">
+          <Logo className="h-7 w-auto" />
+          <div>
+            <p className="text-[15px] font-semibold text-slate-900 dark:text-white">Your first days at Rex</p>
+            <p className="mt-0.5 text-xs text-slate-500">Rex Hub unlocks when all steps are done.</p>
           </div>
-          <div className="ml-auto flex min-w-0 items-center gap-2 md:ml-0">
-            {!ssoConfigured && <PersonaSwitcher />}
-            <button onClick={signOut} className="btn-ghost px-2 py-1.5 text-sm sm:px-3" aria-label="Sign out"><LogOut size={16} className="sm:hidden" /><span className="hidden sm:inline">Sign out</span></button>
-          </div>
+          {progressBlock}
         </div>
-      </header>
-
-      <div className="mx-auto grid max-w-6xl gap-8 px-4 py-8 sm:px-6 lg:grid-cols-[240px_1fr]">
-        <nav aria-label="Walkthrough steps" className="min-w-0 lg:sticky lg:top-24 lg:self-start">
-          <p className="mb-3 text-xs font-semibold tracking-wider text-slate-400 uppercase">Your first day</p>
-          <ol className="flex gap-2 overflow-x-auto pb-1 lg:flex-col lg:gap-1">
-            {walkthroughSteps.map((s, i) => {
-              const done = progress[s.id]
-              const can = unlocked(i)
-              const current = i === index
-              return (
-                <li key={s.id} className="shrink-0">
-                  <button
-                    disabled={!can}
-                    onClick={() => setIndex(i)}
-                    className={`flex w-full items-center gap-3 rounded-xl px-3 py-2.5 text-left text-sm transition ${current ? 'bg-white shadow-sm ring-1 ring-slate-200 dark:bg-slate-900 dark:ring-slate-800' : can ? 'hover:bg-white/70 dark:hover:bg-slate-900' : 'cursor-not-allowed opacity-70'}`}
-                  >
-                    <span className={`flex h-7 w-7 shrink-0 items-center justify-center rounded-full text-xs font-bold ${done ? 'bg-emerald-500 text-white' : current ? 'bg-accent-700 text-white' : 'bg-slate-200 text-slate-500 dark:bg-slate-800'}`}>
-                      {done ? <Check size={14} /> : can ? i + 1 : <Lock size={12} />}
-                    </span>
-                    <span className="whitespace-nowrap lg:whitespace-normal"><span className="block font-medium">{s.label}</span><span className="hidden text-xs text-slate-500 lg:block">{s.blurb}</span></span>
-                  </button>
-                </li>
-              )
-            })}
-          </ol>
+        <nav aria-label="Walkthrough steps" className="steps-scroll relative min-h-0 flex-1 overflow-y-auto border-t border-slate-200 px-2 py-5 dark:border-slate-800">
+          <Stepper index={index} progress={progress} unlocked={unlocked} onPick={setIndex} />
+        </nav>
+        <div className="space-y-3 border-t border-slate-200 px-5 py-4 dark:border-slate-800">
           {user.buddy && (
-            <div className="mt-6 hidden items-center gap-3 rounded-2xl border border-accent-200 bg-accent-50 p-3 text-sm lg:flex dark:border-accent-700/40 dark:bg-accent-700/10">
+            <div className="flex items-center gap-3">
               <Avatar name={user.buddy} size="sm" />
-              <span className="min-w-0"><span className="block text-xs text-accent-700 dark:text-accent-400">Your buddy</span><span className="block truncate font-semibold">{user.buddy}</span></span>
+              <span className="min-w-0 flex-1"><span className="block text-xs text-slate-500">Your buddy</span><span className="block truncate text-sm font-medium text-slate-900 dark:text-white">{user.buddy}</span></span>
             </div>
           )}
-          <div className="mt-3 hidden rounded-2xl bg-brand-700 p-4 text-sm text-brand-100 lg:block">
-            <Lock size={16} className="mb-2 text-accent-400" />
-            Rex Hub unlocks once you finish all {walkthroughSteps.length} steps. Your progress is saved.
+          {!ssoConfigured && <PersonaSwitcher />}
+          <div className="flex items-center justify-between gap-2">
+            <button onClick={signOut} className="btn-ghost -ml-2.5 h-8 px-2.5 text-xs"><LogOut size={14} /> Sign out</button>
+            <SkipAll />
           </div>
-        </nav>
+        </div>
+      </aside>
 
-        <main className="min-w-0">
+      <div className="flex min-h-[100dvh] min-w-0 flex-col">
+        {/* Mobile header: logo, progress and a toggle for the step list. */}
+        <header className="sticky top-0 z-20 border-b border-slate-200 bg-white/90 px-4 py-3 backdrop-blur-md lg:hidden dark:border-slate-800 dark:bg-slate-950/90">
+          <div className="flex items-center gap-3">
+            <Logo className="h-6 w-auto" />
+            <button onClick={() => setStepsOpen(!stepsOpen)} aria-expanded={stepsOpen} className="btn-secondary ml-auto h-8 px-3 text-xs">
+              {step ? `Step ${index + 1} of ${walkthroughSteps.length}` : 'All steps'} <ChevronDown size={14} className={`transition-transform ${stepsOpen ? 'rotate-180' : ''}`} />
+            </button>
+            <button onClick={signOut} className="btn-ghost h-8 w-8 px-0" aria-label="Sign out"><LogOut size={16} /></button>
+          </div>
+          <div className="mt-3">{progressBlock}</div>
+          {stepsOpen && (
+            <nav aria-label="Walkthrough steps" className="steps-scroll animate-fade-up mt-3 max-h-[55dvh] overflow-y-auto border-t border-slate-200 pt-3 dark:border-slate-800">
+              <Stepper index={index} progress={progress} unlocked={unlocked} onPick={setIndex} />
+              {!ssoConfigured && <div className="mt-4 flex flex-wrap items-center justify-between gap-2 border-t border-slate-200 px-3 pt-3 dark:border-slate-800"><PersonaSwitcher /><SkipAll /></div>}
+            </nav>
+          )}
+        </header>
+
+        <main className="mx-auto w-full max-w-4xl flex-1 px-5 py-10 sm:px-8 lg:px-12 lg:py-14">
           {step ? (
             <div key={step.id} className="animate-fade-up">
-              <p className="text-sm font-medium text-accent-700 dark:text-accent-400">Step {index + 1} of {walkthroughSteps.length}</p>
-              <h1 className="mt-1 text-2xl font-bold text-slate-900 sm:text-3xl dark:text-white">{index === 0 ? `Welcome to Rex, ${user.firstName}` : step.label}</h1>
-              <p className="mt-1 mb-8 text-slate-500">{step.blurb}</p>
+              <p className="text-xs font-medium text-slate-500">{step.group}, step {index + 1} of {walkthroughSteps.length}</p>
+              <h1 className="mt-2 text-[28px] leading-tight font-semibold text-slate-900 dark:text-white">{index === 0 ? `Welcome to Rex, ${user.firstName}` : step.label}</h1>
+              <p className="mt-2 mb-10 max-w-[60ch] text-[15px] text-slate-600 dark:text-slate-300">{step.blurb}</p>
               <View progress={progress} update={updateProgress} user={user} />
-              <div className="mt-10 flex flex-col-reverse items-stretch justify-between gap-3 border-t border-slate-200 pt-6 sm:flex-row sm:items-center dark:border-slate-800">
-                <button onClick={() => setIndex(index - 1)} disabled={index === 0} className="btn-ghost"><ArrowLeft size={16} /> Back</button>
-                <div className="flex flex-col items-stretch gap-2 sm:flex-row sm:items-center">
-                  {!req.met && <span className="text-center text-xs text-slate-500">{req.hint}</span>}
-                  <button onClick={next} disabled={!req.met} className="btn bg-accent-700 px-6 text-white hover:bg-accent-800">
-                    {index === walkthroughSteps.length - 1 ? 'Finish' : 'Continue'} <ArrowRight size={16} />
-                  </button>
-                </div>
-              </div>
             </div>
           ) : (
-            <div className="animate-fade-up card mx-auto max-w-xl p-10 text-center">
-              <CelebrateIllustration className="mx-auto h-40 w-auto animate-pop" />
-              <h1 className="mt-6 text-3xl font-bold">You’re all set, {user.firstName}!</h1>
-              <p className="mt-2 text-slate-500">You’ve met the company, your team and every department, signed {policies.length} policies and booked time with {user.buddy}. Rex Hub is now unlocked.</p>
-              <button onClick={() => navigate('/')} disabled={!walkthroughDone} className="btn-primary mt-8 px-6 py-3 text-base">Enter Rex Hub <ArrowRight size={18} /></button>
-              <button onClick={() => { resetWalkthrough(); setIndex(0) }} className="btn-ghost mx-auto mt-3 text-xs"><RotateCcw size={14} /> Restart walkthrough (demo)</button>
+            <div className="animate-fade-up mx-auto max-w-lg py-10 text-center">
+              <CelebrateIllustration className="mx-auto h-36 w-auto animate-pop" />
+              <h1 className="mt-8 text-[28px] leading-tight font-semibold text-slate-900 dark:text-white">You’re all set, {user.firstName}</h1>
+              <p className="mt-3 text-[15px] text-slate-600 dark:text-slate-300">You’ve met the company, your team and every department, signed {policies.length} policies and booked time with {user.buddy}. Rex Hub is now unlocked.</p>
+              <button onClick={() => navigate('/')} disabled={!walkthroughDone} className="btn-primary mt-8 h-10 px-5">Enter Rex Hub <ArrowRight size={16} /></button>
+              <button onClick={() => { resetWalkthrough(); setIndex(0) }} className="btn-ghost mx-auto mt-3 h-8 text-xs"><RotateCcw size={14} /> Restart walkthrough (demo)</button>
             </div>
           )}
         </main>
+
+        {step && (
+          <footer className="sticky bottom-0 z-10 border-t border-slate-200 bg-white/90 backdrop-blur-md dark:border-slate-800 dark:bg-slate-950/90">
+            <div className="mx-auto flex w-full max-w-4xl items-center gap-3 px-5 py-3 sm:px-8 lg:px-12">
+              <button onClick={() => setIndex(index - 1)} disabled={index === 0} className="btn-ghost -ml-3"><ArrowLeft size={16} /> Back</button>
+              {testing && !req.met && <button onClick={next} className="btn h-8 border border-dashed border-amber-400 px-2.5 text-xs text-amber-800 hover:bg-amber-50 dark:border-amber-500/60 dark:text-amber-300 dark:hover:bg-amber-500/10">Skip step (test)</button>}
+              <span className="ml-auto hidden text-right text-xs text-slate-500 sm:block">{req.met ? (walkthroughSteps[index + 1] ? `Next: ${walkthroughSteps[index + 1].label}` : 'Last step') : req.hint}</span>
+              <button onClick={next} disabled={!req.met} className="btn-primary ml-auto px-5 sm:ml-0">
+                {index === walkthroughSteps.length - 1 ? 'Finish' : 'Continue'} <ArrowRight size={16} />
+              </button>
+            </div>
+            {!req.met && <p className="px-5 pb-3 text-xs text-slate-500 sm:hidden">{req.hint}</p>}
+          </footer>
+        )}
       </div>
     </div>
   )

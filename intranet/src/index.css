@@ -65,35 +65,45 @@ html:not(.dark) .text-slate-400 { color: var(--color-slate-500); }
 .dark .text-accent-700:not([class*="dark:text-"]),
 .dark .text-accent-600:not([class*="dark:text-"]) { color: var(--color-accent-400); }
 
+/*
+ * Calm workspace type and spacing.
+ * The root is 15px (93.75%, so browser zoom still works), which tightens every rem-based size and
+ * space by the same ratio. Type scale in use: 12 / 13 / 15 / 17 / 22 / 28 (text-xs .. text-3xl).
+ */
+html { font-size: 93.75%; }
+
 @layer base {
   h1, h2, h3 {
     @apply font-display;
-  }
-  h1, h2 {
-    @apply tracking-tight;
-  }
-  h1, h2, h3 {
     text-wrap: balance;
   }
+  h1 { @apply tracking-tight; }
   body {
     @apply bg-slate-50 text-slate-800 antialiased dark:bg-slate-950 dark:text-slate-200;
+    font-feature-settings: "ss01", "cv11";
   }
+  ::selection { @apply bg-brand-100 text-brand-900; }
 }
 
+/* One radius scale: 12px surfaces (rounded-xl), 8px controls (rounded-lg), 6px tags (rounded-md). */
 @utility card {
-  @apply rounded-2xl border border-slate-200/80 bg-white shadow-[0_1px_2px_rgba(30,45,100,0.05)] dark:border-slate-800 dark:bg-slate-900;
+  @apply rounded-xl border border-slate-200 bg-white dark:border-slate-800 dark:bg-slate-900;
 }
 
 @utility card-hover {
-  @apply transition duration-200 hover:-translate-y-0.5 hover:border-slate-300 hover:shadow-[0_12px_28px_-14px_rgba(30,45,100,0.28)] active:translate-y-0 dark:hover:border-slate-700 dark:hover:shadow-black/40;
+  @apply transition-colors duration-150 hover:border-slate-300 hover:bg-slate-50/60 dark:hover:border-slate-700 dark:hover:bg-slate-800/40;
 }
 
 @utility btn {
-  @apply inline-flex items-center justify-center gap-2 rounded-xl px-4 py-2 text-sm font-medium whitespace-nowrap transition active:scale-[0.98] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand-500 disabled:opacity-50;
+  @apply inline-flex h-9 items-center justify-center gap-2 rounded-lg px-3.5 text-sm font-medium whitespace-nowrap transition-colors active:translate-y-px focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand-500 disabled:opacity-50;
 }
 
 @utility btn-primary {
   @apply btn bg-brand-700 text-white hover:bg-brand-800 dark:bg-brand-500 dark:hover:bg-brand-400;
+}
+
+@utility btn-secondary {
+  @apply btn border border-slate-200 bg-white text-slate-700 hover:bg-slate-50 dark:border-slate-700 dark:bg-slate-900 dark:text-slate-200 dark:hover:bg-slate-800;
 }
 
 @utility btn-ghost {
@@ -101,11 +111,21 @@ html:not(.dark) .text-slate-400 { color: var(--color-slate-500); }
 }
 
 @utility input {
-  @apply w-full rounded-xl border border-slate-200 bg-white px-3 py-2 text-sm outline-none transition placeholder:text-slate-400 focus:border-brand-400 focus:ring-4 focus:ring-brand-100 dark:border-slate-700 dark:bg-slate-900 dark:focus:ring-brand-900;
+  @apply w-full rounded-lg border border-slate-200 bg-white px-3 py-2 text-sm outline-none transition placeholder:text-slate-400 focus:border-brand-400 focus:ring-3 focus:ring-brand-100 dark:border-slate-700 dark:bg-slate-900 dark:focus:ring-brand-900;
 }
 
 @utility chip {
-  @apply inline-flex items-center rounded-full px-2.5 py-0.5 text-xs font-medium;
+  @apply inline-flex items-center rounded-md px-2 py-0.5 text-xs font-medium;
+}
+
+/* Section title used inside cards and on pages: 15px semibold. */
+@utility section-title {
+  @apply text-[15px] font-semibold text-slate-900 dark:text-white;
+}
+
+/* Quiet text link. */
+@utility link {
+  @apply font-medium text-brand-700 underline-offset-4 hover:underline dark:text-brand-300;
 }
 
 @keyframes fade-up {
@@ -147,3 +167,19 @@ html:not(.dark) .text-slate-400 { color: var(--color-slate-500); }
 @media (prefers-reduced-motion: reduce) {
   .animate-fade-up, .animate-pop, .stagger > *, .card-hover, .skeleton { animation: none; transition: none; }
 }
+
+/* Confetti for celebration pop-ups. */
+@keyframes confetti-fall {
+  0% { transform: translate3d(0, -10vh, 0) rotate(0deg); opacity: 1; }
+  85% { opacity: 1; }
+  100% { transform: translate3d(var(--drift), 105vh, 0) rotate(var(--spin)); opacity: 0; }
+}
+.confetti-piece { position: absolute; top: 0; animation-name: confetti-fall; animation-timing-function: cubic-bezier(0.25, 0.5, 0.5, 1); animation-fill-mode: both; }
+@media (prefers-reduced-motion: reduce) { .confetti { display: none; } }
+
+/* Visible, slim scrollbar for the onboarding step list. */
+.steps-scroll { scrollbar-width: thin; scrollbar-color: var(--color-slate-300) transparent; }
+.dark .steps-scroll { scrollbar-color: var(--color-slate-600) transparent; }
+.steps-scroll::-webkit-scrollbar { width: 6px; height: 6px; }
+.steps-scroll::-webkit-scrollbar-thumb { background: var(--color-slate-300); border-radius: 9999px; }
+.dark .steps-scroll::-webkit-scrollbar-thumb { background: var(--color-slate-600); }

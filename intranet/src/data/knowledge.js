@@ -4,7 +4,7 @@ export const articleCategories = ['HR Policies', 'Corporate Policies', 'SOPs', '
 
 export const articles = [
   { id: 'leave', title: 'How to apply for leave', category: 'HR Policies', excerpt: 'Step-by-step guide to requesting annual, sick, maternity or paternity leave in Kissflow.', owner: 'People & Culture', updated: '2026-09-14', views: 1245,
-    body: [['Before you apply', 'Check your balance on the Docs & HR page and agree dates with your line manager.'], ['Apply in Kissflow', 'Open Kissflow, choose Leave Request, pick the leave type and dates, and submit. Your manager is notified automatically.'], ['Sick leave', 'Tell your manager before 9:00 on the first day. A doctor’s note is needed after 2 consecutive days.'], ['Maternity and paternity leave', 'Speak to People & Culture at least 8 weeks before your expected leave date.']] },
+    body: [['Before you apply', 'Check your balance in SeamlessHR and agree dates with your line manager.'], ['Apply in Kissflow', 'Open Kissflow, choose Leave Request, pick the leave type and dates, and submit. Your manager is notified automatically.'], ['Sick leave', 'Tell your manager before 9:00 on the first day. A doctor’s note is needed after 2 consecutive days.'], ['Maternity and paternity leave', 'Speak to People & Culture at least 8 weeks before your expected leave date.']] },
   { id: 'travel', title: 'Travel policy', category: 'Corporate Policies', excerpt: 'Booking flights and hotels, and claiming expenses for business travel.', owner: 'Finance', updated: '2026-08-02', views: 890,
     body: [['Approval', 'All business travel must be approved by your line manager before booking.'], ['Booking', 'Use the approved travel agent. Economy class for flights under 6 hours.'], ['Expenses', 'Submit receipts within 14 days of returning using the expense claim form.']] },
   { id: 'claims-sop', title: 'Claims standard operating procedure', category: 'SOPs', excerpt: 'Core procedure for assessing and approving motor and commercial liability claims.', owner: 'Claims', updated: '2026-10-12', views: 3410,
@@ -30,8 +30,8 @@ export const helpCategories = [
 export const faqs = [
   { q: 'How do I sign in to corporate email with single sign-on?', a: 'Open Outlook on the web and choose Sign in with SSO. If you are off-site, connect to the FortiClient VPN first.' },
   { q: 'When do vendor invoices get paid?', a: 'Finance processes vendor payments on the 10th and 25th of every month, once approved.' },
-  { q: 'How do I claim the home broadband allowance?', a: 'Submit your receipts with the expense claim form in Docs & HR. People & Culture approves wellness allowances.' },
-  { q: 'Where is the latest underwriting risk matrix?', a: 'In the Underwriting workbench, or download the Underwriting authority matrix from Docs & HR.' },
+  { q: 'How do I claim the home broadband allowance?', a: 'Submit your receipts with the expense claim form (Knowledge & Learning, Documents). People & Culture approves wellness allowances.' },
+  { q: 'Where is the latest underwriting risk matrix?', a: 'In the Underwriting workbench, or download the Underwriting authority matrix from Knowledge & Learning, Documents.' },
   { q: 'How fast are help tickets answered?', a: 'Standard tickets are picked up within 2 working hours. Urgent IT issues: call extension 999.' },
   { q: 'I forgot my password', a: 'Use Reset password on the sign-in page. You will need your authenticator app.' },
 ]

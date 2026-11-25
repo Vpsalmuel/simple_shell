@@ -34,7 +34,7 @@ export default function VideoPlayer({ src, poster, duration = '2:00', title, wat
 
   if (src) {
     return (
-      <div className="overflow-hidden rounded-2xl bg-black">
+      <div className="overflow-hidden rounded-xl bg-black">
         <video
           ref={videoRef}
           src={src}
@@ -48,7 +48,7 @@ export default function VideoPlayer({ src, poster, duration = '2:00', title, wat
   }
 
   return (
-    <div className={`relative overflow-hidden rounded-2xl bg-gradient-to-br from-brand-700 via-brand-800 to-brand-950 text-white ${compact ? 'aspect-[16/10]' : 'aspect-video'}`}>
+    <div className={`relative overflow-hidden rounded-xl bg-gradient-to-br from-brand-700 via-brand-800 to-brand-950 text-white ${compact ? 'aspect-[16/10]' : 'aspect-video'}`}>
       {poster && <img src={poster} alt="" className="absolute inset-0 h-full w-full object-cover opacity-35" aria-hidden="true" />}
       {poster && <div className="absolute inset-0 bg-gradient-to-t from-brand-950/90 via-brand-950/40 to-brand-950/70" aria-hidden="true" />}
       <button

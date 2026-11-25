@@ -1,7 +1,7 @@
 import { useMemo, useState } from 'react'
 import { useSearchParams } from 'react-router-dom'
 import { CalendarIcon as Calendar, TrayIcon as Inbox, ChatTextIcon as MessageSquare, PlusIcon as Plus, MagnifyingGlassIcon as Search, PaperPlaneTiltIcon as Send, XIcon as X } from '@phosphor-icons/react'
-import { closedStatuses, initialRequests, priorities, requestDepts, requestTypes } from '../data/requests'
+import { closedStatuses, initialRequests, priorities, requestDesks } from '../data/requests'
 import { useLocalStorage } from '../hooks/useLocalStorage'
 import { useUser } from '../context/UserContext'
 import { useToast } from '../components/Toast'
@@ -9,7 +9,8 @@ import Avatar from '../components/Avatar'
 import Modal from '../components/Modal'
 import Portal from '../components/Portal'
 import StatusBadge from '../components/StatusBadge'
-import { EmptyIllustration } from '../components/Illustrations'
+import Icon from '../components/Icon'
+import PageHeader from '../components/PageHeader'
 
 const statusTone = { Submitted: 'neutral', 'In progress': 'warning', 'Awaiting approval': 'warning', Completed: 'good', Rejected: 'critical', Cancelled: 'neutral' }
 const priorityCls = {
@@ -21,8 +22,9 @@ const priorityCls = {
 const fmt = (d) => new Date(d.length === 10 ? `${d}T00:00` : d).toLocaleDateString(undefined, { day: 'numeric', month: 'short' })
 const fmtTime = (d) => new Date(d).toLocaleString(undefined, { day: 'numeric', month: 'short', hour: '2-digit', minute: '2-digit' })
 
-function NewRequest({ user, onCreate, onClose }) {
-  const [f, setF] = useState({ title: '', type: requestTypes[0], to: requestDepts[0], priority: 'Medium', due: '', description: '' })
+function NewRequest({ to, onCreate, onClose }) {
+  const desk = (d) => requestDesks.find((x) => x.dept === d) ?? requestDesks[0]
+  const [f, setF] = useState({ title: '', to: desk(to).dept, type: desk(to).types[0], priority: 'Medium', due: '', description: '' })
   const set = (k) => (e) => setF({ ...f, [k]: e.target.value })
   return (
     <Modal open onClose={onClose} title="New request" wide>
@@ -31,14 +33,14 @@ function NewRequest({ user, onCreate, onClose }) {
           <input id="rq-title" required className="input mt-1" value={f.title} onChange={set('title')} placeholder="e.g. Access to the reinsurance ledger" />
         </label>
         <label className="block text-sm font-medium" htmlFor="rq-to">Send to
-          <select id="rq-to" className="input mt-1" value={f.to} onChange={set('to')}>{requestDepts.filter((d) => d !== user.dept).map((d) => <option key={d}>{d}</option>)}</select>
+          <select id="rq-to" className="input mt-1" value={f.to} onChange={(e) => setF({ ...f, to: e.target.value, type: desk(e.target.value).types[0] })}>{requestDesks.map((d) => <option key={d.dept} value={d.dept}>{d.short === d.dept ? d.dept : `${d.short} (${d.dept})`}</option>)}</select>
         </label>
         <label className="block text-sm font-medium" htmlFor="rq-type">Type
-          <select id="rq-type" className="input mt-1" value={f.type} onChange={set('type')}>{requestTypes.map((t) => <option key={t}>{t}</option>)}</select>
+          <select id="rq-type" className="input mt-1" value={f.type} onChange={set('type')}>{desk(f.to).types.map((t) => <option key={t}>{t}</option>)}</select>
         </label>
         <fieldset className="sm:col-span-1">
           <legend className="text-sm font-medium">Priority</legend>
-          <div className="mt-2 flex flex-wrap gap-2">{priorities.map((p) => <button type="button" key={p} onClick={() => setF({ ...f, priority: p })} aria-pressed={f.priority === p} className={`chip px-3 py-1 text-sm ${f.priority === p ? 'bg-brand-700 text-white' : priorityCls[p]}`}>{p}</button>)}</div>
+          <div className="mt-1.5 flex flex-wrap gap-1.5">{priorities.map((p) => <button type="button" key={p} onClick={() => setF({ ...f, priority: p })} aria-pressed={f.priority === p} className={`btn h-8 px-3 ${f.priority === p ? 'bg-brand-700 text-white dark:bg-brand-500' : 'btn-secondary'}`}>{p}</button>)}</div>
         </fieldset>
         <label className="block text-sm font-medium" htmlFor="rq-due">Needed by
           <input id="rq-due" type="date" required min={new Date().toISOString().slice(0, 10)} className="input mt-1" value={f.due} onChange={set('due')} />
@@ -73,12 +75,12 @@ function Detail({ req, user, onUpdate, onClose }) {
   return (
     <Portal>
     <div className="fixed inset-0 z-50" role="dialog" aria-modal="true" aria-label={req.title}>
-      <div className="absolute inset-0 bg-slate-900/40 backdrop-blur-sm" onClick={onClose} />
-      <aside className="animate-fade-up absolute inset-y-0 right-0 flex w-full max-w-xl flex-col bg-white shadow-2xl dark:bg-slate-900">
+      <div className="absolute inset-0 bg-slate-900/30" onClick={onClose} />
+      <aside className="animate-fade-up absolute inset-y-0 right-0 flex w-full max-w-xl flex-col border-l border-slate-200 bg-white shadow-[0_0_60px_-20px_rgba(30,45,100,0.35)] dark:border-slate-800 dark:bg-slate-900">
         <header className="flex items-start gap-3 border-b border-slate-100 p-5 dark:border-slate-800">
           <div className="min-w-0 flex-1">
             <div className="flex flex-wrap items-center gap-2"><span className="font-mono text-xs text-slate-500">{req.id}</span><StatusBadge tone={statusTone[req.status]}>{req.status}</StatusBadge><span className={`chip ${priorityCls[req.priority]}`}>{req.priority}</span></div>
-            <h2 className="mt-2 text-lg font-bold">{req.title}</h2>
+            <h2 className="mt-2 text-lg font-semibold text-slate-900 dark:text-white">{req.title}</h2>
           </div>
           <button onClick={onClose} className="btn-ghost p-2" aria-label="Close"><X size={18} /></button>
         </header>
@@ -90,7 +92,7 @@ function Detail({ req, user, onUpdate, onClose }) {
             <div><dt className="text-xs text-slate-500">Needed by</dt><dd>{fmt(req.due)}</dd></div>
             <div className="col-span-2"><dt className="text-xs text-slate-500">Owner</dt><dd>{req.owner ?? 'Not assigned yet'}</dd></div>
           </dl>
-          <p className="rounded-xl bg-slate-50 p-4 text-sm leading-relaxed dark:bg-slate-800">{req.description}</p>
+          <p className="text-[15px] leading-relaxed text-slate-700 dark:text-slate-300">{req.description}</p>
 
           {open && (isReceiver || isRequester) && (
             <div className="flex flex-wrap gap-2">
@@ -108,7 +110,7 @@ function Detail({ req, user, onUpdate, onClose }) {
             <h3 className="mb-3 flex items-center gap-2 text-sm font-semibold"><MessageSquare size={16} /> Comments ({req.comments.length})</h3>
             <ul className="space-y-3">
               {req.comments.map((c, i) => (
-                <li key={i} className="flex gap-3"><Avatar name={c.author} size="sm" /><div className="min-w-0 rounded-2xl bg-slate-100 px-4 py-2.5 text-sm dark:bg-slate-800"><p className="font-semibold">{c.author} <span className="text-xs font-normal text-slate-500">{fmtTime(c.at)}</span></p><p className="break-words">{c.text}</p></div></li>
+                <li key={i} className="flex gap-3"><Avatar name={c.author} size="sm" /><div className="min-w-0 text-sm"><p className="font-medium text-slate-900 dark:text-white">{c.author} <span className="text-xs font-normal text-slate-500">{fmtTime(c.at)}</span></p><p className="break-words">{c.text}</p></div></li>
               ))}
             </ul>
             <form onSubmit={comment} className="mt-3 flex gap-2">
@@ -136,18 +138,18 @@ function Detail({ req, user, onUpdate, onClose }) {
 export default function Requests() {
   const { user } = useUser()
   const toast = useToast()
-  const [requests, setRequests] = useLocalStorage('rex-requests', initialRequests)
+  const [requests, setRequests] = useLocalStorage('rex-requests-v2', initialRequests)
   const [params, setParams] = useSearchParams()
   const [tab, setTab] = useState(params.get('tab') ?? 'all')
   const [q, setQ] = useState('')
-  const [creating, setCreating] = useState(params.get('new') === '1')
+  const [creating, setCreating] = useState(params.get('new') === '1' ? (params.get('to') ?? requestDesks[0].dept) : null)
   const selected = requests.find((r) => r.id === params.get('id'))
 
   const queue = requests.filter((r) => r.to === user.dept && !closedStatuses.includes(r.status))
   const tabs = [
     { id: 'all', label: 'All', test: () => true },
-    { id: 'mine', label: 'Raised by me', test: (r) => r.requestedBy === user.name },
-    { id: 'queue', label: `${user.dept} queue`, test: (r) => r.to === user.dept, badge: queue.length },
+    { id: 'mine', label: 'Mine', test: (r) => r.requestedBy === user.name },
+    ...(requestDesks.some((d) => d.dept === user.dept) || queue.length ? [{ id: 'queue', label: `${user.dept} queue`, test: (r) => r.to === user.dept, badge: queue.length }] : []),
     { id: 'open', label: 'Open', test: (r) => !closedStatuses.includes(r.status) },
     { id: 'closed', label: 'Resolved', test: (r) => closedStatuses.includes(r.status) },
   ]
@@ -163,72 +165,64 @@ export default function Requests() {
     const id = `REQ-${1000 + requests.length + 1}`
     const at = new Date().toISOString()
     setRequests([{ id, ...f, from: user.dept, requestedBy: user.name, status: 'Submitted', owner: null, comments: [], history: [{ action: 'Submitted', by: user.name, at }] }, ...requests])
-    setCreating(false)
+    setCreating(null)
     setTab('mine')
     toast(`${id} sent to ${f.to}`)
   }
 
   return (
-    <div className="space-y-6">
-      <div className="flex flex-wrap items-end justify-between gap-4">
-        <div>
-          <h1 className="text-2xl font-bold text-slate-900 sm:text-3xl dark:text-white">Request Centre</h1>
-          <p className="mt-1 text-sm text-slate-500">Ask another department for help, and track what’s been asked of yours.</p>
-        </div>
-        <button onClick={() => setCreating(true)} className="btn bg-accent-700 text-white hover:bg-accent-800"><Plus size={16} /> New request</button>
-      </div>
+    <div>
+      <PageHeader title="Requests" description="Ask Brand, IT or Admin for help, and track what you’ve asked for." />
 
-      <section className="stagger grid grid-cols-2 gap-4 lg:grid-cols-4" aria-label="Request summary">
-        {[
-          ['Your team’s queue', queue.length, 'queue'],
-          ['Raised by you', requests.filter((r) => r.requestedBy === user.name && !closedStatuses.includes(r.status)).length, 'mine'],
-          ['Open company-wide', requests.filter((r) => !closedStatuses.includes(r.status)).length, 'open'],
-          ['Resolved', requests.filter((r) => closedStatuses.includes(r.status)).length, 'closed'],
-        ].map(([label, n, t]) => (
-          <button key={label} onClick={() => setTab(t)} className={`card card-hover p-4 text-left ${tab === t ? 'ring-2 ring-brand-500' : ''}`}>
-            <p className="text-xs text-slate-500">{label}</p>
-            <p className="mt-1 font-display text-2xl font-bold tabular-nums">{n}</p>
+      {/* 17 Nov review: one place to send requests to Brand, IT and Admin. */}
+      <section aria-label="Send a request" className="mb-10 grid gap-3 md:grid-cols-3">
+        {requestDesks.map((d) => (
+          <button key={d.dept} onClick={() => setCreating(d.dept)} className="card card-hover group flex items-start gap-4 p-5 text-left">
+            <span className="flex h-10 w-10 shrink-0 items-center justify-center rounded-lg bg-brand-50 text-brand-700 transition-colors group-hover:bg-brand-700 group-hover:text-white dark:bg-brand-500/15 dark:text-brand-200 dark:group-hover:bg-brand-500"><Icon name={d.icon} size={20} /></span>
+            <span className="min-w-0">
+              <span className="flex items-center gap-1.5 text-sm font-semibold text-slate-900 dark:text-white">Request from {d.short} <Plus size={14} className="text-slate-400 transition-colors group-hover:text-brand-700 dark:group-hover:text-brand-300" /></span>
+              <span className="mt-0.5 block text-sm text-slate-500">{d.desc}</span>
+            </span>
           </button>
         ))}
       </section>
 
-      <div className="card overflow-hidden">
-        <div className="flex flex-col gap-3 border-b border-slate-100 p-3 lg:flex-row lg:items-center dark:border-slate-800">
-          <div className="-mx-1 flex gap-1 overflow-x-auto px-1" role="tablist">
-            {tabs.map((t) => (
-              <button key={t.id} role="tab" aria-selected={tab === t.id} onClick={() => setTab(t.id)} className={`btn shrink-0 px-3 py-1.5 ${tab === t.id ? 'bg-brand-700 text-white' : 'text-slate-600 hover:bg-slate-100 dark:text-slate-300 dark:hover:bg-slate-800'}`}>
-                {t.label}{t.badge > 0 && <span className={`rounded-full px-1.5 text-[11px] font-bold ${tab === t.id ? 'bg-white/20' : 'bg-accent-700 text-white'}`}>{t.badge}</span>}
-              </button>
-            ))}
-          </div>
-          <div className="relative lg:ml-auto lg:w-72">
-            <Search size={16} className="absolute top-1/2 left-3 -translate-y-1/2 text-slate-400" />
-            <label htmlFor="rq-q" className="sr-only">Search requests</label>
-            <input id="rq-q" className="input pl-9" placeholder="Search by ID, title or person" value={q} onChange={(e) => setQ(e.target.value)} />
-          </div>
+      <div className="mb-4 flex flex-col gap-3 border-b border-slate-200 lg:flex-row lg:items-end lg:justify-between dark:border-slate-800">
+        <nav className="-mb-px flex gap-6 overflow-x-auto" role="tablist" aria-label="Filter requests">
+          {tabs.map((t) => (
+            <button key={t.id} role="tab" aria-selected={tab === t.id} onClick={() => setTab(t.id)} className={`flex shrink-0 items-center gap-1.5 border-b-2 pb-3 text-sm font-medium transition-colors ${tab === t.id ? 'border-brand-700 text-slate-900 dark:border-brand-300 dark:text-white' : 'border-transparent text-slate-500 hover:text-slate-800 dark:hover:text-slate-200'}`}>
+              {t.label}{t.badge > 0 && <span className="rounded-md bg-accent-700 px-1.5 text-[11px] font-semibold text-white tabular-nums">{t.badge}</span>}
+            </button>
+          ))}
+        </nav>
+        <div className="relative pb-3 lg:w-72">
+          <Search size={16} className="absolute top-[calc(50%-6px)] left-3 -translate-y-1/2 text-slate-400" />
+          <label htmlFor="rq-q" className="sr-only">Search requests</label>
+          <input id="rq-q" className="input h-9 pl-9" placeholder="Search by ID, title or person" value={q} onChange={(e) => setQ(e.target.value)} />
         </div>
-
-        {shown.length === 0 ? (
-          <div className="flex flex-col items-center p-12 text-center"><EmptyIllustration /><p className="mt-3 font-semibold">No requests here</p><p className="text-sm text-slate-500">Try another tab, or create a new request.</p></div>
-        ) : (
-          <ul className="divide-y divide-slate-100 dark:divide-slate-800">
-            {shown.map((r) => (
-              <li key={r.id}>
-                <button onClick={() => setParams({ id: r.id })} className="grid w-full gap-2 px-4 py-3.5 text-left hover:bg-slate-50 md:grid-cols-[90px_1fr_170px_90px_80px_130px] md:items-center md:gap-4 dark:hover:bg-slate-800/50">
-                  <span className="font-mono text-xs text-slate-500">{r.id}</span>
-                  <span className="min-w-0"><span className="block truncate font-medium">{r.title}</span><span className="block truncate text-xs text-slate-500">{r.requestedBy} · {r.from}</span></span>
-                  <span className="flex items-center gap-1.5 text-sm"><Inbox size={14} className="shrink-0 text-slate-400" /><span className="truncate">{r.to}</span></span>
-                  <span><span className={`chip ${priorityCls[r.priority]}`}>{r.priority}</span></span>
-                  <span className="flex items-center gap-1 text-xs text-slate-500"><Calendar size={12} />{fmt(r.due)}</span>
-                  <span><StatusBadge tone={statusTone[r.status]}>{r.status}</StatusBadge></span>
-                </button>
-              </li>
-            ))}
-          </ul>
-        )}
       </div>
 
-      {creating && <NewRequest user={user} onCreate={create} onClose={() => setCreating(false)} />}
+      {shown.length === 0 ? (
+        <div className="card px-6 py-12 text-center"><p className="font-medium text-slate-900 dark:text-white">No requests here</p><p className="mt-1 text-sm text-slate-500">Try another tab, or send a new request above.</p></div>
+      ) : (
+        <ul className="card divide-y divide-slate-100 dark:divide-slate-800">
+          {shown.map((r) => (
+            <li key={r.id}>
+              <button onClick={() => setParams({ id: r.id })} className="grid w-full gap-2 px-5 py-3.5 text-left transition-colors hover:bg-slate-50 md:grid-cols-[minmax(0,1fr)_10rem_5rem_12rem] md:items-center md:gap-6 dark:hover:bg-slate-800/50">
+                <span className="min-w-0">
+                  <span className="block truncate text-sm font-medium text-slate-900 dark:text-white">{r.title}</span>
+                  <span className="block truncate text-xs text-slate-500"><span className="font-mono">{r.id}</span>, {r.requestedBy}, {r.from}</span>
+                </span>
+                <span className="flex items-center gap-1.5 text-sm text-slate-600 dark:text-slate-300"><Inbox size={14} className="shrink-0 text-slate-400" /><span className="truncate">{r.to}</span></span>
+                <span className="flex items-center gap-1 text-xs text-slate-500"><Calendar size={12} />{fmt(r.due)}</span>
+                <span className="flex flex-wrap gap-1.5"><StatusBadge tone={statusTone[r.status]}>{r.status}</StatusBadge>{['High', 'Urgent'].includes(r.priority) && <span className={`chip ${priorityCls[r.priority]}`}>{r.priority}</span>}</span>
+              </button>
+            </li>
+          ))}
+        </ul>
+      )}
+
+      {creating && <NewRequest to={creating} onCreate={create} onClose={() => setCreating(null)} />}
       {selected && <Detail req={selected} user={user} onUpdate={update} onClose={() => setParams({})} />}
     </div>
   )

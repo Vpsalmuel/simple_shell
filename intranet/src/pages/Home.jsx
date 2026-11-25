@@ -1,15 +1,15 @@
 import { useEffect, useState } from 'react'
 import { Link } from 'react-router-dom'
-import { ArrowRightIcon as ArrowRight, ArrowUpRightIcon as ArrowUpRight, BookOpenIcon as BookOpen, CalendarDotsIcon as CalendarDays, CheckIcon as Check, CaretRightIcon as ChevronRight, ClockIcon as Clock, TrayIcon as Inbox, InfoIcon as Info, MapPinIcon as MapPin, SparkleIcon as Sparkles, XIcon as X } from '@phosphor-icons/react'
-import { announcements, courses, events, people, poll } from '../data'
-import { birthdays } from '../data/culture'
+import { ArrowRightIcon as ArrowRight, ArrowUpRightIcon as ArrowUpRight, BookOpenIcon as BookOpen, CakeIcon as Cake, CaretRightIcon as ChevronRight, CheckIcon as Check, CheckCircleIcon as CheckCircle, TrayIcon as Inbox, MegaphoneIcon as Megaphone, SealCheckIcon as Approve, XIcon as X } from '@phosphor-icons/react'
+import { announcements, courses, events, poll } from '../data'
 import { closedStatuses, initialRequests } from '../data/requests'
 import { useNews } from '../hooks/useNews'
 import { dashboardFor } from '../config/departments'
 import { companyTools } from '../config/brand'
 import { useUser } from '../context/UserContext'
 import { useLocalStorage } from '../hooks/useLocalStorage'
-import { daysUntil, nextOccurrence, shortDate, whenLabel } from '../lib/dates'
+import { celebrationLabel, upcomingCelebrations } from '../lib/celebrations'
+import { daysUntil, shortDate, whenLabel } from '../lib/dates'
 import { useToast } from '../components/Toast'
 import Avatar from '../components/Avatar'
 import Icon from '../components/Icon'
@@ -17,73 +17,79 @@ import Photo from '../components/Photo'
 import StatusBadge from '../components/StatusBadge'
 import MeetingRoomModal from '../components/MeetingRoomModal'
 
-// Home follows the patterns of award-winning intranets (NN/g Intranet Design Annual, Viva Connections):
-// things to act on and the tools people open daily, then news, events and people.
-// Search lives in the header on every page (NN/g: a persistent, exposed search field), so Home does not repeat it.
-// No metrics, no rotating banners.
+// Home layout: a main column for what needs action and what's new, and a right rail for the tools and
+// people things staff check daily. One card style, one radius, 15px section titles, no metrics, no carousel.
 
 function greeting() {
   const h = new Date().getHours()
   return h < 12 ? 'Good morning' : h < 17 ? 'Good afternoon' : 'Good evening'
 }
 
-function Greeting({ user }) {
+const fmtDate = (d) => new Date(`${d}T00:00`).toLocaleDateString(undefined, { day: 'numeric', month: 'short' })
+
+function Card({ title, action, children, className = '', ...rest }) {
   return (
-    <section>
-      <p className="text-sm text-slate-500 dark:text-slate-400">{new Date().toLocaleDateString(undefined, { weekday: 'long', day: 'numeric', month: 'long' })}</p>
-      <h1 className="mt-1 text-3xl font-bold text-brand-800 sm:text-4xl dark:text-white">{greeting()}, {user.firstName}</h1>
+    <section className={`card ${className}`} {...rest}>
+      {title && (
+        <header className="flex items-center justify-between gap-3 px-5 pt-4 pb-2">
+          <h2 className="section-title">{title}</h2>
+          {action}
+        </header>
+      )}
+      {children}
     </section>
   )
 }
 
-// One important notice, fixed in place (not a rotating banner). People can dismiss it.
+const MoreLink = ({ to, children }) => <Link to={to} className="link inline-flex items-center gap-1 text-xs">{children} <ArrowRight size={12} /></Link>
+
+// One important notice, fixed in place. People can dismiss it.
 function Notice() {
   const [dismissed, setDismissed] = useLocalStorage('rex-dismissed-notices', [])
   const a = announcements.find((x) => !dismissed.includes(x.id))
   if (!a) return null
-  const to = a.tag === 'Compliance' ? '/learning' : a.tag === 'Wellbeing' ? '/wellbeing' : '/news'
+  const to = a.tag === 'Compliance' ? '/knowledge?tab=courses' : a.tag === 'Wellbeing' ? '/wellbeing' : '/news'
   return (
-    <section className="flex flex-col gap-3 rounded-2xl border border-accent-200 bg-accent-50 p-4 sm:flex-row sm:items-center dark:border-accent-700/40 dark:bg-accent-700/10" aria-label="Announcement">
-      <Info size={20} className="hidden shrink-0 text-accent-700 sm:block dark:text-accent-400" />
-      <div className="min-w-0 flex-1">
-        <p className="font-semibold text-slate-900 dark:text-white">{a.title}</p>
-        <p className="text-sm text-slate-600 dark:text-slate-300">{a.body}</p>
-      </div>
-      <div className="flex items-center gap-2">
-        <Link to={to} className="btn bg-brand-700 text-white hover:bg-brand-800">{a.cta}</Link>
-        <button onClick={() => setDismissed([...dismissed, a.id])} className="btn-ghost p-2" aria-label="Dismiss announcement"><X size={16} /></button>
-      </div>
+    <section className="mb-8 flex items-start gap-3 rounded-xl border border-slate-200 bg-white py-3 pr-2 pl-4 sm:items-center dark:border-slate-800 dark:bg-slate-900" aria-label="Announcement">
+      <Megaphone size={18} className="mt-0.5 shrink-0 text-accent-700 sm:mt-0 dark:text-accent-400" />
+      <p className="min-w-0 flex-1 text-sm">
+        <span className="font-medium text-slate-900 dark:text-white">{a.title}.</span>{' '}
+        <span className="text-slate-600 dark:text-slate-300">{a.body}</span>{' '}
+        <Link to={to} className="link whitespace-nowrap">{a.cta}</Link>
+      </p>
+      <button onClick={() => setDismissed([...dismissed, a.id])} className="btn-ghost h-8 w-8 shrink-0 px-0" aria-label="Dismiss announcement"><X size={16} /></button>
     </section>
   )
 }
 
 function TaskRow({ icon: Ico, title, meta, children, to }) {
-  const body = (
+  const inner = (
     <>
-      <span className="flex h-9 w-9 shrink-0 items-center justify-center rounded-lg bg-slate-100 text-slate-600 dark:bg-slate-800 dark:text-slate-300"><Ico size={16} /></span>
+      <Ico size={18} className="mt-0.5 shrink-0 text-slate-500 sm:mt-0" />
       <span className="min-w-0 flex-1">
-        <span className="line-clamp-2 block text-sm font-medium text-slate-900 sm:truncate dark:text-white">{title}</span>
-        <span className="line-clamp-2 block text-xs text-slate-500 sm:truncate">{meta}</span>
+        <span className="block text-sm font-medium text-slate-900 sm:truncate dark:text-white">{title}</span>
+        <span className="block text-xs text-slate-500 sm:truncate">{meta}</span>
         {children && <span className="mt-2 flex sm:hidden">{children}</span>}
       </span>
-      {children && <span className="hidden sm:flex">{children}</span>}
+      {children && <span className="hidden shrink-0 sm:flex">{children}</span>}
     </>
   )
+  const cls = 'flex items-start gap-3 px-5 py-3 sm:items-center'
   return (
     <li>
       {to
-        ? <Link to={to} className="flex items-start gap-3 rounded-xl px-2 py-2.5 sm:items-center transition hover:bg-slate-50 dark:hover:bg-slate-800/60">{body}<ChevronRight size={16} className="shrink-0 text-slate-300" /></Link>
-        : <div className="flex items-start gap-3 px-2 py-2.5 sm:items-center">{body}</div>}
+        ? <Link to={to} className={`${cls} transition-colors hover:bg-slate-50 dark:hover:bg-slate-800/50`}>{inner}<ChevronRight size={14} className="shrink-0 text-slate-400" /></Link>
+        : <div className={cls}>{inner}</div>}
     </li>
   )
 }
 
-// Everything that needs the person's action, in one list.
+// Pending approvals and everything else that needs the person's action, in one list.
 function Tasks({ user }) {
   const toast = useToast()
   const { focus } = dashboardFor(user.dept)
   const [progress] = useLocalStorage('rex-learning', Object.fromEntries(courses.map((c) => [c.id, c.progress])))
-  const [requests] = useLocalStorage('rex-requests', initialRequests)
+  const [requests] = useLocalStorage('rex-requests-v2', initialRequests)
   const [decided, setDecided] = useState([])
   useEffect(() => setDecided([]), [user.dept])
 
@@ -95,24 +101,19 @@ function Tasks({ user }) {
   const count = approvals.length + training.length + (waiting.length ? 1 : 0)
 
   return (
-    <section className="card flex h-full flex-col p-5">
-      <header className="mb-2 flex items-center gap-2">
-        <h2 className="text-lg font-semibold">Your tasks</h2>
-        {count > 0 && <span className="rounded-full bg-brand-700 px-2 py-0.5 text-xs font-semibold text-white tabular-nums">{count}</span>}
-      </header>
+    <Card title={<span className="flex items-center gap-2">Your tasks {count > 0 && <span className="rounded-md bg-slate-100 px-1.5 text-xs font-medium text-slate-600 tabular-nums dark:bg-slate-800 dark:text-slate-300">{count}</span>}</span>}>
       {count === 0 && watch.length === 0 ? (
-        <div className="flex flex-1 flex-col items-center justify-center py-8 text-center">
-          <Check size={28} className="text-emerald-500" />
-          <p className="mt-2 font-semibold">You’re all caught up</p>
-          <p className="text-sm text-slate-500">New approvals and requests will appear here.</p>
+        <div className="flex items-center gap-3 px-5 pt-2 pb-5 text-sm text-slate-600 dark:text-slate-300">
+          <CheckCircle size={20} className="text-emerald-600 dark:text-emerald-400" /> You’re all caught up. New approvals and requests appear here.
         </div>
       ) : (
-        <ul className="-mx-2 divide-y divide-slate-100 dark:divide-slate-800">
+        <ul className="divide-y divide-slate-100 pb-1 dark:divide-slate-800">
+          {approvals.length > 0 && <li className="px-5 pt-1 pb-1.5 text-xs font-medium text-slate-500">Pending approval</li>}
           {approvals.map((a) => (
-            <TaskRow key={a.id} icon={Inbox} title={a.primary} meta={a.secondary}>
-              <div className="flex shrink-0 gap-1.5">
-                <button onClick={() => decide(a, false)} className="btn-ghost border border-slate-200 px-3 py-1.5 dark:border-slate-700">Decline</button>
-                <button onClick={() => decide(a, true)} className="btn bg-emerald-600 px-3 py-1.5 text-white hover:bg-emerald-700">Approve</button>
+            <TaskRow key={a.id} icon={Approve} title={a.primary} meta={a.secondary}>
+              <div className="flex gap-1.5">
+                <button onClick={() => decide(a, false)} className="btn-secondary h-8 px-3 text-xs">Decline</button>
+                <button onClick={() => decide(a, true)} className="btn-primary h-8 px-3 text-xs">Approve</button>
               </div>
             </TaskRow>
           ))}
@@ -122,104 +123,97 @@ function Tasks({ user }) {
             </TaskRow>
           ))}
           {training.map((c) => (
-            <TaskRow key={c.id} icon={BookOpen} title={`Complete ${c.title}`} meta={`Required training, due ${shortDate(new Date(`${c.due}T00:00`))}`} to={`/learning/${c.id}`}>
-              <StatusBadge tone={daysUntil(new Date(`${c.due}T00:00`)) <= 14 ? 'warning' : 'neutral'}>{progress[c.id] ?? 0}% done</StatusBadge>
+            <TaskRow key={c.id} icon={BookOpen} title={`Complete ${c.title}`} meta={`Required training, due ${shortDate(new Date(`${c.due}T00:00`))}, ${progress[c.id] ?? 0}% done`} to={`/learning/${c.id}`}>
+              {daysUntil(new Date(`${c.due}T00:00`)) <= 14 && <StatusBadge tone="warning">Due soon</StatusBadge>}
             </TaskRow>
           ))}
           {waiting.length > 0 && (
-            <TaskRow icon={Inbox} title={`${waiting.length} ${waiting.length === 1 ? 'request is' : 'requests are'} waiting for ${user.dept}`} meta="Assign, reply or close them in the Request Centre" to="/requests?tab=queue" />
+            <TaskRow icon={Inbox} title={`${waiting.length} ${waiting.length === 1 ? 'request is' : 'requests are'} waiting for ${user.dept}`} meta="Assign, reply or close them in Requests" to="/requests?tab=queue" />
           )}
         </ul>
       )}
-    </section>
+    </Card>
   )
 }
 
-function ToolLink({ tool, className, children }) {
+function ToolLink({ tool, onAction, className, children }) {
   const toast = useToast()
   if (tool.internal) return <Link to={tool.internal} className={className}>{children}</Link>
-  if (!tool.url) return <button onClick={() => toast(`${tool.label} link coming soon. IT will add it.`)} className={`${className} text-left`}>{children}</button>
+  if (tool.action) return <button onClick={() => onAction(tool.action)} className={className}>{children}</button>
+  if (!tool.url) return <button onClick={() => toast(`${tool.label}: link coming soon.`)} className={className}>{children}</button>
   return <a href={tool.url} target="_blank" rel="noreferrer" className={className}>{children}</a>
 }
 
-// The company tools people open every day, then department shortcuts.
-function QuickTools({ links }) {
+// The company tools staff open every day (17 Nov review: Book a room and Payslips moved in here).
+function QuickTools() {
   const [room, setRoom] = useState(false)
-  const row = 'group flex items-center gap-3 rounded-xl px-2 py-2 text-sm font-medium text-slate-700 transition hover:bg-slate-50 dark:text-slate-200 dark:hover:bg-slate-800/60'
   return (
-    <section className="card p-5" data-tour="tools">
-      <h2 className="mb-3 text-lg font-semibold">Quick tools</h2>
-      <div className="grid grid-cols-2 gap-2">
+    <Card title="Quick tools" data-tour="tools">
+      <div className="grid grid-cols-3 gap-1 px-3 pb-3">
         {companyTools.map((t) => (
-          <ToolLink key={t.id} tool={t} className="group relative flex flex-col gap-2 rounded-xl border border-slate-200/80 p-3 transition hover:border-brand-300 hover:bg-brand-50/50 dark:border-slate-800 dark:hover:border-brand-600 dark:hover:bg-slate-800/60">
-            <span className="flex h-9 w-9 items-center justify-center rounded-lg bg-brand-700 text-white dark:bg-brand-500"><Icon name={t.icon} size={18} /></span>
-            <span className="min-w-0">
-              <span className="block text-sm font-semibold text-slate-900 dark:text-white">{t.label}</span>
-              <span className="block truncate text-xs text-slate-500 dark:text-slate-400">{t.desc}</span>
-            </span>
-            {!t.internal && <ArrowUpRight size={14} className="absolute top-3 right-3 text-slate-300 transition group-hover:text-brand-600 dark:text-slate-600 dark:group-hover:text-brand-300" />}
+          <ToolLink key={t.id} tool={t} onAction={() => setRoom(true)} className="group flex flex-col items-center gap-2 rounded-lg px-1 py-3 text-center transition-colors hover:bg-slate-50 dark:hover:bg-slate-800/60">
+            <span className="flex h-10 w-10 items-center justify-center rounded-lg bg-brand-50 text-brand-700 transition-colors group-hover:bg-brand-700 group-hover:text-white dark:bg-brand-500/15 dark:text-brand-200 dark:group-hover:bg-brand-500"><Icon name={t.icon} size={20} /></span>
+            <span className="text-xs leading-tight font-medium text-slate-700 dark:text-slate-200">{t.label}</span>
           </ToolLink>
         ))}
       </div>
-      <h3 className="mt-5 mb-1 text-xs font-semibold tracking-wide text-slate-500 uppercase dark:text-slate-400">Shortcuts</h3>
-      <div className="-mx-2">
-        {links.map((q) => {
-          const inner = <><span className="flex h-8 w-8 shrink-0 items-center justify-center rounded-lg bg-brand-50 text-brand-700 dark:bg-slate-800 dark:text-brand-200"><Icon name={q.icon} size={16} /></span>{q.label}</>
-          return q.action === 'meetingRoom'
-            ? <button key={q.label} onClick={() => setRoom(true)} className={`${row} w-full text-left`}>{inner}</button>
-            : q.href.startsWith('/')
-              ? <Link key={q.label} to={q.href} className={row}>{inner}</Link>
-              : <a key={q.label} href={q.href} className={row}>{inner}</a>
-        })}
-      </div>
       <MeetingRoomModal open={room} onClose={() => setRoom(false)} />
-    </section>
+    </Card>
   )
 }
 
-const fmtDate = (d) => new Date(`${d}T00:00`).toLocaleDateString(undefined, { day: 'numeric', month: 'short' })
-
-// One featured story and three headlines. Static: no carousel.
-function News() {
-  const { news } = useNews()
-  const featured = news.find((n) => n.featured) ?? news[0]
-  const rest = news.filter((n) => n !== featured).slice(0, 3)
+// Replaces the Shortcuts list under Quick tools (17 Nov review).
+function CelebrationsCard() {
+  const items = upcomingCelebrations(7).slice(0, 4)
   return (
-    <section>
-      <div className="mb-3 flex items-end justify-between gap-4">
-        <h2 className="text-lg font-semibold">Company news</h2>
-        <Link to="/news" className="inline-flex items-center gap-1 text-sm font-medium text-brand-700 hover:underline dark:text-brand-300">All company news <ArrowRight size={14} /></Link>
-      </div>
-      <div className="grid gap-5 lg:grid-cols-5 [&>*]:min-w-0">
-        <Link to={`/news/${featured.id}`} className="card card-hover group overflow-hidden lg:col-span-3">
-          <Photo src={featured.image} alt="" className="aspect-[16/8] w-full" rounded="rounded-none" />
-          <div className="p-5">
-            <p className="text-xs font-medium text-accent-700 dark:text-accent-400">{featured.category}</p>
-            <h3 className="mt-1 text-xl font-semibold group-hover:text-brand-700 dark:group-hover:text-brand-300">{featured.title}</h3>
-            <p className="mt-1 text-sm text-slate-600 dark:text-slate-300">{featured.excerpt}</p>
-            <p className="mt-3 text-xs text-slate-500">{featured.author}, {fmtDate(featured.date)}</p>
-          </div>
-        </Link>
-        <ul className="card divide-y divide-slate-100 lg:col-span-2 dark:divide-slate-800">
-          {rest.map((n) => (
-            <li key={n.id}>
-              <Link to={`/news/${n.id}`} className="group flex gap-4 p-4 transition hover:bg-slate-50 dark:hover:bg-slate-800/50">
-                <Photo src={n.image} alt="" className="h-16 w-20 shrink-0" rounded="rounded-lg" />
-                <span className="min-w-0">
-                  <span className="text-xs font-medium text-accent-700 dark:text-accent-400">{n.category}</span>
-                  <span className="mt-0.5 block font-medium leading-snug group-hover:text-brand-700 dark:group-hover:text-brand-300">{n.title}</span>
-                  <span className="mt-1 block text-xs text-slate-500">{fmtDate(n.date)}</span>
-                </span>
-              </Link>
+    <Card title="Celebrations" action={<MoreLink to="/celebrations">All</MoreLink>}>
+      {items.length === 0 ? <p className="px-5 pb-5 text-sm text-slate-500">No birthdays or anniversaries this week.</p> : (
+        <ul className="space-y-3 px-5 pt-1 pb-5">
+          {items.map((c) => (
+            <li key={c.kind + c.name} className="flex items-center gap-3">
+              <Avatar name={c.name} size="sm" />
+              <span className="min-w-0 flex-1">
+                <span className="block truncate text-sm font-medium text-slate-900 dark:text-white">{c.name}</span>
+                <span className="flex items-center gap-1 text-xs text-slate-500">{c.kind === 'birthday' && <Cake size={12} />}{celebrationLabel(c)}, {whenLabel(c.days).toLowerCase()}</span>
+              </span>
             </li>
           ))}
         </ul>
-      </div>
-    </section>
+      )}
+    </Card>
   )
 }
 
-function Events() {
+function News() {
+  const { news } = useNews()
+  const featured = news.find((n) => n.featured) ?? news[0]
+  const rest = news.filter((n) => n !== featured).slice(0, 4)
+  return (
+    <Card title="Company news" action={<MoreLink to="/news">All news</MoreLink>}>
+      <Link to={`/news/${featured.id}`} className="group mx-5 mt-1 grid gap-4 sm:grid-cols-[minmax(0,13rem)_1fr]">
+        <Photo src={featured.image} alt="" className="aspect-[4/3] w-full" rounded="rounded-lg" />
+        <span className="min-w-0 self-center">
+          <span className="text-xs font-medium text-accent-700 dark:text-accent-400">{featured.category}</span>
+          <span className="mt-1 block text-[17px] leading-snug font-semibold text-slate-900 group-hover:text-brand-700 dark:text-white dark:group-hover:text-brand-300">{featured.title}</span>
+          <span className="mt-1 line-clamp-2 block text-sm text-slate-600 dark:text-slate-300">{featured.excerpt}</span>
+          <span className="mt-2 block text-xs text-slate-500">{featured.author}, {fmtDate(featured.date)}</span>
+        </span>
+      </Link>
+      <ul className="mt-4 divide-y divide-slate-100 border-t border-slate-100 dark:divide-slate-800 dark:border-slate-800">
+        {rest.map((n) => (
+          <li key={n.id}>
+            <Link to={`/news/${n.id}`} className="group flex items-baseline gap-3 px-5 py-2.5 transition-colors hover:bg-slate-50 dark:hover:bg-slate-800/50">
+              <span className="min-w-0 flex-1 truncate text-sm text-slate-800 group-hover:text-brand-700 dark:text-slate-200 dark:group-hover:text-brand-300">{n.title}</span>
+              <span className="shrink-0 text-xs text-slate-500 tabular-nums">{fmtDate(n.date)}</span>
+            </Link>
+          </li>
+        ))}
+      </ul>
+    </Card>
+  )
+}
+
+function UpcomingEvents() {
   const [rsvp, setRsvp] = useLocalStorage('rex-rsvp', [])
   const toast = useToast()
   const today = new Date().toISOString().slice(0, 10)
@@ -230,58 +224,29 @@ function Events() {
     toast(going ? `RSVP removed for ${e.title}` : `You’re going to ${e.title}`)
   }
   return (
-    <section className="card flex flex-col p-5">
-      <h2 className="mb-3 text-lg font-semibold">Upcoming events</h2>
-      <ul className="flex-1 space-y-3">
+    <Card title="Upcoming events" action={<MoreLink to="/events">Calendar</MoreLink>}>
+      <ul className="divide-y divide-slate-100 pb-1 dark:divide-slate-800">
         {upcoming.map((e) => {
           const d = new Date(`${e.date}T00:00`)
           const going = rsvp.includes(e.id)
           return (
-            <li key={e.id} className="flex items-center gap-3">
-              <div className="flex h-12 w-12 shrink-0 flex-col items-center justify-center rounded-xl border border-slate-200 dark:border-slate-700">
-                <span className="text-[10px] font-semibold text-accent-700 uppercase dark:text-accent-400">{d.toLocaleDateString(undefined, { month: 'short' })}</span>
-                <span className="text-base leading-none font-bold">{d.getDate()}</span>
+            <li key={e.id} className="flex items-center gap-4 px-5 py-3">
+              <div className="w-10 shrink-0 text-center">
+                <p className="text-[11px] font-medium text-accent-700 uppercase dark:text-accent-400">{d.toLocaleDateString(undefined, { month: 'short' })}</p>
+                <p className="text-lg leading-tight font-semibold text-slate-900 tabular-nums dark:text-white">{d.getDate()}</p>
               </div>
               <div className="min-w-0 flex-1">
-                <p className="truncate text-sm font-medium">{e.title}</p>
-                <p className="flex items-center gap-1 truncate text-xs text-slate-500"><Clock size={11} /> {e.time} <MapPin size={11} className="ml-1" /> {e.place}</p>
+                <p className="truncate text-sm font-medium text-slate-900 dark:text-white">{e.title}</p>
+                <p className="truncate text-xs text-slate-500">{e.time}, {e.place}</p>
               </div>
-              <button onClick={() => toggle(e)} aria-pressed={going} className={`btn shrink-0 px-3 py-1.5 ${going ? 'bg-emerald-50 text-emerald-700 dark:bg-emerald-500/10 dark:text-emerald-300' : 'border border-slate-200 text-slate-700 hover:border-brand-400 dark:border-slate-700 dark:text-slate-200'}`}>
+              <button onClick={() => toggle(e)} aria-pressed={going} className={going ? 'btn h-8 shrink-0 px-3 text-xs text-emerald-700 dark:text-emerald-300' : 'btn-secondary h-8 shrink-0 px-3 text-xs'}>
                 {going ? <><Check size={14} /> Going</> : 'RSVP'}
               </button>
             </li>
           )
         })}
       </ul>
-      <Link to="/events" className="mt-4 inline-flex items-center gap-1 text-sm font-medium text-brand-700 hover:underline dark:text-brand-300"><CalendarDays size={14} /> Open the events calendar</Link>
-    </section>
-  )
-}
-
-function ThisWeek() {
-  const soonBirthdays = Object.entries(birthdays)
-    .map(([name, mmdd]) => ({ name, days: daysUntil(nextOccurrence(mmdd)), date: nextOccurrence(mmdd), kind: 'Birthday' }))
-  const anniversaries = people.filter((p) => p.joined).map((p) => {
-    const date = nextOccurrence(p.joined.slice(5))
-    const years = date.getFullYear() - Number(p.joined.slice(0, 4))
-    return { name: p.name, days: daysUntil(date), date, kind: `${years}-year anniversary`, years }
-  }).filter((a) => a.years > 0)
-  const items = [...soonBirthdays, ...anniversaries].filter((x) => x.days <= 7).sort((a, b) => a.days - b.days).slice(0, 4)
-  return (
-    <section className="card flex flex-col p-5">
-      <h2 className="mb-3 text-lg font-semibold">Celebrations this week</h2>
-      {items.length === 0 ? <p className="flex-1 text-sm text-slate-500">No birthdays or work anniversaries this week.</p> : (
-        <ul className="flex-1 space-y-3">
-          {items.map((x) => (
-            <li key={x.name + x.kind} className="flex items-center gap-3">
-              <Avatar name={x.name} size="sm" />
-              <span className="min-w-0 flex-1"><span className="block truncate text-sm font-medium">{x.name}</span><span className="block text-xs text-slate-500">{x.kind}, {whenLabel(x.days).toLowerCase()}</span></span>
-            </li>
-          ))}
-        </ul>
-      )}
-      <Link to="/celebrations" className="mt-4 inline-flex items-center gap-1 text-sm font-medium text-brand-700 hover:underline dark:text-brand-300"><Sparkles size={14} /> See all celebrations</Link>
-    </section>
+    </Card>
   )
 }
 
@@ -291,54 +256,56 @@ function Poll() {
   const counts = base.map((c, i) => c + (vote === i ? 1 : 0))
   const total = counts.reduce((a, b) => a + b, 0)
   return (
-    <section className="card p-5">
-      <h2 className="text-lg font-semibold">Pulse poll</h2>
-      <p className="mt-1 mb-3 text-sm text-slate-600 dark:text-slate-300">{poll.question}</p>
-      <div className="space-y-2">
-        {poll.options.map((o, i) => {
-          const pct = Math.round((counts[i] / total) * 100)
-          return (
-            <button key={o} onClick={() => setVote(i)} disabled={vote !== null} aria-pressed={vote === i} className={`relative w-full overflow-hidden rounded-xl border px-3 py-2 text-left text-sm transition ${vote === i ? 'border-brand-500' : 'border-slate-200 hover:border-brand-300 dark:border-slate-700'}`}>
-              {vote !== null && <span className="absolute inset-y-0 left-0 bg-brand-50 transition-all duration-700 dark:bg-brand-900/40" style={{ width: `${pct}%` }} />}
-              <span className="relative flex justify-between gap-2"><span>{o}</span>{vote !== null && <span className="font-semibold tabular-nums">{pct}%</span>}</span>
-            </button>
-          )
-        })}
+    <Card title="Pulse poll">
+      <div className="px-5 pb-5">
+        <p className="mb-3 text-sm text-slate-600 dark:text-slate-300">{poll.question}</p>
+        <div className="space-y-1.5">
+          {poll.options.map((o, i) => {
+            const pct = Math.round((counts[i] / total) * 100)
+            return (
+              <button key={o} onClick={() => setVote(i)} disabled={vote !== null} aria-pressed={vote === i} className={`relative w-full overflow-hidden rounded-lg border px-3 py-2 text-left text-sm transition-colors disabled:cursor-default ${vote === i ? 'border-brand-500 dark:border-brand-400' : 'border-slate-200 hover:border-slate-300 dark:border-slate-700'}`}>
+                {vote !== null && <span className="absolute inset-y-0 left-0 bg-brand-50 transition-[width] duration-700 dark:bg-brand-500/15" style={{ width: `${pct}%` }} />}
+                <span className="relative flex justify-between gap-2"><span>{o}</span>{vote !== null && <span className="font-medium tabular-nums">{pct}%</span>}</span>
+              </button>
+            )
+          })}
+        </div>
+        {vote !== null && <button onClick={() => setVote(null)} className="mt-3 text-xs text-slate-500 hover:underline">Change my vote</button>}
       </div>
-      {vote !== null && <button onClick={() => setVote(null)} className="mt-3 text-xs text-slate-500 hover:underline">Change my vote</button>}
-    </section>
+    </Card>
   )
 }
 
 function FirstNinetyDays({ user }) {
   return (
-    <section className="flex flex-col gap-3 rounded-2xl border border-brand-100 bg-brand-50 p-4 sm:flex-row sm:items-center dark:border-slate-800 dark:bg-slate-900">
-      <div className="flex-1">
-        <p className="font-semibold">Your first 90 days, {user.firstName}</p>
-        <p className="text-sm text-slate-600 dark:text-slate-300">Your buddy is {user.buddy} and your manager is {user.manager}.</p>
-      </div>
-      <Link to="/welcome" className="btn-ghost shrink-0 border border-slate-200 bg-white dark:border-slate-700 dark:bg-slate-900">Revisit your onboarding</Link>
-    </section>
+    <p className="mb-8 flex flex-wrap items-center gap-x-3 gap-y-1 text-sm text-slate-600 dark:text-slate-300">
+      Your first 90 days: your buddy is <b className="font-medium text-slate-900 dark:text-white">{user.buddy}</b> and your manager is <b className="font-medium text-slate-900 dark:text-white">{user.manager}</b>.
+      <Link to="/welcome" className="link inline-flex items-center gap-1">Revisit onboarding <ArrowUpRight size={12} /></Link>
+    </p>
   )
 }
 
 export default function Home() {
   const { user } = useUser()
-  const { quickLinks } = dashboardFor(user.dept)
   return (
-    <div className="space-y-6">
-      <Greeting user={user} />
+    <div>
+      <header className="mb-8">
+        <p className="text-sm text-slate-500">{new Date().toLocaleDateString(undefined, { weekday: 'long', day: 'numeric', month: 'long' })}</p>
+        <h1 className="mt-1 text-[28px] leading-tight font-semibold text-slate-900 dark:text-white">{greeting()}, {user.firstName}</h1>
+      </header>
       {user.newStaff && <FirstNinetyDays user={user} />}
       <Notice />
-      <div className="grid gap-6 lg:grid-cols-3 [&>*]:min-w-0">
-        <div className="lg:col-span-2"><Tasks user={user} /></div>
-        <QuickTools links={quickLinks} />
-      </div>
-      <News />
-      <div className="grid gap-6 md:grid-cols-2 xl:grid-cols-3 [&>*]:min-w-0">
-        <Events />
-        <ThisWeek />
-        <Poll />
+      <div className="grid grid-cols-1 gap-6 lg:grid-cols-[minmax(0,1fr)_19rem] xl:gap-8">
+        <div className="min-w-0 space-y-6">
+          <Tasks user={user} />
+          <News />
+          <UpcomingEvents />
+        </div>
+        <aside className="min-w-0 space-y-6">
+          <QuickTools />
+          <CelebrationsCard />
+          <Poll />
+        </aside>
       </div>
     </div>
   )

@@ -26,8 +26,8 @@ export const people = [
 ]
 
 export const announcements = [
-  { id: 1, tag: 'Company', title: 'Q3 results: gross written premium up 18%', body: 'Thank you to every team. Town hall recording and slides are now in the Docs hub.', tone: 'brand', cta: 'Watch town hall' },
-  { id: 2, tag: 'Compliance', title: 'Annual AML & data-protection training due 15 Nov', body: 'Complete both modules in the Learning portal. Takes about 40 minutes.', tone: 'warn', cta: 'Start training' },
+  { id: 1, tag: 'Company', title: 'Q3 results: gross written premium up 18%', body: 'Thank you to every team. The town hall recording and slides are in the Knowledge Center.', tone: 'brand', cta: 'Watch town hall' },
+  { id: 2, tag: 'Compliance', title: 'Annual AML & data-protection training due 30 Nov', body: 'Complete both courses in Knowledge & Learning. About 40 minutes.', tone: 'warn', cta: 'Start training' },
   { id: 3, tag: 'Wellbeing', title: 'Open enrolment for 2027 health plan is live', body: 'Review your HMO options and add dependants before 30 Nov.', tone: 'accent', cta: 'Review benefits' },
 ]
 
@@ -43,7 +43,7 @@ export const news = [
   { id: 4, category: 'IT', title: 'Single sign-on rolls out to all core systems', excerpt: 'One login for the policy admin, claims portal and HR. Migration dates inside.', author: 'David Kojo', date: '2026-10-18', readMins: 2, likes: 25, comments: 3, image: newsPhotos[4],
     body: ['From 3 November you will sign in once to reach policy admin, the claims workbench, HR and email.', 'Multi-factor authentication stays on for every system. Keep your authenticator app handy during the switch.'] },
   { id: 5, category: 'Company', title: 'Q3 results: gross written premium up 18%', excerpt: 'Strong growth in motor and health, with a combined ratio of 94%.', author: 'Victoria Hawthorne', date: '2026-10-15', readMins: 4, likes: 88, comments: 21, image: newsPhotos[5],
-    body: ['Gross written premium grew 18% year on year, led by motor and health.', 'Our combined ratio improved to 94%, and customer NPS rose to 62. Thank you to every team. The town hall recording is in the Docs hub.'] },
+    body: ['Gross written premium grew 18% year on year, led by motor and health.', 'Our combined ratio improved to 94%, and customer NPS rose to 62. Thank you to every team. The town hall recording is in the Knowledge Center.'] },
   { id: 6, category: 'Wellbeing', title: 'Open enrolment for the 2027 health plan', excerpt: 'Review your HMO options and add dependants before 30 November.', author: 'Thomas Mueller', date: '2026-10-12', readMins: 2, likes: 19, comments: 4, image: newsPhotos[6],
     body: ['Three plan tiers are available for 2027, and you can now add up to four dependants.', 'Drop-in sessions with our HMO partner run every Wednesday in November.'] },
 ]
@@ -65,8 +65,8 @@ export const events = [
 // `mandatory` courses are assigned to everyone with a due date. `progress` is the demo user's completion %.
 // `rating` and `reviews` are sample values. Set `image` to a course thumbnail URL to replace the cover.
 const courseList = [
-  { id: 'aml', title: 'Anti-money laundering essentials', instructor: 'David Okon', rating: 4.6, reviews: 212, category: 'Compliance', mins: 40, level: 'All staff', mandatory: true, due: '2026-11-15', progress: 60 },
-  { id: 'ndpa', title: 'Data protection (NDPA) in practice', instructor: 'David Okon', rating: 4.4, reviews: 167, category: 'Compliance', mins: 30, level: 'All staff', mandatory: true, due: '2026-11-15', progress: 0 },
+  { id: 'aml', title: 'Anti-money laundering essentials', instructor: 'David Okon', rating: 4.6, reviews: 212, category: 'Compliance', mins: 40, level: 'All staff', mandatory: true, due: '2026-11-30', progress: 60 },
+  { id: 'ndpa', title: 'Data protection (NDPA) in practice', instructor: 'David Okon', rating: 4.4, reviews: 167, category: 'Compliance', mins: 30, level: 'All staff', mandatory: true, due: '2026-11-30', progress: 0 },
   { id: 'cyber', title: 'Cyber security awareness', instructor: 'David Kojo', rating: 4.7, reviews: 301, category: 'Compliance', mins: 25, level: 'All staff', mandatory: true, due: '2026-12-31', progress: 100 },
   { id: 'claims101', title: 'Claims handling fundamentals', instructor: 'Arthur Pendelton', rating: 4.8, reviews: 96, category: 'Insurance', mins: 90, level: 'Beginner', progress: 0 },
   { id: 'uw', title: 'Introduction to underwriting', instructor: 'Rebecca Sterling', rating: 4.7, reviews: 84, category: 'Insurance', mins: 75, level: 'Beginner', progress: 35 },

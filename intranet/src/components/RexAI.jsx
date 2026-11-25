@@ -2,12 +2,29 @@ import { useEffect, useRef, useState } from 'react'
 import { Link } from 'react-router-dom'
 import { PaperPlaneTiltIcon as Send, SparkleIcon as Sparkles, XIcon as X } from '@phosphor-icons/react'
 import { articles, faqs } from '../data/knowledge'
+import { siteGuide } from '../config/siteGuide'
 import { useUser } from '../context/UserContext'
 
-const suggestions = ['How do I apply for leave?', 'I need access to a system', 'Where is the claims SOP?', 'Who do I call for IT help?']
+const suggestions = ['Where do I find my payslip?', 'How do I request branded items?', 'How do I apply for leave?', 'Where are my required courses?']
 
-// Offline answers when the server or API key is unavailable: match the Knowledge Center and FAQs.
+// Navigation questions ("where is…", "how do I find…", or a page's keywords) get a page and directions.
+const navIntent = /\b(where|find|navigate|go to|open|get to|located|how do i (get|find|see|book|request|raise|download))\b/i
+function navigationAnswer(q) {
+  const text = q.toLowerCase()
+  const hits = siteGuide.map((p) => ({ p, s: p.keywords.filter((k) => text.includes(k)).length })).filter((x) => x.s > 0).sort((a, b) => b.s - a.s)
+  if (!hits.length || (!navIntent.test(q) && hits[0].s < 2)) return null
+  const { p } = hits[0]
+  const steps = p.to === '/' ? 'Click **Home** at the top of the left menu.' : `Open the left menu and choose **${p.name}**.`
+  return {
+    text: `That's on **${p.name}**, where you'll find ${p.what}.\n- ${steps}\n- Or press **Ctrl K** anywhere and type what you're looking for.`,
+    links: [{ to: p.to, label: `Go to ${p.name}` }, ...(hits[1] ? [{ to: hits[1].p.to, label: hits[1].p.name }] : [])],
+  }
+}
+
+// Offline answers when the server or API key is unavailable: site directions first, then the Knowledge Center and FAQs.
 function offlineAnswer(q) {
+  const nav = navigationAnswer(q)
+  if (nav) return nav
   const words = q.toLowerCase().split(/\W+/).filter((w) => w.length > 3)
   const score = (text) => words.filter((w) => text.toLowerCase().includes(w)).length
   const faq = faqs.map((f) => ({ f, s: score(f.q + ' ' + f.a) })).sort((a, b) => b.s - a.s)[0]
@@ -48,7 +65,7 @@ export default function RexAI() {
   const [busy, setBusy] = useState(false)
   const [draft, setDraft] = useState('')
   const [offline, setOffline] = useState(false)
-  const [messages, setMessages] = useState([{ role: 'model', text: `Hi ${user.firstName}, I’m Rex AI. Ask me about policies, who to contact, or where to find something in Rex Hub.` }])
+  const [messages, setMessages] = useState([{ role: 'model', text: `Hi ${user.firstName}, I’m Rex AI. Ask me about policies, who to contact, or where to find anything in Rex Hub.` }])
   const endRef = useRef(null)
 
   useEffect(() => { endRef.current?.scrollIntoView({ block: 'end' }) }, [messages, open])
@@ -87,7 +104,7 @@ export default function RexAI() {
         </button>
       )}
       {open && (
-        <section className="animate-fade-up fixed inset-x-2 bottom-2 z-50 flex max-h-[80vh] flex-col overflow-hidden rounded-2xl border border-slate-200 bg-white shadow-2xl sm:inset-x-auto sm:right-4 sm:bottom-4 sm:w-96 dark:border-slate-800 dark:bg-slate-900" aria-label="Rex AI chat">
+        <section className="animate-fade-up fixed inset-x-2 bottom-2 z-50 flex max-h-[80vh] flex-col overflow-hidden rounded-xl border border-slate-200 bg-white shadow-[0_24px_60px_-20px_rgba(30,45,100,0.4)] sm:inset-x-auto sm:right-4 sm:bottom-4 sm:w-96 dark:border-slate-800 dark:bg-slate-900" aria-label="Rex AI chat">
           <header className="flex items-center gap-3 bg-brand-700 px-4 py-3 text-white">
             <span className="flex h-8 w-8 items-center justify-center rounded-full bg-accent-600"><Sparkles size={16} /></span>
             <span className="flex-1"><span className="block text-sm font-semibold">Rex AI</span><span className="block text-[11px] text-brand-200">{offline ? 'Offline mode: answers from the Knowledge Center' : 'Powered by Gemini · can make mistakes'}</span></span>
@@ -96,7 +113,7 @@ export default function RexAI() {
           <div className="flex-1 space-y-3 overflow-y-auto p-4 text-sm" aria-live="polite">
             {messages.map((m, i) => (
               <div key={i} className={`flex ${m.role === 'user' ? 'justify-end' : ''}`}>
-                <div className={`max-w-[85%] rounded-2xl px-3.5 py-2.5 ${m.role === 'user' ? 'bg-brand-700 text-white' : 'bg-slate-100 dark:bg-slate-800'}`}>
+                <div className={`max-w-[85%] rounded-xl px-3.5 py-2.5 ${m.role === 'user' ? 'bg-brand-700 text-white' : 'bg-slate-100 dark:bg-slate-800'}`}>
                   <Markdown text={m.text} />
                   {m.links?.length > 0 && <div className="mt-2 flex flex-col gap-1">{m.links.map((l) => <Link key={l.to} to={l.to} onClick={() => setOpen(false)} className="font-medium text-brand-600 underline dark:text-brand-300">{l.label}</Link>)}</div>}
                 </div>
