@@ -1,6 +1,6 @@
 import { useCallback, useEffect, useRef, useState } from 'react'
 import { Navigate, NavLink, Outlet, useLocation } from 'react-router-dom'
-import { BellIcon as Bell, CameraIcon as Camera, CompassIcon as Compass, ListIcon as Menu, MoonIcon as Moon, MagnifyingGlassIcon as Search, SunIcon as Sun, XIcon as X, SignOutIcon as LogOut } from '@phosphor-icons/react'
+import { ArrowCounterClockwiseIcon as RotateCcw, BellIcon as Bell, CameraIcon as Camera, CompassIcon as Compass, ListIcon as Menu, MoonIcon as Moon, MagnifyingGlassIcon as Search, SunIcon as Sun, XIcon as X, SignOutIcon as LogOut } from '@phosphor-icons/react'
 import Logo from './Logo'
 import Avatar from './Avatar'
 import CommandPalette from './CommandPalette'
@@ -84,7 +84,7 @@ export default function Layout() {
   const location = useLocation()
   const toast = useToast()
   const fileRef = useRef(null)
-  const { user, blocked, ready, signedIn, signOut, ssoConfigured, setPhoto } = useUser()
+  const { user, blocked, ready, signedIn, signOut, ssoConfigured, setPhoto, resetWalkthrough } = useUser()
   // First visit per person: show the guided tour once.
   const [toured, setToured] = useLocalStorage(`rex-tour-${user.id}`, false)
   const [tourOpen, setTourOpen] = useState(false)
@@ -217,6 +217,8 @@ export default function Layout() {
                   <div className="pt-1">
                     <button onClick={() => fileRef.current?.click()} className="btn-ghost w-full justify-start"><Camera size={16} /> Change profile photo</button>
                     <button onClick={() => { setMenuOpen(false); setTourOpen(true) }} className="btn-ghost w-full justify-start"><Compass size={16} /> Take the tour</button>
+                    {/* Testing only (demo mode, new staff): send this person back to step 1 of onboarding. */}
+                    {!ssoConfigured && user.newStaff && <button onClick={() => { setMenuOpen(false); resetWalkthrough() }} className="btn-ghost w-full justify-start text-amber-800 dark:text-amber-300"><RotateCcw size={16} /> Reset onboarding (test)</button>}
                     <button onClick={() => { setMenuOpen(false); signOut() }} className="btn-ghost w-full justify-start"><LogOut size={16} /> Sign out</button>
                   </div>
                   <input ref={fileRef} type="file" accept="image/*" className="hidden" onChange={onPhoto} aria-label="Upload profile photo" />

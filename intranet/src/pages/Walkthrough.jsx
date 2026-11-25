@@ -510,6 +510,9 @@ export default function Walkthrough() {
     setIndex(walkthroughSteps.length)
   }
   const testing = !ssoConfigured
+  const testBtn = 'btn h-8 border border-dashed border-amber-400 px-2.5 text-xs text-amber-800 hover:bg-amber-50 dark:border-amber-500/60 dark:text-amber-300 dark:hover:bg-amber-500/10'
+  const resetAll = () => { resetWalkthrough(); setIndex(0) }
+  const ResetAll = () => testing && <button onClick={resetAll} disabled={doneCount === 0} className={testBtn}><RotateCcw size={12} /> Reset steps (test)</button>
   const SkipAll = ({ className = '' }) => testing && (
     <button onClick={skipAll} className={`btn h-8 border border-dashed border-amber-400 px-2.5 text-xs text-amber-800 hover:bg-amber-50 dark:border-amber-500/60 dark:text-amber-300 dark:hover:bg-amber-500/10 ${className}`}>Skip onboarding (test)</button>
   )
@@ -547,10 +550,8 @@ export default function Walkthrough() {
             </div>
           )}
           {!ssoConfigured && <PersonaSwitcher />}
-          <div className="flex items-center justify-between gap-2">
-            <button onClick={signOut} className="btn-ghost -ml-2.5 h-8 px-2.5 text-xs"><LogOut size={14} /> Sign out</button>
-            <SkipAll />
-          </div>
+          {testing && <div className="flex flex-wrap gap-2"><SkipAll /><ResetAll /></div>}
+          <button onClick={signOut} className="btn-ghost -ml-2.5 h-8 px-2.5 text-xs"><LogOut size={14} /> Sign out</button>
         </div>
       </aside>
 
@@ -568,7 +569,7 @@ export default function Walkthrough() {
           {stepsOpen && (
             <nav aria-label="Walkthrough steps" className="steps-scroll animate-fade-up mt-3 max-h-[55dvh] overflow-y-auto border-t border-slate-200 pt-3 dark:border-slate-800">
               <Stepper index={index} progress={progress} unlocked={unlocked} onPick={setIndex} />
-              {!ssoConfigured && <div className="mt-4 flex flex-wrap items-center justify-between gap-2 border-t border-slate-200 px-3 pt-3 dark:border-slate-800"><PersonaSwitcher /><SkipAll /></div>}
+              {!ssoConfigured && <div className="mt-4 flex flex-wrap items-center justify-between gap-2 border-t border-slate-200 px-3 pt-3 dark:border-slate-800"><PersonaSwitcher /><div className="flex flex-wrap gap-2"><SkipAll /><ResetAll /></div></div>}
             </nav>
           )}
         </header>
