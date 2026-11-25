@@ -55,17 +55,17 @@ export const values = [
 ]
 
 export const workplaceNorms = [
-  { title: 'Office days', text: 'Tuesday to Thursday in the office. Monday and Friday are remote unless your team agrees otherwise.' },
-  { title: 'Core hours', text: 'Be reachable 10:00 to 16:00 on working days, and keep your Teams status up to date.' },
+  { title: 'Office days', text: 'Monday, Tuesday, Thursday and Friday in the office. Wednesday is work from home.' },
+  { title: 'Core hours', text: 'Be reachable 8:00 to 16:00 on working days, and keep your Teams status up to date.' },
   { title: 'Meetings', text: 'Start on time, share an agenda, and end with clear next steps and owners.' },
 ]
 
 // Dress code sits under company culture (20 Aug review), shown as tabs with an example photo each.
 // Sample wording for HR to confirm. `image` keys match dressPhotos in src/data/photos.js.
 export const dressCode = [
-  { id: 'office', title: 'Office days', image: 'office', summary: 'Business casual, Tuesday to Thursday.', wear: ['Shirts or blouses, with a tie and jacket if you like', 'Tailored trousers, chinos or knee-length skirts', 'Smart native wear', 'Clean, closed or smart shoes'], avoid: ['Jeans with rips', 'T-shirts with slogans', 'Sportswear and trainers'] },
+  { id: 'office', title: 'Office days', image: 'office', summary: 'Business casual on Monday, Tuesday and Thursday.', wear: ['Shirts or blouses, with a tie and jacket if you like', 'Tailored trousers, chinos or knee-length skirts', 'Smart native wear', 'Clean, closed or smart shoes'], avoid: ['Jeans with rips', 'T-shirts with slogans', 'Sportswear and trainers'] },
   { id: 'client', title: 'Client meetings', image: 'client', summary: 'Full business attire when you meet clients, brokers or regulators.', wear: ['A matching suit, or a skirt or trouser suit', 'Shirt and tie, or a smart blouse', 'Formal shoes', 'Your staff ID, visible'], avoid: ['Casual or loud prints', 'Open-toe sandals', 'Visible branding from other companies'] },
-  { id: 'remote', title: 'Remote days', image: 'remote', summary: 'Casual but presentable on video calls.', wear: ['A plain top, shirt or knitwear', 'Tidy hair and a neat appearance on camera', 'A quiet, plain background or a Rex virtual background'], avoid: ['Sleepwear or gym wear on camera', 'Busy or distracting backgrounds'] },
+  { id: 'remote', title: 'Wednesday (WFH)', image: 'remote', summary: 'Work from home: casual but presentable on video calls.', wear: ['A plain top, shirt or knitwear', 'Tidy hair and a neat appearance on camera', 'A quiet, plain background or a Rex virtual background'], avoid: ['Sleepwear or gym wear on camera', 'Busy or distracting backgrounds'] },
   { id: 'friday', title: 'Fridays', image: 'friday', summary: 'Casual Friday: relaxed, but still neat.', wear: ['Polo shirts, casual shirts and blouses, including ankara or adire prints', 'Chinos, dark jeans or casual trousers', 'Clean sneakers, loafers or flats'], avoid: ['Sportswear and slippers', 'Torn or faded clothing', 'Shorts and vests'] },
 ]
 

@@ -247,20 +247,21 @@ function PoliciesStep({ progress, update, user }) {
 // each with a small visual: the office week, the core-hours window, and the meeting habits.
 function HowWeWork() {
   const [office, hours, meetings] = workplaceNorms
-  const days = [['Mon', false], ['Tue', true], ['Wed', true], ['Thu', true], ['Fri', false]]
+  const days = [['Mon', true], ['Tue', true], ['Wed', false], ['Thu', true], ['Fri', true]]
   const stops = [
-    { n: office, Icon: Buildings, tone: 'bg-brand-700 text-white dark:bg-brand-500', visual: (
-      <div className="flex gap-1" aria-label="Office Tuesday to Thursday, remote Monday and Friday">
+    { n: office, Icon: Buildings, tone: 'bg-brand-700 text-white dark:bg-brand-500', visual: (<>
+      <div className="flex gap-1" aria-label="Office Monday, Tuesday, Thursday and Friday; work from home on Wednesday">
         {days.map(([d, inOffice]) => <span key={d} className={`flex h-8 flex-1 items-center justify-center rounded-md text-[11px] font-medium ${inOffice ? 'bg-brand-700 text-white dark:bg-brand-500' : 'border border-dashed border-slate-300 text-slate-500 dark:border-slate-600'}`}>{d}</span>)}
       </div>
-    ) },
+      <p className="mt-1.5 flex items-center justify-between text-[10px] text-slate-500"><span className="inline-flex items-center gap-1"><i className="h-2 w-2 rounded-sm bg-brand-700 dark:bg-brand-500" /> Office</span><span className="inline-flex items-center gap-1"><i className="h-2 w-2 rounded-sm border border-dashed border-slate-400" /> Work from home</span></p>
+    </>) },
     { n: hours, Icon: Clock, tone: 'bg-accent-700 text-white', visual: (
-      <div aria-label="Core hours 10:00 to 16:00">
+      <div aria-label="Core hours 8:00 to 16:00">
         <div className="relative h-8 rounded-md bg-slate-100 dark:bg-slate-800">
-          <span className="absolute inset-y-0 rounded-md bg-accent-700" style={{ left: '20%', right: '20%' }} />
-          <span className="absolute inset-0 flex items-center justify-center text-[11px] font-semibold text-white">10:00 to 16:00</span>
+          <span className="absolute inset-y-0 rounded-md bg-accent-700" style={{ left: `${(1 / 11) * 100}%`, right: `${(2 / 11) * 100}%` }} />
+          <span className="absolute inset-0 flex items-center justify-center text-[11px] font-semibold text-white">8:00 to 16:00</span>
         </div>
-        <div className="mt-1 flex justify-between text-[10px] text-slate-500 tabular-nums"><span>08:00</span><span>18:00</span></div>
+        <div className="mt-1 flex justify-between text-[10px] text-slate-500 tabular-nums"><span>07:00</span><span>18:00</span></div>
       </div>
     ) },
     { n: meetings, Icon: UsersThree, tone: 'bg-emerald-600 text-white', visual: (
