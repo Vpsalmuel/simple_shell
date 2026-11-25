@@ -6,7 +6,7 @@ const fmt = (s) => `${Math.floor(s / 60)}:${String(Math.floor(s % 60)).padStart(
 
 // Plays a real video when `src` is set and reports completion at 90% watched.
 // Without `src` it renders a placeholder that simulates playback (sped up) so the flow can be tested.
-export default function VideoPlayer({ src, poster, duration = '2:00', title, watched, onComplete, compact = false, hint = 'Video placeholder: add the file URL in src/data/onboarding.js' }) {
+export default function VideoPlayer({ src, poster, duration = '2:00', title, watched, onComplete, compact = false, hint = 'Video placeholder: add the file URL in src/data/onboarding.js', posterVivid = false }) {
   const videoRef = useRef(null)
   const [playing, setPlaying] = useState(false)
   const [pos, setPos] = useState(watched ? toSeconds(duration) : 0)
@@ -49,8 +49,9 @@ export default function VideoPlayer({ src, poster, duration = '2:00', title, wat
 
   return (
     <div className={`relative overflow-hidden rounded-xl bg-gradient-to-br from-brand-700 via-brand-800 to-brand-950 text-white ${compact ? 'aspect-[16/10]' : 'aspect-video'}`}>
-      {poster && <img src={poster} alt="" className="absolute inset-0 h-full w-full object-cover opacity-35" aria-hidden="true" />}
-      {poster && <div className="absolute inset-0 bg-gradient-to-t from-brand-950/90 via-brand-950/40 to-brand-950/70" aria-hidden="true" />}
+      {/* posterVivid shows the thumbnail at full strength (e.g. the MD's welcome); otherwise it is a dim backdrop. */}
+      {poster && <img src={poster} alt="" className={`absolute inset-0 h-full w-full object-cover ${posterVivid ? '' : 'opacity-35'}`} aria-hidden="true" />}
+      {poster && <div className={`absolute inset-0 ${posterVivid ? 'bg-gradient-to-t from-brand-950/80 via-transparent to-brand-950/50' : 'bg-gradient-to-t from-brand-950/90 via-brand-950/40 to-brand-950/70'}`} aria-hidden="true" />}
       <button
         onClick={() => (pos >= total ? (setPos(0), setPlaying(true)) : setPlaying(!playing))}
         className="absolute inset-0 flex items-center justify-center"

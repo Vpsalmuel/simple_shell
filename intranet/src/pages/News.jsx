@@ -123,7 +123,7 @@ export default function News() {
       <PageHeader title="News" description="Stories, results and updates from across Rex." />
 
       {showFeatured && featured && (
-        <Link to={`/news/${featured.id}`} className="group -mt-2 grid gap-6 md:grid-cols-[minmax(0,1.2fr)_minmax(0,1fr)] md:items-center">
+        <Link to={`/news/${featured.id}`} className="img-zoom group -mt-2 grid gap-6 md:grid-cols-[minmax(0,1.2fr)_minmax(0,1fr)] md:items-center">
           <Photo src={featured.image} alt="" className="aspect-[16/10] w-full" rounded="rounded-xl" />
           <div className="flex flex-col gap-2">
             <p className="text-xs font-medium text-accent-700 dark:text-accent-400">Featured, {featured.category}</p>
@@ -148,9 +148,9 @@ export default function News() {
       {rest.length === 0 ? (
         <div className="card px-6 py-12 text-center"><p className="font-medium text-slate-900 dark:text-white">No stories match</p><p className="mt-1 text-sm text-slate-500">Try another word or category.</p></div>
       ) : (
-        <div className="grid gap-x-6 gap-y-10 sm:grid-cols-2 lg:grid-cols-3">
+        <div className="stagger grid gap-x-6 gap-y-10 sm:grid-cols-2 lg:grid-cols-3">
           {rest.map((n) => (
-            <article key={n.id} className="flex flex-col">
+            <article key={n.id} className="img-zoom flex flex-col">
               <Link to={`/news/${n.id}`} tabIndex={-1} aria-hidden="true"><Photo src={n.image} alt="" className="aspect-[16/9] w-full" rounded="rounded-lg" /></Link>
               <p className="mt-3 text-xs font-medium text-accent-700 dark:text-accent-400">{n.category}</p>
               <Link to={`/news/${n.id}`} className="mt-1 text-[15px] leading-snug font-semibold text-slate-900 hover:text-brand-700 dark:text-white dark:hover:text-brand-300">{n.title}</Link>

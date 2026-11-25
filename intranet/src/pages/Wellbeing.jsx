@@ -1,6 +1,8 @@
 import { useState } from 'react'
 import { ArrowUpRightIcon as ArrowUpRight, CalendarDotsIcon as CalendarDays, CheckIcon as Check, LockIcon as Lock, MapPinIcon as MapPin, PhoneIcon as Phone, TrophyIcon as Trophy, UsersIcon as Users } from '@phosphor-icons/react'
 import { people } from '../data'
+import { wellbeingPhotos } from '../data/photos'
+import Photo from '../components/Photo'
 import { gymChampion, nextHike, reap, wellbeingChecklist, wellbeingTabs } from '../data/culture'
 import { useLocalStorage } from '../hooks/useLocalStorage'
 import { useToast } from '../components/Toast'
@@ -14,13 +16,15 @@ function Reap() {
   const toast = useToast()
   const open = () => (reap.url ? window.open(reap.url, '_blank', 'noopener') : toast('REAP link coming soon. HCM will share it.'))
   return (
-    <section className="card flex flex-col gap-4 p-5 sm:flex-row sm:items-center">
-      <span className="flex h-11 w-11 shrink-0 items-center justify-center rounded-lg bg-brand-700 text-white dark:bg-brand-500"><Icon name="Brain" size={22} /></span>
+    <section className="card card-lift img-zoom grid overflow-hidden sm:grid-cols-[13rem_1fr]">
+      <Photo src={wellbeingPhotos.mind} alt="" className="aspect-[16/9] w-full sm:aspect-auto sm:h-full" rounded="rounded-none" />
+      <div className="flex flex-col gap-4 p-5 sm:flex-row sm:items-center">
       <div className="min-w-0 flex-1">
         <h2 className="section-title">{reap.name}</h2>
         <p className="mt-0.5 text-sm text-slate-600 dark:text-slate-300">{reap.text}</p>
       </div>
       <button onClick={open} className="btn-primary shrink-0">Open REAP <ArrowUpRight size={14} /></button>
+      </div>
     </section>
   )
 }
@@ -81,7 +85,9 @@ function Hike() {
   const slots = nextHike.slots - (joined ? 1 : 0)
   const date = new Date(`${nextHike.date}T00:00`).toLocaleDateString(undefined, { weekday: 'long', day: 'numeric', month: 'long' })
   return (
-    <section className="card p-5">
+    <section className="card card-lift img-zoom overflow-hidden">
+      <Photo src={wellbeingPhotos.hike} alt="Colleagues on a guided walk through the forest canopy" className="aspect-[16/9] w-full" rounded="rounded-none" />
+      <div className="p-5">
       <p className="text-xs font-medium text-slate-500">Monthly hiking challenge</p>
       <h2 className="mt-0.5 section-title">{nextHike.place}</h2>
       <div className="mt-3 space-y-1.5 text-sm text-slate-600 dark:text-slate-300">
@@ -90,6 +96,7 @@ function Hike() {
         <p className="flex items-center gap-2"><Users size={16} className="text-slate-400" /><span><b className="font-medium text-slate-900 tabular-nums dark:text-white">{slots}</b> places left</span></p>
       </div>
       <button onClick={() => { setJoined(!joined); toast(joined ? 'You’ve left the hike' : 'You’re on the hike list') }} aria-pressed={joined} className={`mt-4 w-full ${joined ? 'btn-secondary text-emerald-700 dark:text-emerald-300' : 'btn-primary'}`}>{joined ? <><Check size={16} /> You’re going</> : 'Join the hike'}</button>
+      </div>
     </section>
   )
 }
@@ -103,30 +110,38 @@ export default function Wellbeing() {
       <div className="grid grid-cols-1 gap-8 lg:grid-cols-[minmax(0,1fr)_20rem]">
         <div className="min-w-0 space-y-6">
           <Reap />
-          <section className="card">
-            <nav className="flex gap-6 overflow-x-auto border-b border-slate-200 px-5 dark:border-slate-800" role="tablist">
-              {wellbeingTabs.map((x) => (
-                <button key={x.id} role="tab" aria-selected={tab === x.id} onClick={() => setTab(x.id)} className={`-mb-px flex shrink-0 items-center gap-2 border-b-2 py-3.5 text-sm font-medium transition-colors ${tab === x.id ? 'border-brand-700 text-slate-900 dark:border-brand-300 dark:text-white' : 'border-transparent text-slate-500 hover:text-slate-800 dark:hover:text-slate-200'}`}><Icon name={x.icon} size={16} />{x.label}</button>
-              ))}
-            </nav>
-            <div key={t.id} className="animate-fade-up p-6" role="tabpanel">
-              <h2 className="text-[17px] font-semibold text-slate-900 dark:text-white">{t.title}</h2>
-              <p className="mt-1 text-[15px] text-slate-600 dark:text-slate-300">{t.intro}</p>
-              {t.id === 'mind' && <p className="mt-3 inline-flex items-center gap-1.5 text-xs font-medium text-emerald-700 dark:text-emerald-300"><Lock size={12} /> Private: not shared with HR or your manager</p>}
-              <dl className="mt-6 divide-y divide-slate-100 border-y border-slate-100 dark:divide-slate-800 dark:border-slate-800">
-                {t.points.map(([h, p]) => (
-                  <div key={h} className="grid gap-1 py-3.5 sm:grid-cols-[13rem_1fr] sm:gap-6">
-                    <dt className="text-sm font-medium text-slate-900 dark:text-white">{h}</dt>
-                    <dd className="text-sm text-slate-600 dark:text-slate-300">{p}</dd>
+          {/* Each area is a photo card; the chosen one opens its details below. */}
+          <div className="stagger grid gap-4 sm:grid-cols-3" role="tablist" aria-label="Wellbeing areas">
+            {wellbeingTabs.map((x) => {
+              const on = tab === x.id
+              return (
+                <button key={x.id} role="tab" aria-selected={on} onClick={() => setTab(x.id)} className={`card card-lift img-zoom group overflow-hidden text-left ${on ? 'ring-2 ring-brand-700 ring-offset-2 ring-offset-slate-50 dark:ring-brand-300 dark:ring-offset-slate-950' : ''}`}>
+                  <div className="relative">
+                    <Photo src={wellbeingPhotos[x.id]} alt="" className="aspect-[4/3] w-full" rounded="rounded-none" />
+                    <div className="absolute inset-0 bg-gradient-to-t from-brand-950/80 via-brand-950/10 to-transparent" aria-hidden="true" />
+                    <span className="absolute inset-x-0 bottom-0 flex items-center gap-2 p-3.5 text-sm font-semibold text-white"><Icon name={x.icon} size={18} className="icon-lift" />{x.label}</span>
                   </div>
-                ))}
-              </dl>
-              <div className="mt-5 flex flex-wrap items-center gap-3">
-                <Phone size={18} className="text-slate-400" />
-                <span className="text-sm text-slate-500">{t.contact.label}:</span>
-                <span className="text-sm font-semibold text-slate-900 select-all dark:text-white">{t.contact.value}</span>
-                <span className="text-xs text-slate-500">{t.contact.note}</span>
-              </div>
+                </button>
+              )
+            })}
+          </div>
+          <section key={t.id} className="card animate-fade-up p-6" role="tabpanel">
+            <h2 className="text-[17px] font-semibold text-slate-900 dark:text-white">{t.title}</h2>
+            <p className="mt-1 text-[15px] text-slate-600 dark:text-slate-300">{t.intro}</p>
+            {t.id === 'mind' && <p className="mt-3 inline-flex items-center gap-1.5 text-xs font-medium text-emerald-700 dark:text-emerald-300"><Lock size={12} /> Private: not shared with HR or your manager</p>}
+            <dl className="mt-6 divide-y divide-slate-100 border-y border-slate-100 dark:divide-slate-800 dark:border-slate-800">
+              {t.points.map(([h, p]) => (
+                <div key={h} className="grid gap-1 py-3.5 sm:grid-cols-[13rem_1fr] sm:gap-6">
+                  <dt className="text-sm font-medium text-slate-900 dark:text-white">{h}</dt>
+                  <dd className="text-sm text-slate-600 dark:text-slate-300">{p}</dd>
+                </div>
+              ))}
+            </dl>
+            <div className="mt-5 flex flex-wrap items-center gap-3">
+              <Phone size={18} className="text-slate-400" />
+              <span className="text-sm text-slate-500">{t.contact.label}:</span>
+              <span className="text-sm font-semibold text-slate-900 select-all dark:text-white">{t.contact.value}</span>
+              <span className="text-xs text-slate-500">{t.contact.note}</span>
             </div>
           </section>
         </div>

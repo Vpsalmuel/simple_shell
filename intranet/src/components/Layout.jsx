@@ -1,6 +1,6 @@
 import { useCallback, useEffect, useRef, useState } from 'react'
 import { Navigate, NavLink, Outlet, useLocation } from 'react-router-dom'
-import { BellIcon as Bell, CameraIcon as Camera, CompassIcon as Compass, ListIcon as Menu, MoonIcon as Moon, MagnifyingGlassIcon as Search, SunIcon as Sun, XIcon as X, SignOutIcon as LogOut } from '@phosphor-icons/react'
+import { ArrowCounterClockwiseIcon as RotateCcw, BellIcon as Bell, CameraIcon as Camera, CompassIcon as Compass, ListIcon as Menu, MoonIcon as Moon, MagnifyingGlassIcon as Search, SunIcon as Sun, XIcon as X, SignOutIcon as LogOut } from '@phosphor-icons/react'
 import Logo from './Logo'
 import Avatar from './Avatar'
 import CommandPalette from './CommandPalette'
@@ -51,11 +51,12 @@ function Sidebar({ onNavigate }) {
                   end={end}
                   onClick={onNavigate}
                   className={({ isActive }) =>
-                    `flex h-8 items-center gap-2.5 rounded-lg px-2.5 text-sm transition-colors ${isActive ? 'bg-brand-50 font-medium text-brand-800 dark:bg-brand-500/15 dark:text-white' : 'text-slate-600 hover:bg-slate-100 hover:text-slate-900 dark:text-slate-300 dark:hover:bg-slate-800 dark:hover:text-white'}`
+                    `group relative flex h-8 items-center gap-2.5 rounded-lg px-2.5 text-sm transition-colors ${isActive ? 'bg-brand-50 font-medium text-brand-800 dark:bg-brand-500/15 dark:text-white' : 'text-slate-600 hover:bg-slate-100 hover:text-slate-900 dark:text-slate-300 dark:hover:bg-slate-800 dark:hover:text-white'}`
                   }
                 >
                   {({ isActive }) => (
                     <>
+                      <span aria-hidden="true" data-active={isActive} className="nav-line absolute top-1.5 bottom-1.5 -left-3 w-[3px] rounded-r-full bg-accent-600" />
                       <Ico size={17} weight={isActive ? 'fill' : 'regular'} className={isActive ? 'text-brand-700 dark:text-brand-300' : 'text-slate-500 dark:text-slate-400'} />
                       {label}
                     </>
@@ -83,7 +84,7 @@ export default function Layout() {
   const location = useLocation()
   const toast = useToast()
   const fileRef = useRef(null)
-  const { user, blocked, ready, signedIn, signOut, ssoConfigured, setPhoto } = useUser()
+  const { user, blocked, ready, signedIn, signOut, ssoConfigured, setPhoto, resetWalkthrough } = useUser()
   // First visit per person: show the guided tour once.
   const [toured, setToured] = useLocalStorage(`rex-tour-${user.id}`, false)
   const [tourOpen, setTourOpen] = useState(false)
@@ -216,6 +217,8 @@ export default function Layout() {
                   <div className="pt-1">
                     <button onClick={() => fileRef.current?.click()} className="btn-ghost w-full justify-start"><Camera size={16} /> Change profile photo</button>
                     <button onClick={() => { setMenuOpen(false); setTourOpen(true) }} className="btn-ghost w-full justify-start"><Compass size={16} /> Take the tour</button>
+                    {/* Testing only (demo mode, new staff): send this person back to step 1 of onboarding. */}
+                    {!ssoConfigured && user.newStaff && <button onClick={() => { setMenuOpen(false); resetWalkthrough() }} className="btn-ghost w-full justify-start text-amber-800 dark:text-amber-300"><RotateCcw size={16} /> Reset onboarding (test)</button>}
                     <button onClick={() => { setMenuOpen(false); signOut() }} className="btn-ghost w-full justify-start"><LogOut size={16} /> Sign out</button>
                   </div>
                   <input ref={fileRef} type="file" accept="image/*" className="hidden" onChange={onPhoto} aria-label="Upload profile photo" />

@@ -96,7 +96,7 @@ function Articles({ q }) {
 function CourseCard({ course, pct }) {
   const action = pct === 100 ? 'Review' : pct > 0 ? 'Continue' : 'Start'
   return (
-    <Link to={`/learning/${course.id}`} className="group flex flex-col">
+    <Link to={`/learning/${course.id}`} className="img-zoom group flex flex-col">
       <Photo src={course.image} alt="" className="aspect-video w-full" rounded="rounded-lg" />
       <div className="mt-3 flex flex-1 flex-col">
         <h3 className="line-clamp-2 text-sm leading-snug font-semibold text-slate-900 group-hover:text-brand-700 dark:text-white dark:group-hover:text-brand-300">{course.title}</h3>
@@ -132,7 +132,7 @@ function Courses({ q }) {
         <section>
           <h2 className="section-title">Required for you</h2>
           <p className="mt-0.5 mb-4 text-sm text-slate-500">{outstanding.length ? `${outstanding.length} to finish, due ${fmt(outstanding[0].due)}` : 'All required training is complete.'}</p>
-          <div className="grid gap-x-6 gap-y-8 sm:grid-cols-2 lg:grid-cols-3">{required.map((c) => <CourseCard key={c.id} course={c} pct={pct(c)} />)}</div>
+          <div className="stagger grid gap-x-6 gap-y-8 sm:grid-cols-2 lg:grid-cols-3">{required.map((c) => <CourseCard key={c.id} course={c} pct={pct(c)} />)}</div>
         </section>
       )}
       <section>
@@ -140,7 +140,7 @@ function Courses({ q }) {
           <h2 className="section-title">Course catalogue</h2>
           <Filter options={cats} value={cat} onChange={setCat} />
         </div>
-        {catalogue.length === 0 ? <Empty q={q} /> : <div className="grid gap-x-6 gap-y-8 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">{catalogue.map((c) => <CourseCard key={c.id} course={c} pct={pct(c)} />)}</div>}
+        {catalogue.length === 0 ? <Empty q={q} /> : <div className="stagger grid gap-x-6 gap-y-8 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">{catalogue.map((c) => <CourseCard key={c.id} course={c} pct={pct(c)} />)}</div>}
       </section>
     </div>
   )

@@ -55,38 +55,39 @@ export const values = [
 ]
 
 export const workplaceNorms = [
-  { title: 'Office days', text: 'Tuesday to Thursday in the office. Monday and Friday are remote unless your team agrees otherwise.' },
-  { title: 'Core hours', text: 'Be reachable 10:00 to 16:00 on working days, and keep your Teams status up to date.' },
+  { title: 'Office days', text: 'Monday, Tuesday, Thursday and Friday in the office. Wednesday is work from home.' },
+  { title: 'Core hours', text: 'Be reachable 8:00 to 16:00 on working days, and keep your Teams status up to date.' },
   { title: 'Meetings', text: 'Start on time, share an agenda, and end with clear next steps and owners.' },
 ]
 
-// Dress code sits under company culture (20 Aug review). Sample wording for HR to confirm.
+// Dress code sits under company culture (20 Aug review), shown as tabs with an example photo each.
+// Sample wording for HR to confirm. `image` keys match dressPhotos in src/data/photos.js.
 export const dressCode = [
-  { title: 'Office days', text: 'Business casual: shirts or blouses, trousers or skirts, smart native wear.' },
-  { title: 'Client meetings', text: 'Full business attire when you meet clients, brokers or regulators.' },
-  { title: 'Remote days', text: 'Casual but presentable on video calls, with a quiet or plain background.' },
-  { title: 'Fridays', text: 'Smart casual or native attire. Keep it neat; no sportswear or slippers.' },
+  { id: 'office', title: 'Office days', image: 'office', summary: 'Business casual on Monday, Tuesday and Thursday.', wear: ['Shirts or blouses, with a tie and jacket if you like', 'Tailored trousers, chinos or knee-length skirts', 'Smart native wear', 'Clean, closed or smart shoes'], avoid: ['Jeans with rips', 'T-shirts with slogans', 'Sportswear and trainers'] },
+  { id: 'client', title: 'Client meetings', image: 'client', summary: 'Full business attire when you meet clients, brokers or regulators.', wear: ['A matching suit, or a skirt or trouser suit', 'Shirt and tie, or a smart blouse', 'Formal shoes', 'Your staff ID, visible'], avoid: ['Casual or loud prints', 'Open-toe sandals', 'Visible branding from other companies'] },
+  { id: 'remote', title: 'Wednesday (WFH)', image: 'remote', summary: 'Work from home: casual but presentable on video calls.', wear: ['A plain top, shirt or knitwear', 'Tidy hair and a neat appearance on camera', 'A quiet, plain background or a Rex virtual background'], avoid: ['Sleepwear or gym wear on camera', 'Busy or distracting backgrounds'] },
+  { id: 'friday', title: 'Fridays', image: 'friday', summary: 'Casual Friday: relaxed, but still neat.', wear: ['Polo shirts, casual shirts and blouses, including ankara or adire prints', 'Chinos, dark jeans or casual trousers', 'Clean sneakers, loafers or flats'], avoid: ['Sportswear and slippers', 'Torn or faded clothing', 'Shorts and vests'] },
 ]
 
 export const products = [
-  { id: 'motor', title: 'Motor Insurance', icon: 'Car', variants: ['Third-party', 'Comprehensive', 'Royal Silver', 'Bronze'], description: 'Motor insurance for private and commercial vehicles against accident, theft and third-party liability, with 24/7 roadside assistance.' },
-  { id: 'fire', title: 'Fire Insurance', icon: 'Flame', variants: ['Standard Fire', 'Special Perils'], description: 'Protects commercial and residential properties against loss or damage caused by fire, lightning and other specified perils.' },
-  { id: 'agric', title: 'Agric Insurance', icon: 'Sprout', variants: ['Crop', 'Livestock', 'Poultry', 'Fish Farm'], description: 'Cover for farmers and agricultural businesses against natural disasters, disease and other risks affecting yields.' },
-  { id: 'energy', title: 'Energy Insurance', icon: 'Zap', variants: ['Oil & Gas', 'Renewable', 'Power Generation'], description: 'Risk solutions for the energy sector, including offshore and onshore operations, renewables and power generation.' },
-  { id: 'engineering', title: 'Engineering Insurance', icon: 'HardHat', variants: ['Contractors All Risk', 'Erection All Risk', 'Plant & Machinery'], description: 'Cover for construction projects, machinery installation and operational equipment against physical loss or damage.' },
-  { id: 'travel', title: 'Travel Insurance', icon: 'Luggage', variants: ['Local', 'International', 'Student', 'Pilgrimage'], description: 'Covers medical emergencies, trip cancellations, lost baggage and travel delays.' },
-  { id: 'marine', title: 'Marine Insurance', icon: 'Ship', variants: ['Marine Cargo', 'Marine Hull', 'Goods-in-Transit'], description: 'Covers goods moving by sea, air and road, and the vessels that carry them, against loss or damage in transit.' },
+  { id: 'motor', who: 'Car owners, ride-hailing drivers and fleet operators.', title: 'Motor Insurance', icon: 'Car', variants: ['Third-party', 'Comprehensive', 'Royal Silver', 'Bronze'], description: 'Motor insurance for private and commercial vehicles against accident, theft and third-party liability, with 24/7 roadside assistance.' },
+  { id: 'fire', who: 'Homeowners, landlords, factories and retail businesses.', title: 'Fire Insurance', icon: 'Flame', variants: ['Standard Fire', 'Special Perils'], description: 'Protects commercial and residential properties against loss or damage caused by fire, lightning and other specified perils.' },
+  { id: 'agric', who: 'Smallholder farmers, agribusinesses and cooperatives.', title: 'Agric Insurance', icon: 'Sprout', variants: ['Crop', 'Livestock', 'Poultry', 'Fish Farm'], description: 'Cover for farmers and agricultural businesses against natural disasters, disease and other risks affecting yields.' },
+  { id: 'energy', who: 'Oil and gas operators, IPPs and renewable developers.', title: 'Energy Insurance', icon: 'Zap', variants: ['Oil & Gas', 'Renewable', 'Power Generation'], description: 'Risk solutions for the energy sector, including offshore and onshore operations, renewables and power generation.' },
+  { id: 'engineering', who: 'Contractors, project owners and manufacturers.', title: 'Engineering Insurance', icon: 'HardHat', variants: ['Contractors All Risk', 'Erection All Risk', 'Plant & Machinery'], description: 'Cover for construction projects, machinery installation and operational equipment against physical loss or damage.' },
+  { id: 'travel', who: 'Holidaymakers, students abroad, pilgrims and business travellers.', title: 'Travel Insurance', icon: 'Luggage', variants: ['Local', 'International', 'Student', 'Pilgrimage'], description: 'Covers medical emergencies, trip cancellations, lost baggage and travel delays.' },
+  { id: 'marine', who: 'Importers, exporters, logistics firms and ship owners.', title: 'Marine Insurance', icon: 'Ship', variants: ['Marine Cargo', 'Marine Hull', 'Goods-in-Transit'], description: 'Covers goods moving by sea, air and road, and the vessels that carry them, against loss or damage in transit.' },
   // Bond variants are placeholders until the product team confirms the list.
-  { id: 'bond', title: 'Bond Insurance', icon: 'ScrollText', variants: ['Bid Bond', 'Performance Bond', 'Advance Payment Bond', 'Customs Bond'], description: 'Guarantees that protect project owners and government agencies if a contractor or importer fails to meet their obligations.' },
-  { id: 'aviation', title: 'Aviation Insurance', icon: 'Plane', variants: ['Hull All Risks', 'Passenger Liability', 'Airport Operators Liability'], description: 'Aircraft hull, passenger and third-party liability cover for airlines, private jets and aviation operations.' },
+  { id: 'bond', who: 'Contractors bidding for public and private projects, and importers.', title: 'Bond Insurance', icon: 'ScrollText', variants: ['Bid Bond', 'Performance Bond', 'Advance Payment Bond', 'Customs Bond'], description: 'Guarantees that protect project owners and government agencies if a contractor or importer fails to meet their obligations.' },
+  { id: 'aviation', who: 'Airlines, private jet owners and airport operators.', title: 'Aviation Insurance', icon: 'Plane', variants: ['Hull All Risks', 'Passenger Liability', 'Airport Operators Liability'], description: 'Aircraft hull, passenger and third-party liability cover for airlines, private jets and aviation operations.' },
 ]
 
 // Headquarters floor plan, top floor first.
 export const floors = [
-  { floor: 4, name: 'Executive & HR', teams: ['Executive Office', 'People & Culture', 'Legal & Compliance', 'Finance'] },
-  { floor: 3, name: 'Claims', teams: ['Claims', 'Actuarial'] },
-  { floor: 2, name: 'Underwriting', teams: ['Underwriting', 'Brand & Communications'] },
-  { floor: 1, name: 'IT & Customer Care', teams: ['Technology', 'Customer Care', 'Reception'] },
+  { floor: 4, name: 'Executive & HR', teams: ['Executive Office', 'People & Culture', 'Legal & Compliance', 'Finance'], where: 'Rex House, 4th floor · lifts to the right of reception', about: 'Home of the leadership team and the corporate functions that keep Rex running: people, legal, compliance and finance.', spots: ['Boardroom (book through Kissflow)', 'HR drop-in desk, 10:00 to 15:00', 'Quiet lounge with a city view'] },
+  { floor: 3, name: 'Claims', teams: ['Claims', 'Actuarial'], where: 'Rex House, 3rd floor · east wing', about: 'Where claims are registered, assessed and settled, next door to the actuaries who model reserves and pricing.', spots: ['Claims triage room', 'Huddle wall for the daily stand-up', 'Kitchenette and water point'] },
+  { floor: 2, name: 'Underwriting', teams: ['Underwriting', 'Brand & Communications'], where: 'Rex House, 2nd floor · open plan', about: 'Underwriters price and accept risk here, alongside the brand team who look after our voice, campaigns and internal comms.', spots: ['Two glass meeting pods', 'Brand studio and mood board wall', 'Standing collaboration tables'] },
+  { floor: 1, name: 'IT & Customer Care', teams: ['Technology', 'Customer Care', 'Reception'], where: 'Rex House, 1st floor · reception level', about: 'Your first stop: reception, the Customer Care contact centre, and the IT service desk for laptops, access and passwords.', spots: ['Reception and visitor sign-in', 'IT service desk (ext. 999)', 'Customer Care contact centre'] },
 ]
 
 export const performance = [

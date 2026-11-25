@@ -24,3 +24,69 @@ export const coursePhotos = {
   aml: courseAml, ndpa: courseNdpa, cyber: courseCyber, claims101: courseClaims, uw: courseUnderwriting,
   ifrs17: courseIfrs17, cx: courseCx, excel: courseExcel, lead: courseManager, feedback: courseFeedback,
 }
+
+import wbHmo from '../assets/photos/wellbeing-hmo.jpg'
+import wbMind from '../assets/photos/wellbeing-mind.jpg'
+import wbFitness from '../assets/photos/wellbeing-fitness.jpg'
+import wbHike from '../assets/photos/wellbeing-hike.jpg'
+import deskBrand from '../assets/photos/desk-brand.jpg'
+import deskIt from '../assets/photos/desk-it.jpg'
+import deskAdmin from '../assets/photos/desk-admin.jpg'
+import deskHr from '../assets/photos/desk-hr.jpg'
+
+export const wellbeingPhotos = { hmo: wbHmo, mind: wbMind, fitness: wbFitness, hike: wbHike }
+export const deskPhotos = { 'Brand & Communications': deskBrand, IT: deskIt, Admin: deskAdmin, HR: deskHr }
+
+// Department cards reuse the closest matching photo until each team supplies its own.
+export const departmentPhotos = {
+  claims: newsClaimsTeam, underwriting: courseUnderwriting, care: newsCustomerCare, actuarial: courseExcel, finance: courseIfrs17,
+  hr: deskHr, it: deskIt, comms: deskBrand, compliance: courseAml,
+}
+
+import dressOffice from '../assets/photos/dress-office.jpg'
+import dressClient from '../assets/photos/dress-client.jpg'
+import dressRemote from '../assets/photos/dress-remote.jpg'
+import dressFriday from '../assets/photos/dress-friday.jpg'
+
+export const dressPhotos = { office: dressOffice, client: dressClient, remote: dressRemote, friday: dressFriday }
+
+import prMotor from '../assets/photos/product-motor.jpg'
+import prFire from '../assets/photos/product-fire.jpg'
+import prAgric from '../assets/photos/product-agric.jpg'
+import prEnergy from '../assets/photos/product-energy.jpg'
+import prEngineering from '../assets/photos/product-engineering.jpg'
+import prTravel from '../assets/photos/product-travel.jpg'
+import prMarine from '../assets/photos/product-marine.jpg'
+import prBond from '../assets/photos/product-bond.jpg'
+import prAviation from '../assets/photos/product-aviation.jpg'
+
+// Insurance products (onboarding). Keyed by product id in data/onboarding.js.
+export const productPhotos = {
+  motor: prMotor, fire: prFire, agric: prAgric, energy: prEnergy, engineering: prEngineering,
+  travel: prTravel, marine: prMarine, bond: prBond, aviation: prAviation,
+}
+
+import floor1 from '../assets/photos/floor-1.jpg'
+import floor2 from '../assets/photos/floor-2.jpg'
+import floor3 from '../assets/photos/floor-3.jpg'
+import floor4 from '../assets/photos/floor-4.jpg'
+export const floorPhotos = { 1: floor1, 2: floor2, 3: floor3, 4: floor4 }
+
+import perfOkr from '../assets/photos/perf-okr.jpg'
+import perf1on1 from '../assets/photos/perf-1on1.jpg'
+import perf360 from '../assets/photos/perf-360.jpg'
+import perfCheckin from '../assets/photos/perf-checkin.jpg'
+// Illustrations for the performance-management step, in data order.
+export const performanceArt = [perfOkr, perf1on1, perf360, perfCheckin]
+
+// Staff headshots (placeholders until real photos are uploaded). Avatar falls back to initials.
+import pSarah from '../assets/people/sarah-jenkins.jpg'
+import pArthur from '../assets/people/arthur-pendelton.jpg'
+import pChloe from '../assets/people/chloe-chen.jpg'
+import pJohn from '../assets/people/john-davis.jpg'
+import pFatima from '../assets/people/fatima-bello.jpg'
+import pMichael from '../assets/people/michael-okoro.jpg'
+export const peoplePhotos = {
+  'Sarah Jenkins': pSarah, 'Arthur Pendelton': pArthur, 'Chloe Chen': pChloe,
+  'John Davis': pJohn, 'Fatima Bello': pFatima, 'Michael Okoro': pMichael,
+}

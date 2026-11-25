@@ -79,7 +79,7 @@ After finishing, new staff land on their department's dashboard with a "first 90
 
 ## Pages
 
-Sidebar groups (from `src/config/nav.js`): **Workspace** (Home, News, Events, Celebrations) · **Self-service** (Requests, Knowledge & Learning, Help Desk) · **Company** (Departments, Health & Wellbeing) · **Management** (Admin Workspace).
+Sidebar groups (from `src/config/nav.js`): **Workspace** (Home, News, Events, Celebrations) · **Self-service** (Knowledge & Learning, Help Desk) · **Company** (Departments, Health & Wellbeing) · **Management** (Admin Workspace).
 
 Restricted items are hidden from the menu and search, and their address shows a "no access" page:
 - Admin Workspace: HR, IT, Brand & Communications, Executive Office
@@ -91,21 +91,20 @@ Restricted items are hidden from the menu and search, and their address shows a 
 | News | `/news`, `/news/:id` | Featured story, category filter, search, article page with likes, comments and a simple "More stories" list |
 | Events | `/events` | Ruled month calendar, type filters, RSVP, upcoming list |
 | Celebrations | `/celebrations` | Recognition and kudos with reactions and comments, birthdays, work anniversaries, new joiners. Admins can share recognition. Replaces Milestones |
-| Requests | `/requests` | Request from **Brand**, **IT** or **Admin**; tabs, search, and a detail panel with comments and history |
 | Knowledge & Learning | `/knowledge`, `/knowledge/:id` | Tabs: Policies & guides, Courses (required + catalogue), Documents (pin up to three) |
 | Course player | `/learning/:id` | Video, lesson list with progress, overview and other courses. Lessons are in `lessonTitles` in `src/data/index.js` |
-| Help Desk | `/help` | IT and HR tickets, FAQs, my tickets |
+| Help Desk | `/help` | One place for help and requests: photo cards for **IT**, **HR**, **Admin** and **Brand** open a request form; your requests (mine, team queue, open, resolved) with a detail panel, comments and history; common questions. Replaces the separate Requests page, which shared the same ticket store |
 | Departments | `/departments`, `/departments/:id` | Each team: culture video, head, services, team, documents, events |
 | Health & Wellbeing | `/wellbeing` | REAP mental-health programme, HMO and fitness info, Gym Champion of the month, daily checklist, monthly hike |
 | Admin Workspace | `/admin` | Publish news to News and the Home feed, open requests by team |
 
-Retired pages redirect: `/docs` → Documents, `/learning` → Courses, `/milestones` → Celebrations, `/rewards` → Health & Wellbeing, `/people` → Home.
+Retired pages redirect: `/requests` → Help Desk (keeps `?tab=` and `?id=`), `/docs` → Documents, `/learning` → Courses, `/milestones` → Celebrations, `/rewards` → Health & Wellbeing, `/people` → Home.
 
 Also: a birthday and anniversary pop-up with confetti (once a day), and a profile photo people can change from the account menu.
 
 ## Design system
 
-Calm workspace style: 15px root size (type scale 12 / 13 / 15 / 17 / 22 / 28), one radius scale (12px surfaces, 8px controls), hairline borders instead of shadows, a light sidebar, one page header component (`src/components/PageHeader.jsx`), and a 1200px content width. Utilities (`card`, `btn-primary`, `btn-secondary`, `section-title`, `link`) are in `src/index.css`.
+Calm workspace style with light motion: cards lift and their photos ease in on hover, lists fade in one after another, and an orange line marks the hovered and current sidebar item (all off under reduced motion). 15px root size (type scale 12 / 13 / 15 / 17 / 22 / 28), one radius scale (12px surfaces, 8px controls), hairline borders instead of shadows, a light sidebar, one page header component (`src/components/PageHeader.jsx`), and a 1200px content width. Utilities (`card`, `btn-primary`, `btn-secondary`, `section-title`, `link`) are in `src/index.css`.
 
 Global: search field in the header on every page (⌘K / Ctrl+K), notifications, dark mode, responsive layout, reduced-motion support.
 
@@ -125,7 +124,8 @@ Global: search field in the header on every page (⌘K / Ctrl+K), notifications,
 | News, events, courses, people, documents | `src/data/index.js` (set a news `image` to show a photo) |
 | Department pages | `departmentTour` in `src/data/onboarding.js` |
 | Demo personas (incl. buddy and manager) | `src/context/UserContext.jsx` |
-| Requests | `src/data/requests.js` |
+| Help Desk desks and sample requests | `src/data/requests.js` |
+| Photos (news, courses, wellbeing, help desks, departments) | `src/data/photos.js`, `src/assets/photos/` |
 | Knowledge articles, Help Desk FAQs | `src/data/knowledge.js` |
 | Onboarding content (products, floors, IT setup…) | `src/data/onboarding.js` |
 | Recognition, birthdays, wellbeing, REAP, Gym Champion | `src/data/culture.js` |
