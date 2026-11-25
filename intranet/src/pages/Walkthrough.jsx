@@ -1,6 +1,6 @@
 import { useEffect, useRef, useState } from 'react'
 import { Navigate, useNavigate } from 'react-router-dom'
-import { ArrowLeftIcon as ArrowLeft, ArrowRightIcon as ArrowRight, CalendarCheckIcon as CalendarCheck, SignOutIcon as LogOut, CheckIcon as Check, CheckCircleIcon as CheckCircle2, CaretDownIcon as ChevronDown, SignatureIcon as FileSignature, LockIcon as Lock, MapPinIcon as MapPin, QuotesIcon as Quote, ArrowCounterClockwiseIcon as RotateCcw, StarIcon as Star, XIcon as X } from '@phosphor-icons/react'
+import { ArrowLeftIcon as ArrowLeft, ArrowRightIcon as ArrowRight, CalendarCheckIcon as CalendarCheck, SignOutIcon as LogOut, CheckIcon as Check, CheckCircleIcon as CheckCircle2, CaretDownIcon as ChevronDown, SignatureIcon as FileSignature, LockIcon as Lock, MapPinIcon as MapPin, QuotesIcon as Quote, ArrowCounterClockwiseIcon as RotateCcw, StarIcon as Star, XIcon as X, BuildingsIcon as Buildings, ClockIcon as Clock, UsersThreeIcon as UsersThree } from '@phosphor-icons/react'
 import { company, departmentTour, dressCode, feedbackSlots, floors, itSetup, mdMessage, performance, policies, products, values, walkthroughSteps, workplaceNorms } from '../data/onboarding'
 import { people } from '../data'
 import { useUser } from '../context/UserContext'
@@ -243,6 +243,54 @@ function PoliciesStep({ progress, update, user }) {
   )
 }
 
+// How we work: three stops joined by one line (horizontal on desktop, vertical on phones),
+// each with a small visual: the office week, the core-hours window, and the meeting habits.
+function HowWeWork() {
+  const [office, hours, meetings] = workplaceNorms
+  const days = [['Mon', false], ['Tue', true], ['Wed', true], ['Thu', true], ['Fri', false]]
+  const stops = [
+    { n: office, Icon: Buildings, tone: 'bg-brand-700 text-white dark:bg-brand-500', visual: (
+      <div className="flex gap-1" aria-label="Office Tuesday to Thursday, remote Monday and Friday">
+        {days.map(([d, inOffice]) => <span key={d} className={`flex h-8 flex-1 items-center justify-center rounded-md text-[11px] font-medium ${inOffice ? 'bg-brand-700 text-white dark:bg-brand-500' : 'border border-dashed border-slate-300 text-slate-500 dark:border-slate-600'}`}>{d}</span>)}
+      </div>
+    ) },
+    { n: hours, Icon: Clock, tone: 'bg-accent-700 text-white', visual: (
+      <div aria-label="Core hours 10:00 to 16:00">
+        <div className="relative h-8 rounded-md bg-slate-100 dark:bg-slate-800">
+          <span className="absolute inset-y-0 rounded-md bg-accent-700" style={{ left: '20%', right: '20%' }} />
+          <span className="absolute inset-0 flex items-center justify-center text-[11px] font-semibold text-white">10:00 to 16:00</span>
+        </div>
+        <div className="mt-1 flex justify-between text-[10px] text-slate-500 tabular-nums"><span>08:00</span><span>18:00</span></div>
+      </div>
+    ) },
+    { n: meetings, Icon: UsersThree, tone: 'bg-emerald-600 text-white', visual: (
+      <div className="flex flex-wrap gap-1.5">
+        {['On time', 'Agenda', 'Next steps', 'Owners'].map((t) => <span key={t} className="inline-flex items-center gap-1 rounded-full bg-emerald-50 px-2 py-1 text-[11px] font-medium text-emerald-800 dark:bg-emerald-500/15 dark:text-emerald-200"><Check size={11} weight="bold" />{t}</span>)}
+      </div>
+    ) },
+  ]
+  return (
+    <section>
+      <h2 className="section-title mb-5">How we work</h2>
+      <ol className="relative grid gap-8 md:grid-cols-3 md:gap-6">
+        {/* The connecting line: across the icons on desktop, down the left on phones. */}
+        <span aria-hidden="true" className="absolute top-5 right-[16.66%] left-[16.66%] hidden h-0.5 bg-gradient-to-r from-brand-700 via-accent-600 to-emerald-600 md:block" />
+        <span aria-hidden="true" className="absolute top-5 bottom-5 left-5 w-0.5 bg-gradient-to-b from-brand-700 via-accent-600 to-emerald-600 md:hidden" />
+        {stops.map(({ n, Icon: StopIcon, tone, visual }) => (
+          <li key={n.title} className="relative flex gap-4 md:flex-col md:items-center md:text-center">
+            <span className={`relative z-10 flex h-10 w-10 shrink-0 items-center justify-center rounded-full ring-4 ring-white dark:ring-slate-950 ${tone}`}><StopIcon size={20} weight="fill" /></span>
+            <div className="card card-lift min-w-0 flex-1 p-4 md:mt-4 md:w-full md:text-left">
+              <p className="text-sm font-semibold text-slate-900 dark:text-white">{n.title}</p>
+              <p className="mt-1 mb-4 text-sm text-slate-600 dark:text-slate-300">{n.text}</p>
+              {visual}
+            </div>
+          </li>
+        ))}
+      </ol>
+    </section>
+  )
+}
+
 function DressCode() {
   const [tab, setTab] = useState(dressCode[0].id)
   const d = dressCode.find((x) => x.id === tab)
@@ -273,17 +321,7 @@ function CultureStep() {
   return (
     <div className="space-y-10">
       <p className="max-w-[65ch] text-[15px] leading-relaxed text-slate-600 dark:text-slate-300">At Rex Insurance our culture is built on transparency, empathy and innovation. We take care of our people so they can take care of our clients.</p>
-      <section>
-        <h2 className="section-title mb-3">How we work</h2>
-        <dl className="card divide-y divide-slate-100 dark:divide-slate-800">
-          {workplaceNorms.map((n) => (
-            <div key={n.title} className="grid gap-1 px-5 py-3.5 sm:grid-cols-[10rem_1fr] sm:gap-6">
-              <dt className="text-sm font-medium text-slate-900 dark:text-white">{n.title}</dt>
-              <dd className="text-sm text-slate-600 dark:text-slate-300">{n.text}</dd>
-            </div>
-          ))}
-        </dl>
-      </section>
+      <HowWeWork />
       <DressCode />
     </div>
   )
