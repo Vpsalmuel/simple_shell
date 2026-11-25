@@ -86,7 +86,7 @@ function MdStep({ progress, update }) {
   return (
     <div className="space-y-10">
       <VideoPlayer title={`A welcome from ${mdMessage.name}`} {...mdMessage.video} watched={progress.mdVideo} onComplete={() => update({ mdVideo: true })} />
-      <figure className="relative max-w-[68ch]">
+      <figure className="relative w-full">
         <Quote className="absolute -top-2 -left-1 text-accent-300 dark:text-accent-700/60" size={32} weight="fill" aria-hidden="true" />
         <div className="space-y-4 pt-8 text-[15px] leading-relaxed text-slate-700 dark:text-slate-300">{mdMessage.letter.map((p, i) => <p key={i}>{p}</p>)}</div>
         <figcaption className="mt-8 flex items-center gap-3 border-t border-slate-200 pt-5 dark:border-slate-800">
