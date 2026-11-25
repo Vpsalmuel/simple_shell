@@ -84,10 +84,10 @@ export const products = [
 
 // Headquarters floor plan, top floor first.
 export const floors = [
-  { floor: 4, name: 'Executive & HR', teams: ['Executive Office', 'People & Culture', 'Legal & Compliance', 'Finance'] },
-  { floor: 3, name: 'Claims', teams: ['Claims', 'Actuarial'] },
-  { floor: 2, name: 'Underwriting', teams: ['Underwriting', 'Brand & Communications'] },
-  { floor: 1, name: 'IT & Customer Care', teams: ['Technology', 'Customer Care', 'Reception'] },
+  { floor: 4, name: 'Executive & HR', teams: ['Executive Office', 'People & Culture', 'Legal & Compliance', 'Finance'], where: 'Rex House, 4th floor · lifts to the right of reception', about: 'Home of the leadership team and the corporate functions that keep Rex running: people, legal, compliance and finance.', spots: ['Boardroom (book through Kissflow)', 'HR drop-in desk, 10:00 to 15:00', 'Quiet lounge with a city view'] },
+  { floor: 3, name: 'Claims', teams: ['Claims', 'Actuarial'], where: 'Rex House, 3rd floor · east wing', about: 'Where claims are registered, assessed and settled, next door to the actuaries who model reserves and pricing.', spots: ['Claims triage room', 'Huddle wall for the daily stand-up', 'Kitchenette and water point'] },
+  { floor: 2, name: 'Underwriting', teams: ['Underwriting', 'Brand & Communications'], where: 'Rex House, 2nd floor · open plan', about: 'Underwriters price and accept risk here, alongside the brand team who look after our voice, campaigns and internal comms.', spots: ['Two glass meeting pods', 'Brand studio and mood board wall', 'Standing collaboration tables'] },
+  { floor: 1, name: 'IT & Customer Care', teams: ['Technology', 'Customer Care', 'Reception'], where: 'Rex House, 1st floor · reception level', about: 'Your first stop: reception, the Customer Care contact centre, and the IT service desk for laptops, access and passwords.', spots: ['Reception and visitor sign-in', 'IT service desk (ext. 999)', 'Customer Care contact centre'] },
 ]
 
 export const performance = [

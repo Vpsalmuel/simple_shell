@@ -65,3 +65,28 @@ export const productPhotos = {
   motor: prMotor, fire: prFire, agric: prAgric, energy: prEnergy, engineering: prEngineering,
   travel: prTravel, marine: prMarine, bond: prBond, aviation: prAviation,
 }
+
+import floor1 from '../assets/photos/floor-1.jpg'
+import floor2 from '../assets/photos/floor-2.jpg'
+import floor3 from '../assets/photos/floor-3.jpg'
+import floor4 from '../assets/photos/floor-4.jpg'
+export const floorPhotos = { 1: floor1, 2: floor2, 3: floor3, 4: floor4 }
+
+import perfOkr from '../assets/photos/perf-okr.jpg'
+import perf1on1 from '../assets/photos/perf-1on1.jpg'
+import perf360 from '../assets/photos/perf-360.jpg'
+import perfCheckin from '../assets/photos/perf-checkin.jpg'
+// Illustrations for the performance-management step, in data order.
+export const performanceArt = [perfOkr, perf1on1, perf360, perfCheckin]
+
+// Staff headshots (placeholders until real photos are uploaded). Avatar falls back to initials.
+import pSarah from '../assets/people/sarah-jenkins.jpg'
+import pArthur from '../assets/people/arthur-pendelton.jpg'
+import pChloe from '../assets/people/chloe-chen.jpg'
+import pJohn from '../assets/people/john-davis.jpg'
+import pFatima from '../assets/people/fatima-bello.jpg'
+import pMichael from '../assets/people/michael-okoro.jpg'
+export const peoplePhotos = {
+  'Sarah Jenkins': pSarah, 'Arthur Pendelton': pArthur, 'Chloe Chen': pChloe,
+  'John Davis': pJohn, 'Fatima Bello': pFatima, 'Michael Okoro': pMichael,
+}
