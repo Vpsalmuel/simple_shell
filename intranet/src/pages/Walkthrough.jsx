@@ -1,6 +1,6 @@
 import { useEffect, useRef, useState } from 'react'
 import { Navigate, useNavigate } from 'react-router-dom'
-import { ArrowLeftIcon as ArrowLeft, ArrowRightIcon as ArrowRight, CalendarCheckIcon as CalendarCheck, SignOutIcon as LogOut, CheckIcon as Check, CheckCircleIcon as CheckCircle2, CaretDownIcon as ChevronDown, SignatureIcon as FileSignature, LockIcon as Lock, MapPinIcon as MapPin, QuotesIcon as Quote, ArrowCounterClockwiseIcon as RotateCcw, StarIcon as Star } from '@phosphor-icons/react'
+import { ArrowLeftIcon as ArrowLeft, ArrowRightIcon as ArrowRight, CalendarCheckIcon as CalendarCheck, SignOutIcon as LogOut, CheckIcon as Check, CheckCircleIcon as CheckCircle2, CaretDownIcon as ChevronDown, SignatureIcon as FileSignature, LockIcon as Lock, MapPinIcon as MapPin, QuotesIcon as Quote, ArrowCounterClockwiseIcon as RotateCcw, StarIcon as Star, XIcon as X } from '@phosphor-icons/react'
 import { company, departmentTour, dressCode, feedbackSlots, floors, itSetup, mdMessage, performance, policies, products, values, walkthroughSteps, workplaceNorms } from '../data/onboarding'
 import { people } from '../data'
 import { useUser } from '../context/UserContext'
@@ -10,7 +10,9 @@ import Icon from '../components/Icon'
 import Modal from '../components/Modal'
 import VideoPlayer from '../components/VideoPlayer'
 import PersonaSwitcher from '../components/PersonaSwitcher'
-import { CelebrateIllustration, WelcomeIllustration } from '../components/Illustrations'
+import { CelebrateIllustration } from '../components/Illustrations'
+import companyPhoto from '../assets/photos/company-team.jpg'
+import { dressPhotos } from '../data/photos'
 
 // Each step's completion rule. A step unlocks only when every earlier step is done.
 function requirement(stepId, progress) {
@@ -47,15 +49,15 @@ function requirement(stepId, progress) {
 function CompanyStep() {
   return (
     <div className="space-y-8">
-      <div className="grid items-center gap-6 md:grid-cols-[1fr_auto]">
+      <div className="grid grid-cols-1 items-center gap-8 md:grid-cols-[minmax(0,1fr)_16rem]">
         <div>
-          <p className="text-lg leading-relaxed text-slate-600 dark:text-slate-300">{company.intro}</p>
-          <div className="mt-6 grid gap-3 sm:grid-cols-2">
-            <div className="rounded-xl bg-brand-50 p-4 dark:bg-slate-800"><p className="text-xs font-semibold tracking-wider text-brand-600 uppercase dark:text-brand-300">Mission</p><p className="mt-1 font-medium">{company.mission}</p></div>
-            <div className="rounded-xl bg-accent-50 p-4 dark:bg-slate-800"><p className="text-xs font-semibold tracking-wider text-accent-700 uppercase dark:text-accent-400">Vision</p><p className="mt-1 font-medium">{company.vision}</p></div>
-          </div>
+          <p className="text-[17px] leading-relaxed text-slate-700 dark:text-slate-300">{company.intro}</p>
+          <dl className="mt-6 grid gap-3 sm:grid-cols-2">
+            <div className="rounded-xl border border-slate-200 p-4 dark:border-slate-800"><dt className="text-xs font-medium text-brand-700 dark:text-brand-300">Our mission</dt><dd className="mt-1 text-sm font-medium text-slate-900 dark:text-white">{company.mission}</dd></div>
+            <div className="rounded-xl border border-slate-200 p-4 dark:border-slate-800"><dt className="text-xs font-medium text-accent-700 dark:text-accent-400">Our vision</dt><dd className="mt-1 text-sm font-medium text-slate-900 dark:text-white">{company.vision}</dd></div>
+          </dl>
         </div>
-        <WelcomeIllustration className="mx-auto hidden h-52 w-auto md:block" />
+        <img src={companyPhoto} alt="Rex colleagues walking through the head office lobby" className="aspect-[4/5] w-full rounded-xl object-cover" />
       </div>
       <div className="stagger grid grid-cols-2 gap-3 md:grid-cols-4">
         {company.stats.map((s) => (
@@ -98,6 +100,14 @@ function MdStep({ progress, update }) {
   )
 }
 
+// Each value gets its own colour from the brand palette: two solid (navy, orange) and two tinted.
+const valueTones = [
+  { card: 'bg-brand-700 text-white dark:bg-brand-600', sub: 'text-brand-100', chip: 'bg-white/15 text-white', mark: 'text-white/10', quote: 'bg-white/10 text-white' },
+  { card: 'bg-accent-700 text-white', sub: 'text-accent-100', chip: 'bg-white/15 text-white', mark: 'text-white/15', quote: 'bg-white/10 text-white' },
+  { card: 'bg-brand-50 text-brand-900 ring-1 ring-brand-100 dark:bg-brand-500/15 dark:text-white dark:ring-brand-500/25', sub: 'text-brand-800/80 dark:text-brand-100', chip: 'bg-brand-700 text-white dark:bg-brand-400 dark:text-slate-900', mark: 'text-brand-700/10 dark:text-white/10', quote: 'bg-white text-brand-900 dark:bg-white/10 dark:text-white' },
+  { card: 'bg-accent-50 text-accent-900 ring-1 ring-accent-100 dark:bg-accent-600/15 dark:text-white dark:ring-accent-600/25', sub: 'text-accent-900/80 dark:text-accent-100', chip: 'bg-accent-700 text-white', mark: 'text-accent-700/10 dark:text-white/10', quote: 'bg-white text-accent-900 dark:bg-white/10 dark:text-white' },
+]
+
 function ValuesStep({ progress, update }) {
   const seen = progress.valuesSeen ?? []
   const [open, setOpen] = useState(null)
@@ -106,29 +116,41 @@ function ValuesStep({ progress, update }) {
     if (!seen.includes(id)) update({ valuesSeen: [...seen, id] })
   }
   return (
-    <div className="stagger grid gap-4 md:grid-cols-2">
-      {values.map((v) => {
-        const isOpen = open === v.id
-        const isSeen = seen.includes(v.id)
-        return (
-          <button key={v.id} onClick={() => toggle(v.id)} aria-expanded={isOpen} className={`card card-hover p-5 text-left transition ${isOpen ? 'ring-2 ring-accent-500' : ''}`}>
-            <div className="flex items-start gap-4">
-              <span className={`flex h-12 w-12 shrink-0 items-center justify-center rounded-xl transition ${isSeen ? 'bg-accent-700 text-white' : 'bg-brand-50 text-brand-700 dark:bg-slate-800 dark:text-brand-200'}`}><Icon name={v.icon} size={22} /></span>
-              <div className="flex-1">
-                <p className="text-[15px] font-semibold">{v.name}</p>
-                <p className="text-sm text-slate-500">{v.short}</p>
+    <div>
+      <div className="mb-5 flex items-center gap-3">
+        <div className="flex gap-1.5" aria-hidden="true">
+          {values.map((v, i) => <span key={v.id} className={`h-1.5 w-8 rounded-full transition-colors duration-300 ${seen.includes(v.id) ? (i % 2 ? 'bg-accent-600' : 'bg-brand-700 dark:bg-brand-300') : 'bg-slate-200 dark:bg-slate-700'}`} />)}
+        </div>
+        <span className="text-xs text-slate-500">{seen.length} of {values.length} opened. Tap a value to read what it means in practice.</span>
+      </div>
+      <div className="stagger grid gap-4 md:grid-cols-2">
+        {values.map((v, i) => {
+          const t = valueTones[i % valueTones.length]
+          const isOpen = open === v.id
+          const isSeen = seen.includes(v.id)
+          return (
+            <button key={v.id} onClick={() => toggle(v.id)} aria-expanded={isOpen} className={`card-lift group relative flex min-h-[15rem] flex-col overflow-hidden rounded-xl p-6 text-left ${t.card}`}>
+              <Icon name={v.icon} size={180} weight="fill" aria-hidden="true" className={`pointer-events-none absolute -right-8 -bottom-10 transition-transform duration-500 group-hover:-rotate-6 group-hover:scale-105 ${t.mark}`} />
+              <div className="relative flex items-center justify-between gap-3">
+                <span className={`flex h-11 w-11 items-center justify-center rounded-xl ${t.chip}`}><Icon name={v.icon} size={22} weight="duotone" className="icon-lift" /></span>
+                {isSeen
+                  ? <span className={`inline-flex items-center gap-1 rounded-full px-2.5 py-1 text-xs font-medium ${t.chip}`}><Check size={12} weight="bold" /> Read</span>
+                  : <ChevronDown size={18} className={`transition-transform duration-300 ${t.sub}`} />}
               </div>
-              <ChevronDown size={18} className={`shrink-0 text-slate-400 transition ${isOpen ? 'rotate-180' : ''}`} />
-            </div>
-            {isOpen && (
-              <div className="animate-fade-up mt-4 space-y-3 border-t border-slate-100 pt-4 text-sm dark:border-slate-800">
-                <p>{v.detail}</p>
-                <p className="rounded-xl bg-slate-50 p-3 text-slate-600 dark:bg-slate-800 dark:text-slate-300"><b className="text-slate-900 dark:text-white">In practice:</b> {v.example}</p>
+              <div className="relative mt-auto pt-10">
+                <p className="text-[22px] leading-tight font-semibold">{v.name}</p>
+                <p className={`mt-1.5 text-sm ${t.sub}`}>{v.short}</p>
+                <div className={`grid transition-[grid-template-rows] duration-300 ease-out ${isOpen ? 'grid-rows-[1fr]' : 'grid-rows-[0fr]'}`}>
+                  <div className="overflow-hidden">
+                    <p className="pt-4 text-sm leading-relaxed">{v.detail}</p>
+                    <p className={`mt-3 rounded-lg p-3 text-sm ${t.quote}`}><b className="font-semibold">In practice: </b>{v.example}</p>
+                  </div>
+                </div>
               </div>
-            )}
-          </button>
-        )
-      })}
+            </button>
+          )
+        })}
+      </div>
     </div>
   )
 }
@@ -221,25 +243,48 @@ function PoliciesStep({ progress, update, user }) {
   )
 }
 
-function CultureStep() {
-  const Block = ({ title, items }) => (
+function DressCode() {
+  const [tab, setTab] = useState(dressCode[0].id)
+  const d = dressCode.find((x) => x.id === tab)
+  return (
     <section>
-      <h2 className="section-title mb-3">{title}</h2>
-      <dl className="card divide-y divide-slate-100 dark:divide-slate-800">
-        {items.map((n) => (
-          <div key={n.title} className="grid gap-1 px-5 py-3.5 sm:grid-cols-[10rem_1fr] sm:gap-6">
-            <dt className="text-sm font-medium text-slate-900 dark:text-white">{n.title}</dt>
-            <dd className="text-sm text-slate-600 dark:text-slate-300">{n.text}</dd>
-          </div>
+      <h2 className="section-title mb-3">Dress code</h2>
+      <div className="mb-4 flex gap-1 overflow-x-auto rounded-xl bg-slate-100 p-1 dark:bg-slate-800/70" role="tablist" aria-label="Dress code">
+        {dressCode.map((x) => (
+          <button key={x.id} role="tab" aria-selected={tab === x.id} onClick={() => setTab(x.id)} className={`h-9 flex-1 shrink-0 rounded-lg px-3 text-sm font-medium whitespace-nowrap transition-colors ${tab === x.id ? 'bg-white text-slate-900 shadow-[0_1px_2px_rgba(30,45,100,0.15)] dark:bg-slate-700 dark:text-white' : 'text-slate-600 hover:text-slate-900 dark:text-slate-300 dark:hover:text-white'}`}>{x.title}</button>
         ))}
-      </dl>
+      </div>
+      <div key={d.id} role="tabpanel" className="card animate-fade-up grid overflow-hidden md:grid-cols-[minmax(0,1.15fr)_minmax(0,1fr)]">
+        <img src={dressPhotos[d.image]} alt={`Example outfits for ${d.title.toLowerCase()}`} className="aspect-[3/2] h-full w-full object-cover" />
+        <div className="p-6">
+          <p className="text-[17px] font-semibold text-slate-900 dark:text-white">{d.title}</p>
+          <p className="mt-1 text-sm text-slate-600 dark:text-slate-300">{d.summary}</p>
+          <p className="mt-5 text-xs font-medium text-emerald-700 dark:text-emerald-400">Wear</p>
+          <ul className="mt-1.5 space-y-1.5">{d.wear.map((w) => <li key={w} className="flex gap-2 text-sm text-slate-700 dark:text-slate-200"><Check size={16} weight="bold" className="mt-0.5 shrink-0 text-emerald-600 dark:text-emerald-400" />{w}</li>)}</ul>
+          <p className="mt-5 text-xs font-medium text-rose-700 dark:text-rose-400">Avoid</p>
+          <ul className="mt-1.5 space-y-1.5">{d.avoid.map((w) => <li key={w} className="flex gap-2 text-sm text-slate-700 dark:text-slate-200"><X size={16} weight="bold" className="mt-0.5 shrink-0 text-rose-600 dark:text-rose-400" />{w}</li>)}</ul>
+        </div>
+      </div>
     </section>
   )
+}
+
+function CultureStep() {
   return (
     <div className="space-y-10">
       <p className="max-w-[65ch] text-[15px] leading-relaxed text-slate-600 dark:text-slate-300">At Rex Insurance our culture is built on transparency, empathy and innovation. We take care of our people so they can take care of our clients.</p>
-      <Block title="How we work" items={workplaceNorms} />
-      <Block title="Dress code" items={dressCode} />
+      <section>
+        <h2 className="section-title mb-3">How we work</h2>
+        <dl className="card divide-y divide-slate-100 dark:divide-slate-800">
+          {workplaceNorms.map((n) => (
+            <div key={n.title} className="grid gap-1 px-5 py-3.5 sm:grid-cols-[10rem_1fr] sm:gap-6">
+              <dt className="text-sm font-medium text-slate-900 dark:text-white">{n.title}</dt>
+              <dd className="text-sm text-slate-600 dark:text-slate-300">{n.text}</dd>
+            </div>
+          ))}
+        </dl>
+      </section>
+      <DressCode />
     </div>
   )
 }

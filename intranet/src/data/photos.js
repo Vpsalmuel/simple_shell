@@ -42,3 +42,10 @@ export const departmentPhotos = {
   claims: newsClaimsTeam, underwriting: courseUnderwriting, care: newsCustomerCare, actuarial: courseExcel, finance: courseIfrs17,
   hr: deskHr, it: deskIt, comms: deskBrand, compliance: courseAml,
 }
+
+import dressOffice from '../assets/photos/dress-office.jpg'
+import dressClient from '../assets/photos/dress-client.jpg'
+import dressRemote from '../assets/photos/dress-remote.jpg'
+import dressFriday from '../assets/photos/dress-friday.jpg'
+
+export const dressPhotos = { office: dressOffice, client: dressClient, remote: dressRemote, friday: dressFriday }

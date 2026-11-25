@@ -60,12 +60,13 @@ export const workplaceNorms = [
   { title: 'Meetings', text: 'Start on time, share an agenda, and end with clear next steps and owners.' },
 ]
 
-// Dress code sits under company culture (20 Aug review). Sample wording for HR to confirm.
+// Dress code sits under company culture (20 Aug review), shown as tabs with an example photo each.
+// Sample wording for HR to confirm. `image` keys match dressPhotos in src/data/photos.js.
 export const dressCode = [
-  { title: 'Office days', text: 'Business casual: shirts or blouses, trousers or skirts, smart native wear.' },
-  { title: 'Client meetings', text: 'Full business attire when you meet clients, brokers or regulators.' },
-  { title: 'Remote days', text: 'Casual but presentable on video calls, with a quiet or plain background.' },
-  { title: 'Fridays', text: 'Smart casual or native attire. Keep it neat; no sportswear or slippers.' },
+  { id: 'office', title: 'Office days', image: 'office', summary: 'Business casual, Tuesday to Thursday.', wear: ['Shirts or blouses, with or without a jacket', 'Tailored trousers, chinos or knee-length skirts', 'Smart native wear', 'Clean, closed or smart shoes'], avoid: ['Jeans with rips', 'T-shirts with slogans', 'Sportswear and trainers'] },
+  { id: 'client', title: 'Client meetings', image: 'client', summary: 'Full business attire when you meet clients, brokers or regulators.', wear: ['A matching suit, or a skirt or trouser suit', 'Shirt and tie, or a smart blouse', 'Formal shoes', 'Your staff ID, visible'], avoid: ['Casual or loud prints', 'Open-toe sandals', 'Visible branding from other companies'] },
+  { id: 'remote', title: 'Remote days', image: 'remote', summary: 'Casual but presentable on video calls.', wear: ['A plain top, shirt or knitwear', 'Tidy hair and a neat appearance on camera', 'A quiet, plain background or a Rex virtual background'], avoid: ['Sleepwear or gym wear on camera', 'Busy or distracting backgrounds'] },
+  { id: 'friday', title: 'Fridays', image: 'friday', summary: 'Smart casual or native attire, worn neatly.', wear: ['Ankara, adire or other native attire', 'Smart casual shirts, polos and chinos', 'Neat dresses or separates'], avoid: ['Sportswear and slippers', 'Torn or very casual clothing'] },
 ]
 
 export const products = [
