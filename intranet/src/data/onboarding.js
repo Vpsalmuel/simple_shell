@@ -66,7 +66,7 @@ export const dressCode = [
   { id: 'office', title: 'Office days', image: 'office', summary: 'Business casual, Tuesday to Thursday.', wear: ['Shirts or blouses, with or without a jacket', 'Tailored trousers, chinos or knee-length skirts', 'Smart native wear', 'Clean, closed or smart shoes'], avoid: ['Jeans with rips', 'T-shirts with slogans', 'Sportswear and trainers'] },
   { id: 'client', title: 'Client meetings', image: 'client', summary: 'Full business attire when you meet clients, brokers or regulators.', wear: ['A matching suit, or a skirt or trouser suit', 'Shirt and tie, or a smart blouse', 'Formal shoes', 'Your staff ID, visible'], avoid: ['Casual or loud prints', 'Open-toe sandals', 'Visible branding from other companies'] },
   { id: 'remote', title: 'Remote days', image: 'remote', summary: 'Casual but presentable on video calls.', wear: ['A plain top, shirt or knitwear', 'Tidy hair and a neat appearance on camera', 'A quiet, plain background or a Rex virtual background'], avoid: ['Sleepwear or gym wear on camera', 'Busy or distracting backgrounds'] },
-  { id: 'friday', title: 'Fridays', image: 'friday', summary: 'Smart casual or native attire, worn neatly.', wear: ['Ankara, adire or other native attire', 'Smart casual shirts, polos and chinos', 'Neat dresses or separates'], avoid: ['Sportswear and slippers', 'Torn or very casual clothing'] },
+  { id: 'friday', title: 'Fridays', image: 'friday', summary: 'Casual Friday: relaxed, but still neat.', wear: ['Polo shirts, casual shirts and blouses, including ankara or adire prints', 'Chinos, dark jeans or casual trousers', 'Clean sneakers, loafers or flats'], avoid: ['Sportswear and slippers', 'Torn or faded clothing', 'Shorts and vests'] },
 ]
 
 export const products = [
