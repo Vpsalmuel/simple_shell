@@ -14,7 +14,8 @@ import { CelebrateIllustration } from '../components/Illustrations'
 import companyPhoto from '../assets/photos/company-team.jpg'
 // Illustrative thumbnail until the MD's real video and poster frame are added.
 import mdThumb from '../assets/photos/md-video.jpg'
-import { dressPhotos } from '../data/photos'
+import { dressPhotos, productPhotos } from '../data/photos'
+import Portal from '../components/Portal'
 
 // Each step's completion rule. A step unlocks only when every earlier step is done.
 function requirement(stepId, progress) {
@@ -337,31 +338,102 @@ function ProductsStep({ progress, update }) {
     setOpen(p)
     if (!seen.includes(p.id)) update({ productsSeen: [...seen, p.id] })
   }
+  const idx = open ? products.findIndex((p) => p.id === open.id) : -1
+  const go = (d) => show(products[(idx + d + products.length) % products.length])
   return (
     <>
-      <div className="stagger grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
-        {products.map((p) => (
-          <button key={p.id} onClick={() => show(p)} className="card card-hover flex items-start gap-4 p-5 text-left">
-            <span className={`flex h-12 w-12 shrink-0 items-center justify-center rounded-xl transition ${seen.includes(p.id) ? 'bg-accent-700 text-white' : 'bg-brand-50 text-brand-700 dark:bg-slate-800 dark:text-brand-200'}`}><Icon name={p.icon} size={22} /></span>
-            <span className="min-w-0">
-              <span className="block text-[15px] font-semibold">{p.title}</span>
-              <span className="block truncate text-xs text-slate-500">{p.variants.join(' · ')}</span>
-            </span>
-          </button>
-        ))}
+      <div className="mb-5 flex items-center gap-3">
+        <div className="h-1.5 flex-1 overflow-hidden rounded-full bg-slate-100 dark:bg-slate-800">
+          <div className="h-full rounded-full bg-accent-600 transition-[width] duration-500 ease-[var(--ease-out)]" style={{ width: `${(seen.length / products.length) * 100}%` }} />
+        </div>
+        <span className="text-xs font-semibold text-slate-500 tabular-nums">{seen.length} of {products.length} explored</span>
       </div>
-      <Modal open={Boolean(open)} onClose={() => setOpen(null)} title={open?.title ?? ''}>
-        {open && (
-          <div className="space-y-4 text-sm">
-            <p className="leading-relaxed text-slate-600 dark:text-slate-300">{open.description}</p>
-            <div>
-              <p className="mb-2 font-semibold">Available variants</p>
-              <div className="flex flex-wrap gap-2">{open.variants.map((v) => <span key={v} className="chip bg-brand-50 px-3 py-1 text-brand-700 dark:bg-slate-800 dark:text-brand-200">{v}</span>)}</div>
+      <div className="stagger grid grid-cols-1 gap-5 sm:grid-cols-2 xl:grid-cols-3">
+        {products.map((p, i) => {
+          const done = seen.includes(p.id)
+          return (
+            <article key={p.id} className="card card-lift img-zoom group flex flex-col overflow-hidden">
+              <div className="relative aspect-[16/10] overflow-hidden bg-slate-100 dark:bg-slate-800">
+                <img src={productPhotos[p.id]} alt="" loading="lazy" className="h-full w-full object-cover" />
+                <div className="absolute inset-0 bg-gradient-to-t from-slate-950/55 via-transparent to-transparent" />
+                <span className="absolute top-3 left-3 flex h-10 w-10 items-center justify-center rounded-xl bg-white/95 text-brand-700 shadow-sm backdrop-blur dark:bg-slate-900/90 dark:text-brand-200"><Icon name={p.icon} size={20} /></span>
+                <span className="absolute top-3 right-3 rounded-full bg-slate-950/45 px-2 py-0.5 font-display text-[11px] font-semibold text-white tabular-nums backdrop-blur">{String(i + 1).padStart(2, '0')}</span>
+                {done && <span className="animate-pop absolute right-3 bottom-3 inline-flex items-center gap-1 rounded-full bg-accent-700 px-2.5 py-1 text-[11px] font-semibold text-white"><Check size={12} weight="bold" /> Explored</span>}
+              </div>
+              <div className="flex flex-1 flex-col p-5">
+                <h3 className="text-base font-semibold">{p.title}</h3>
+                <p className="mt-1.5 line-clamp-2 text-sm leading-relaxed text-slate-600 dark:text-slate-300">{p.description}</p>
+                <div className="mt-3 mb-5 flex flex-wrap gap-1.5">
+                  {p.variants.slice(0, 2).map((v) => <span key={v} className="chip bg-brand-50 text-brand-700 dark:bg-slate-800 dark:text-brand-200">{v}</span>)}
+                  {p.variants.length > 2 && <span className="chip bg-slate-100 text-slate-600 dark:bg-slate-800 dark:text-slate-300">+{p.variants.length - 2} more</span>}
+                </div>
+                <button onClick={() => show(p)} className="btn-secondary mt-auto w-full justify-center group-hover:border-accent-600" aria-label={`Read more about ${p.title}`}>
+                  Read more <ArrowRight size={16} className="transition-transform duration-200 group-hover:translate-x-0.5" />
+                </button>
+              </div>
+            </article>
+          )
+        })}
+      </div>
+      {open && <ProductModal product={open} index={idx} onClose={() => setOpen(null)} onPrev={() => go(-1)} onNext={() => go(1)} />}
+    </>
+  )
+}
+
+function ProductModal({ product: p, index, onClose, onPrev, onNext }) {
+  useEffect(() => {
+    const onKey = (e) => {
+      if (e.key === 'Escape') onClose()
+      if (e.key === 'ArrowRight') onNext()
+      if (e.key === 'ArrowLeft') onPrev()
+    }
+    window.addEventListener('keydown', onKey)
+    return () => window.removeEventListener('keydown', onKey)
+  }, [onClose, onNext, onPrev])
+  return (
+    <Portal>
+      <div className="fixed inset-0 z-50 flex items-end justify-center sm:items-center sm:p-4" role="dialog" aria-modal="true" aria-label={p.title}>
+        <div className="absolute inset-0 bg-slate-900/40 backdrop-blur-[2px]" onClick={onClose} />
+        <div key={p.id} className="animate-fade-up relative max-h-[92vh] w-full overflow-y-auto rounded-t-2xl bg-white shadow-[0_24px_60px_-20px_rgba(30,45,100,0.45)] sm:max-w-2xl sm:rounded-2xl dark:bg-slate-900">
+          <div className="relative aspect-[16/8] overflow-hidden">
+            <img src={productPhotos[p.id]} alt="" className="h-full w-full object-cover" />
+            <div className="absolute inset-0 bg-gradient-to-t from-slate-950/80 via-slate-950/20 to-transparent" />
+            <button onClick={onClose} className="absolute top-3 right-3 flex h-9 w-9 items-center justify-center rounded-full bg-white/90 text-slate-700 transition hover:bg-white active:scale-95" aria-label="Close"><X size={18} /></button>
+            <div className="absolute right-6 bottom-5 left-6 flex items-end gap-3 text-white">
+              <span className="flex h-12 w-12 shrink-0 items-center justify-center rounded-xl bg-accent-700"><Icon name={p.icon} size={24} /></span>
+              <div>
+                <p className="text-xs font-semibold tracking-wider text-white/80 uppercase">Product {index + 1} of {products.length}</p>
+                <h2 className="font-display text-2xl font-bold">{p.title}</h2>
+              </div>
             </div>
           </div>
-        )}
-      </Modal>
-    </>
+          <div className="space-y-6 p-6">
+            <p className="text-[15px] leading-relaxed text-slate-700 dark:text-slate-200">{p.description}</p>
+            <div className="rounded-xl border-l-4 border-accent-600 bg-accent-50/60 p-4 dark:bg-accent-700/10">
+              <p className="text-xs font-semibold tracking-wider text-accent-700 uppercase dark:text-accent-400">Who it's for</p>
+              <p className="mt-1 text-sm text-slate-700 dark:text-slate-200">{p.who}</p>
+            </div>
+            <div>
+              <p className="mb-3 text-sm font-semibold">Available variants</p>
+              <ul className="grid grid-cols-1 gap-2 sm:grid-cols-2">
+                {p.variants.map((v) => (
+                  <li key={v} className="flex items-center gap-2.5 rounded-lg border border-slate-200 px-3 py-2.5 text-sm dark:border-slate-700">
+                    <CheckCircle2 size={18} weight="fill" className="shrink-0 text-brand-700 dark:text-brand-200" /> {v}
+                  </li>
+                ))}
+              </ul>
+            </div>
+          </div>
+          <div className="sticky bottom-0 flex items-center justify-between gap-3 border-t border-slate-200 bg-white/95 px-6 py-4 backdrop-blur dark:border-slate-800 dark:bg-slate-900/95">
+            <button onClick={onPrev} className="btn-ghost"><ArrowLeft size={16} /> Previous</button>
+            <div className="flex gap-2">
+              <button onClick={onClose} className="btn-secondary">Got it</button>
+              <button onClick={onNext} className="btn-primary">Next <ArrowRight size={16} /></button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </Portal>
   )
 }
 

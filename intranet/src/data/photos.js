@@ -49,3 +49,19 @@ import dressRemote from '../assets/photos/dress-remote.jpg'
 import dressFriday from '../assets/photos/dress-friday.jpg'
 
 export const dressPhotos = { office: dressOffice, client: dressClient, remote: dressRemote, friday: dressFriday }
+
+import prMotor from '../assets/photos/product-motor.jpg'
+import prFire from '../assets/photos/product-fire.jpg'
+import prAgric from '../assets/photos/product-agric.jpg'
+import prEnergy from '../assets/photos/product-energy.jpg'
+import prEngineering from '../assets/photos/product-engineering.jpg'
+import prTravel from '../assets/photos/product-travel.jpg'
+import prMarine from '../assets/photos/product-marine.jpg'
+import prBond from '../assets/photos/product-bond.jpg'
+import prAviation from '../assets/photos/product-aviation.jpg'
+
+// Insurance products (onboarding). Keyed by product id in data/onboarding.js.
+export const productPhotos = {
+  motor: prMotor, fire: prFire, agric: prAgric, energy: prEnergy, engineering: prEngineering,
+  travel: prTravel, marine: prMarine, bond: prBond, aviation: prAviation,
+}
